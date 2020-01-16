@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>f7ef21b1-ee13-4b24-99b6-cb79bbcb71ce</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shin.Framework</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\Concurrent\ConcurrentCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\Concurrent\ConcurrentHashSet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\Concurrent\ConcurrentList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\ListDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Disposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ExceptionNotRegisteredException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ExceptionProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ExceptionProvider.Defaults.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\TypeArguementException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ActionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\AssemblyExtionsions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\CollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DictionaryExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EventHandlerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExceptionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExpressionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ObjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\TypeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\UintExceptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IDispose.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IInitialize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ILogService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IMessageAggregator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Initializable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\ILogEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\ILogProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\LogCategory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Loggers\ConsoleLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Loggers\PlatformLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Loggers\TextLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\LogPriority.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Native\LogService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\DelegateReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IActionMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IDelegateReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\ISubscription.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageAggregator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\Messages\ActionMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\Messages\Message.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\Subscriptions\BackgroundDispatcherSubscription.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\Subscriptions\ContextDispatcherSubscription.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\Subscriptions\Subscription.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\SubscriptionToken.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\ThreadOption.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PropertyChangedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PropertyChangingEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Throw.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Throw.DefaultConditions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ThrowExceptionSelector.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Collections\Concurrent\" />
+    <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\" />
+  </ItemGroup>
+</Project>

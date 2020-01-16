@@ -1,0 +1,12 @@
+{
+	"core": "../build/shin.framework/debug/netstandard2.1/Shin.Framework.dll",
+	"projects": [
+		{
+			"name": "Shin.Framework",
+			"nuspec": "Shin.Framework.nuspec",
+			"files": {
+				"debug": "../build/shin.framework/debug/netstandard2.1/Shin.Framework.dll"
+			}
+		}
+	]
+}

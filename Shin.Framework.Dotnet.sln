@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shin.Framework", "src\Shin.Framework\Shin.Framework.shproj", "{F7EF21B1-EE13-4B24-99B6-CB79BBCB71CE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetStandard", "NetStandard", "{FCDC1DAE-0B6D-4FB3-83A3-8543A5368870}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.NetStandard", "src\Netstandard\Shin.Framework.NetStandard\Shin.Framework.NetStandard.csproj", "{CE636A6D-423B-4011-8A67-C2FA02CF1A8C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuSpec", "NuSpec", "{FC3C0675-9A2A-4341-8DD9-70A4144F8DCE}"
+	ProjectSection(SolutionItems) = preProject
+		nuspecs\generate-nuget.ps1 = nuspecs\generate-nuget.ps1
+		nuspecs\projects.json = nuspecs\projects.json
+		nuspecs\Shield.Framework.IoC.Ninject.nuspec = nuspecs\Shield.Framework.IoC.Ninject.nuspec
+		nuspecs\Shield.Framework.Platform.MonoGame.Windows.nuspec = nuspecs\Shield.Framework.Platform.MonoGame.Windows.nuspec
+		nuspecs\Shield.Framework.Platform.Windows.nuspec = nuspecs\Shield.Framework.Platform.Windows.nuspec
+		nuspecs\Shin.Framework.nuspec = nuspecs\Shin.Framework.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A0B56BE1-0C2D-466B-AD59-6B7D34C41E51}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
+		CODESTYLE.md = CODESTYLE.md
+		CONTRIBUTING.md = CONTRIBUTING.md
+		src\GlobalSuppressions.cs = src\GlobalSuppressions.cs
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+		src\SharedAssemblyInfo.cs = src\SharedAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F997FA0E-EDDB-4E55-B46A-4D6025AECB42}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Shin.Framework\Shin.Framework.projitems*{f7ef21b1-ee13-4b24-99b6-cb79bbcb71ce}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C} = {FCDC1DAE-0B6D-4FB3-83A3-8543A5368870}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E19F08BB-A8A3-402E-ABF8-1D5E72FD43E8}
+	EndGlobalSection
+EndGlobal

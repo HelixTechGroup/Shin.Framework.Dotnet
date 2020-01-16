@@ -1,27 +1,31 @@
 
 <p align="center">
-    <img src="https://placeholder.pics/svg/500x200/DEDEDE/555555/Project%20Name"
-        height="130">
+	<img src="https://avatars0.githubusercontent.com/u/33513927?s=130"
+		height="130">
 </p>
 <p align="center">
-    <a href="https://github.com/%USER%/%ProjectName%/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/%USER%/%ProjectName%" /></a>
-    <a href="#backers" alt="Backers on Open Collective">
-        <img src="https://img.shields.io/opencollective/backers/%ProjectName%" /></a>
-    <a href="#sponsors" alt="Sponsors on Open Collective">
-        <img src="https://img.shields.io/opencollective/sponsors/%ProjectName%" /></a>
-    <a href="https://github.com/badges/shields/pulse" alt="Activity">
-        <img src="https://img.shields.io/github/commit-activity/m/%USER%/%ProjectName%" /></a>
-            <a href="#">
-            <img src="https://img.shields.io/github/last-commit/%USER%/%ProjectName%"></a>
-            <a href="https://github.com/%USER%/%ProjectName%/releases">
-           <img src="https://img.shields.io/github/v/release/%USER%/%ProjectName%"></a>
-      <a href="#">
-	      <img src="https://img.shields.io/github/release-date/%USER%/%ProjectName%?label=last release date"></a>
+	<a href="https://github.com/HelixTechGroup/Shin.Framework.Dotnet/graphs/contributors" alt="Contributors">
+		<img src="https://img.shields.io/github/contributors/HelixTechGroup/Shin.Framework.Dotnet" /></a>
+	<a href="#backers" alt="Backers on Open Collective">
+		<img src="https://img.shields.io/opencollective/backers/%ProjectName%" /></a>
+	<a href="#sponsors" alt="Sponsors on Open Collective">
+		<img src="https://img.shields.io/opencollective/sponsors/%ProjectName%" /></a>
+	<a href="https://github.com/badges/shields/pulse" alt="Activity">
+		<img src="https://img.shields.io/github/commit-activity/m/HelixTechGroup/Shin.Framework.Dotnet" /></a>
+			<a href="#">
+			<img src="https://img.shields.io/github/last-commit/HelixTechGroup/Shin.Framework.Dotnet"></a>
+			<a href="https://github.com/HelixTechGroup/Shin.Framework.Dotnet/releases">
+		   <img src="https://img.shields.io/github/v/release/HelixTechGroup/Shin.Framework.Dotnet"></a>
+	  <a href="#">
+		  <img src="https://img.shields.io/github/release-date/HelixTechGroup/Shin.Framework.Dotnet?label=last release date"></a>
 </p>
+
+## Shin.Framework (DotNet)
+This project is a core framework comprised of common and sharable code used in all HTG (HelixTechGroup) projects.
 
  * [Build Status](#build-status)
  * [Supported Platforms](#supported-platforms)
+ * [Features](#features)
  * [Prerequisites](#prerequisites)
  * [Installation](#installation)
  * [Usage example](#usage-example)
@@ -76,6 +80,9 @@ We support a growing list of platforms across the desktop, mobile, and console s
 
 The included sandboxes show a default/empty application for each platform
 
+### Features
+* To-do
+
 ### Prerequisites
 * To-do
 
@@ -118,7 +125,7 @@ edit autoexec.bat
 ## Support
 
 __Bugs and requests__: submit them through the project's issues tracker.<br>
-[![Issues](https://img.shields.io/github/issues-raw/%USER%/%ProjectName%?logo=github)]( https://github.com/%USER%/%ProjectName%/issues )
+[![Issues](https://img.shields.io/github/issues-raw/HelixTechGroup/Shin.Framework.Dotnet?logo=github)]( https://github.com/%USER%/%ProjectName%/issues )
 
 __Questions__: ask them at StackOverflow with the tag *%ProjectName%*, on the Subreddit or on our community forums.<br>
 [![StackOverflow](https://img.shields.io/stackexchange/stackoverflow/t/%ProjectName%?logo=stackoverflow)]( http://stackoverflow.com/questions/tagged/%USER%/%ProjectName% )
@@ -126,7 +133,7 @@ __Questions__: ask them at StackOverflow with the tag *%ProjectName%*, on the Su
 [![Forums](https://img.shields.io/badge/forums-forums-yellowgreen)]()
 
 __Chat__: join us at gitter.im or discord.gg.<br>
-[![Chat](https://img.shields.io/gitter/room/nwjs/nsjs?label=gitter.im&logo=gitter)]( https://gitter.im/%USER%/%ProjectName% )
+[![Chat](https://img.shields.io/gitter/room/nwjs/nsjs?label=gitter.im&logo=gitter)]( https://gitter.im/HelixTechGroup/Shin.Framework.Dotnet )
 [![Chat](https://img.shields.io/discord/308323056592486420?logo=discord&label=discord.gg)](https://discord.gg/HjJCwm5)
 
 ## Code of conduct
@@ -141,11 +148,11 @@ Maintainers:
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/%USER%/%ProjectName%/graphs/contributors"><img src="https://opencollective.com/%ProjectName%/contributors.svg?width=890" /></a>
+<a href="https://github.com/HelixTechGroup/Shin.Framework.Dotnet/graphs/contributors"><img src="https://opencollective.com/%ProjectName%/contributors.svg?width=890" /></a>
 
 ## Roadmap
 
-See the [open issues](https://github.com/%USER%/%ProjectName%/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/HelixTechGroup/Shin.Framework.Dotnet/issues) for a list of proposed features (and known issues).
 
 ## Change log
 
@@ -153,13 +160,13 @@ Please read [CHANGELOG.md](CHANGELOG.md) for details.
 
 ## Versioning
 We use [SemVer](http://semver.org/) for versioning.
-For the versions available, see the [tags on this repository](https://github.com/chaosnhatred/epa-envirofacts-api/tags).
+For the versions available, see the [tags on this repository](https://github.com/HelixTechGroup/Shin.Framework.Dotnet/tags).
 
 ## Contact
 [![GitHub](https://img.shields.io/github/followers/chaosnhatred?label=%40Chaosnhatred&logo=github)]()
 [![Twitter](https://img.shields.io/twitter/follow/chaosnhatred?logo=twitter&style=flat&label=%40Chaosnhatred)](https://twitter.com/chaosnhatred)
 [![https://img.shields.io/discord/102860784329052160?logo=discord](https://img.shields.io/discord/102860784329052160?logo=discord)](https://discord.gg/HjJCwm5)
-[![gitter.gg](https://img.shields.io/gitter/room/nwjs/nw.js?logo=gitter)](https://gitter.im/MonoGame/MonoGame)
+[![gitter.gg](https://img.shields.io/gitter/room/nwjs/nw.js?logo=gitter)](https://gitter.im/HelixTechGroup/Shin.Framework.Dotnet)
 
 ## Backers
 
