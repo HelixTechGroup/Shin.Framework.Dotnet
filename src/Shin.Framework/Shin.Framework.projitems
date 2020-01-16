@@ -33,7 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\UintExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDispose.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IInitialize.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ILogService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ILogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IMessageAggregator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\ILogEntry.cs" />
@@ -44,7 +44,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Loggers\PlatformLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Loggers\TextLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogPriority.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\Native\LogService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Native\Logger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\DelegateReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IActionMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IDelegateReference.cs" />

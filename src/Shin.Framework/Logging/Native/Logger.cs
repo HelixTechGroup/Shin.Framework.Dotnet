@@ -11,28 +11,8 @@ using Shin.Framework.Collections.Concurrent;
 
 namespace Shin.Framework.Logging.Native
 {
-    public sealed class LogService : ILogService
+    public sealed class Logger : Initializable, ILogger
     {
-        #region Events
-        public event Action<IDispose> OnDispose;
-
-        /// <inheritdoc />
-        public event EventHandler Disposing;
-
-        /// <inheritdoc />
-        event EventHandler IDispose.Disposed
-        {
-            add { m_disposed1 += value; }
-            remove { m_disposed1 -= value; }
-        }
-
-        /// <inheritdoc />
-        public event EventHandler Initializing;
-
-        /// <inheritdoc />
-        public event EventHandler Initialized;
-        #endregion
-
         #region Members
         private const int m_queueSize = 2;
         private readonly ConcurrentList<ILogProvider> m_loggers;
@@ -40,32 +20,9 @@ namespace Shin.Framework.Logging.Native
         private readonly ConcurrentQueue<ILogEntry> m_logQueue;
         private readonly Task m_logTask;
         private readonly BackgroundWorker m_logThread;
-        private bool m_disposed;
-        private EventHandler m_disposed1;
-        private bool m_isDisposed;
-        private bool m_isInitialized;
         #endregion
 
-        #region Properties
-        public bool Disposed
-        {
-            get { return m_disposed; }
-        }
-
-        /// <inheritdoc />
-        public bool IsDisposed
-        {
-            get { return m_isDisposed; }
-        }
-
-        /// <inheritdoc />
-        public bool IsInitialized
-        {
-            get { return m_isInitialized; }
-        }
-        #endregion
-
-        public LogService()
+        public Logger()
         {
             m_logQueue = new ConcurrentQueue<ILogEntry>();
             m_logLock = new object();
@@ -74,11 +31,6 @@ namespace Shin.Framework.Logging.Native
             m_logThread = new BackgroundWorker();
             m_logThread.WorkerSupportsCancellation = true;
             m_logThread.DoWork += Flush;
-        }
-
-        ~LogService()
-        {
-            Dispose(false);
         }
 
         #region Methods
@@ -130,29 +82,6 @@ namespace Shin.Framework.Logging.Native
         public void Log(ILogEntry entry)
         {
             Enqueue(entry);
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <inheritdoc />
-        public void Initialize()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (m_disposed)
-                return;
-
-            //m_loggers.Dispose();
-
-            OnDispose?.Invoke(this);
-            m_disposed = true;
         }
 
         private void Enqueue(ILogEntry entry)

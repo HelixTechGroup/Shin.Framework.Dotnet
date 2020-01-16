@@ -8,7 +8,7 @@ using Shin.Framework.Logging;
 
 namespace Shin.Framework
 {
-    public interface ILogService : IApplicationService
+    public interface ILogger : IInitialize, IDisposable
     {
         #region Methods
         void AddLogProvider(ILogProvider logProvider);

@@ -7,24 +7,13 @@ using System;
 
 namespace Shin.Framework.Logging
 {
-    public sealed class LogEntry : ILogEntry, IEquatable<LogEntry>
+    public sealed class LogEntry : Disposable, ILogEntry, IEquatable<LogEntry>
     {
-        #region Events
-        public event Action<IDispose> OnDispose;
-
-        /// <inheritdoc />
-        public event EventHandler Disposing;
-
-        /// <inheritdoc />
-        public event EventHandler Disposed;
-        #endregion
-
         #region Members
         private readonly LogCategory m_category;
         private readonly object m_entryLock;
         private readonly Guid m_id;
         private readonly LogPriority m_priority;
-        private bool m_isDisposed;
         private string m_logDate;
         private string m_logTime;
         private string m_message;
@@ -39,11 +28,6 @@ namespace Shin.Framework.Logging
         public Guid Id
         {
             get { return m_id; }
-        }
-
-        public bool IsDisposed
-        {
-            get { return m_isDisposed; }
         }
 
         public string LogDate
@@ -101,11 +85,6 @@ namespace Shin.Framework.Logging
             SetLogDate();
         }
 
-        ~LogEntry()
-        {
-            Dispose(false);
-        }
-
         #region Methods
         public static bool operator ==(LogEntry left, LogEntry right)
         {
@@ -135,26 +114,11 @@ namespace Shin.Framework.Logging
                  && Equals((LogEntry)obj));
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
         public bool Equals(LogEntry other)
         {
             return !(other is null)
                 && (ReferenceEquals(this, other)
                  || m_id == other.Id);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (m_isDisposed)
-                return;
-
-            OnDispose?.Invoke(this);
-            m_isDisposed = true;
         }
 
         private void SetLogDate()
