@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Shin.Framework.Exceptions
 {
-    internal static partial class ExceptionProvider
+    public static partial class ExceptionProvider
     {
         #region Methods
         public static ArgumentNullException ArgumentNullException(string paramName,

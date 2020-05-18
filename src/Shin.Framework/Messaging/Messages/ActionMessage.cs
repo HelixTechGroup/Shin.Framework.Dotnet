@@ -37,6 +37,12 @@ namespace Shin.Framework.Messaging.Messages
             return Subscribe(subscription);
         }
 
+        /// <inheritdoc />
+        public void Unsubscribe(Action subscriber)
+        {
+            throw new NotImplementedException();
+        }
+
         public SubscriptionToken Subscribe(Action action)
         {
             return Subscribe(action, ThreadOption.PublisherThread);
@@ -52,7 +58,7 @@ namespace Shin.Framework.Messaging.Messages
             return Subscribe(action, ThreadOption.PublisherThread, keepSubscriberReferenceAlive);
         }
 
-        public bool Contains(Action subscriber)
+        public bool ContainsSubscription(Action subscriber)
         {
             var eventSubscription = m_subscriptions.Cast<Subscription>().FirstOrDefault(evt => (Action)evt.Action == subscriber);
             return eventSubscription != null;
@@ -116,6 +122,18 @@ namespace Shin.Framework.Messaging.Messages
         public SubscriptionToken Subscribe(Action<TPayload> action, ThreadOption threadOption, bool keepSubscriberReferenceAlive)
         {
             return Subscribe(action, threadOption, keepSubscriberReferenceAlive, null);
+        }
+
+        /// <inheritdoc />
+        public void Unsubscribe(Action<TPayload> subscriber)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc />
+        public bool ContainsSubscription(Action<TPayload> subscriber)
+        {
+            throw new NotImplementedException();
         }
 
         public void Publish(TPayload payload)

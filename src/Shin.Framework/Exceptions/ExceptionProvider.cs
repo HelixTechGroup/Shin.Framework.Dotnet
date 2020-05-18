@@ -10,7 +10,7 @@ using Shin.Framework.Extensions;
 
 namespace Shin.Framework.Exceptions
 {
-    internal static partial class ExceptionProvider
+    public static partial class ExceptionProvider
     {
         #region Methods
         public static TException GenerateArgumentException<TException>(string argumentName,

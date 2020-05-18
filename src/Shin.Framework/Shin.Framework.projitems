@@ -32,9 +32,26 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\UintExceptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDispose.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IId.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IInitialize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ILogger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IMessageAggregator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IBindings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDepend.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDependency.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\InjectConstructorAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\InjectPropertyAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ConstructorInvokeInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Exceptions\IoCRegistrationException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Exceptions\IoCResolutionException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\IoCContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\IResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ReflectionCompiler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ResolverDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\TypeResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\Collections\IMessageCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessageProxy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessagePump.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\ILogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\ILogProvider.cs" />
@@ -49,8 +66,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IActionMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IDelegateReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IPublish.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IPublishMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\ISubscribe.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\ISubscribeMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ISubscription.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageAggregator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\Collections\MessageCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\Exceptions\MessageErrorEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Messages\ActionMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Messages\Message.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Subscriptions\BackgroundDispatcherSubscription.cs" />
@@ -67,5 +89,7 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Collections\Concurrent\" />
     <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Messaging\Exceptions\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Messaging\Collections\" />
   </ItemGroup>
 </Project>

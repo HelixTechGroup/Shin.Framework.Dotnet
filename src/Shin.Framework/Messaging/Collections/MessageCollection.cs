@@ -7,23 +7,31 @@ using System.Collections.Concurrent;
 using System.Threading;
 #endregion
 
-namespace Shin.Framework.Messaging
+namespace Shin.Framework.Messaging.Collections
 {
-    public sealed class MessageAggregator : Initializable, IMessageAggregator
+    public sealed class MessageCollection : IMessageCollection
     {
         #region Members
         private readonly SynchronizationContext m_context;
         private readonly ConcurrentDictionary<Type, IMessage> m_messages;
         #endregion
 
-        public MessageAggregator()
+        public MessageCollection() : this(SynchronizationContext.Current) { }
+
+        public MessageCollection(SynchronizationContext context)
         {
-            m_context = SynchronizationContext.Current;
+            m_context = context;
             m_messages = new ConcurrentDictionary<Type, IMessage>();
         }
 
         #region Methods
-        public bool MessageExists<T>() where T : IMessage, new()
+        /// <inheritdoc />
+        public int Count
+        {
+            get { return m_messages.Count; }
+        }
+
+        public bool ContainsMessage<T>() where T : IMessage, new()
         {
             return m_messages.ContainsKey(typeof(T));
         }
@@ -42,7 +50,7 @@ namespace Shin.Framework.Messaging
 
         public void RemoveMessage<T>() where T : IMessage, new()
         {
-            if (!MessageExists<T>())
+            if (!ContainsMessage<T>())
                 return;
 
             m_messages.TryRemove(typeof(T), out var message);
