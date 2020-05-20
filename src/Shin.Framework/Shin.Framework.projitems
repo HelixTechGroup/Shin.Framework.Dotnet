@@ -73,6 +73,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ISubscription.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Collections\MessageCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Exceptions\MessageErrorEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessagePump.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Messages\ActionMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Messages\Message.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Subscriptions\BackgroundDispatcherSubscription.cs" />

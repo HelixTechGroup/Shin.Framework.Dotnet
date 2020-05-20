@@ -1,12 +1,28 @@
-﻿namespace Shin.Framework.Messaging
+﻿using System.Threading;
+
+namespace Shin.Framework.Messaging
 {
     public interface IMessagePump : IInitialize, IDispose
     {
 
-        int Peek(out IMessage message);
-        int Poll(out IMessage message);
+        bool Peek(out IMessage message);
+        bool Poll(out IMessage message, CancellationToken ctx);
         void Pump();
-        int Wait(out IMessage message, int timeout);
-        int Push(IMessage message);
+        bool Wait(out IMessage message, int timeout, CancellationToken ctx);
+        bool Pop(out IMessage message);
+        bool Push(IMessage message);
+    }
+
+    public interface IMessagePump<T> : IMessagePump where T : IMessage
+    {
+        bool Peek(out T message);
+
+        bool Poll(out T message, CancellationToken ctx);
+
+        bool Wait(out T message, int timeout, CancellationToken ctx);
+
+        bool Pop(out T message);
+
+        bool Push(T message);
     }
 }
