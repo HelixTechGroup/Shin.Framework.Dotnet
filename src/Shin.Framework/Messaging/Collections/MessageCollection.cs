@@ -42,7 +42,7 @@ namespace Shin.Framework.Messaging.Collections
                 return (T)message;
 
             var newMessage = new T();
-            newMessage.Context = m_context;
+            (newMessage as ISubscribe).Context = m_context;
             m_messages[typeof(T)] = newMessage;
 
             return newMessage;

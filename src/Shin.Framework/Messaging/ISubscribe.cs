@@ -1,13 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Shin.Framework.Messaging
 {
-    public interface ISubscribe<in TSubscriber> where TSubscriber : Delegate
+    public interface ISubscribe
     {
+        SynchronizationContext Context { get; set; }
+
         int SubscriptionCount { get; }
 
+        void Unsubscribe(SubscriptionToken token);
+
+        void ClearSubscriptions();
+
+        bool ContainsSubscription(SubscriptionToken token);
+    }
+
+    public interface ISubscribe<in TSubscriber> : ISubscribe where TSubscriber : Delegate
+    {
         SubscriptionToken Subscribe(TSubscriber subscriber);
 
         SubscriptionToken Subscribe(TSubscriber subscriber, ThreadOption threadOption);
@@ -16,13 +28,7 @@ namespace Shin.Framework.Messaging
 
         SubscriptionToken Subscribe(TSubscriber subscriber, ThreadOption threadOption, bool keepSubscriberReferenceAlive);
 
-        void Unsubscribe(SubscriptionToken token);
-
         void Unsubscribe(TSubscriber subscriber);
-
-        void ClearSubscriptions();
-
-        bool ContainsSubscription(SubscriptionToken token);
 
         bool ContainsSubscription(TSubscriber subscriber);
     }
