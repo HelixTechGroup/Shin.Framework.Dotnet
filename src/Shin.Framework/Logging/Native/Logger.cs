@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using Shin.Framework.Collections.Concurrent;
 #endregion
@@ -34,6 +35,21 @@ namespace Shin.Framework.Logging.Native
         }
 
         #region Methods
+        /// <inheritdoc />
+        protected override void InitializeResources()
+        {
+            base.InitializeResources();
+            m_logThread.RunWorkerAsync();
+        }
+
+        /// <inheritdoc />
+        protected override void DisposeManagedResources()
+        {
+            base.DisposeManagedResources();
+            m_logThread.CancelAsync();
+            m_logThread.Dispose();
+        }
+
         /// <inheritdoc />
         public void AddLogProvider(ILogProvider logProvider)
         {
@@ -90,8 +106,8 @@ namespace Shin.Framework.Logging.Native
             {
                 m_logQueue.Enqueue(entry);
 
-                if (!m_logThread.IsBusy)
-                    m_logThread.RunWorkerAsync();
+                //if (!m_logThread.IsBusy)
+                //    m_logThread.RunWorkerAsync();
                 //Action flush = Flush;
                 //if (m_logTask.IsCompleted)
                 //    m_logTask = flush.OnNewThreadAsync();
@@ -100,10 +116,13 @@ namespace Shin.Framework.Logging.Native
 
         private void Flush(object sender, DoWorkEventArgs e)
         {
-            lock(m_logLock)
-            {
-                if (m_logQueue.Count < m_queueSize)
-                    return;
+            //lock(m_logLock)
+            //{
+            while(true)
+            { 
+                //if (m_logQueue.Count < m_queueSize)
+                while (m_logQueue.Count == 0)
+                    Thread.Sleep(20);
 
                 while (m_logQueue.Count > 0)
                 {
@@ -114,6 +133,7 @@ namespace Shin.Framework.Logging.Native
                     entry.Dispose();
                 }
             }
+            //}
         }
         #endregion
     }
