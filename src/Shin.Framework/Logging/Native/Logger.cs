@@ -20,18 +20,30 @@ namespace Shin.Framework.Logging.Native
         private readonly object m_logLock;
         private readonly ConcurrentQueue<ILogEntry> m_logQueue;
         private readonly Task m_logTask;
-        private readonly BackgroundWorker m_logThread;
+        private readonly BackgroundWorker m_logWorker;
+        private readonly Thread m_thread;
+        private CancellationTokenSource m_tokenSource;
+        private CancellationToken m_token;
+        private readonly ConcurrentList<int> m_tokens;
         #endregion
+
+        public Thread Thread
+        {
+            get { return m_thread; }
+        }
 
         public Logger()
         {
             m_logQueue = new ConcurrentQueue<ILogEntry>();
             m_logLock = new object();
             m_loggers = new ConcurrentList<ILogProvider>();
-            m_logTask = Task.CompletedTask;
-            m_logThread = new BackgroundWorker();
-            m_logThread.WorkerSupportsCancellation = true;
-            m_logThread.DoWork += Flush;
+            //m_logTask = Task.CompletedTask;
+            //m_logWorker = new BackgroundWorker {WorkerSupportsCancellation = true};
+            //m_logWorker.DoWork += Flush;
+            //m_logTask = new Task(Flush);
+            m_thread = new Thread(Flush);
+            m_token = new CancellationToken();
+            m_tokens = new ConcurrentList<int>();
         }
 
         #region Methods
@@ -39,15 +51,37 @@ namespace Shin.Framework.Logging.Native
         protected override void InitializeResources()
         {
             base.InitializeResources();
-            m_logThread.RunWorkerAsync();
+            AddCancellationToken(m_token);
+            //m_logTask.Start();
+            m_thread.Start(m_tokenSource.Token);
+            //m_logWorker.RunWorkerAsync();
+        }
+
+        public void Initialize(CancellationToken token)
+        {
+            if (m_isInitialized)
+                return;
+
+            m_token = token;
+            Initialize();
         }
 
         /// <inheritdoc />
         protected override void DisposeManagedResources()
         {
+            if (!m_tokenSource.IsCancellationRequested)
+                m_tokenSource.Cancel();
+
+            m_thread.Join();
+
             base.DisposeManagedResources();
-            m_logThread.CancelAsync();
-            m_logThread.Dispose();
+
+            //m_logWorker.CancelAsync();
+            //m_logWorker.Dispose();
+            m_tokenSource.Dispose();
+
+            foreach (var logger in m_loggers)
+                logger.Dispose();
         }
 
         /// <inheritdoc />
@@ -82,7 +116,7 @@ namespace Shin.Framework.Logging.Native
             var trace = exception.StackTrace;
 
             if (exception.StackTrace.Length > 1300)
-                trace = exception.StackTrace.Substring(0, 1300) + " [...] (traceback cut short)";
+                trace = exception.StackTrace.Substring(0, 1300) + " [...] (stacktrace cut short)";
 
             LogError(string.Format("{0}\n{1}\n{2}",
                                    exception.Message,
@@ -102,8 +136,8 @@ namespace Shin.Framework.Logging.Native
 
         private void Enqueue(ILogEntry entry)
         {
-            lock(m_logLock)
-            {
+            //lock(m_logLock)
+            //{
                 m_logQueue.Enqueue(entry);
 
                 //if (!m_logThread.IsBusy)
@@ -111,17 +145,19 @@ namespace Shin.Framework.Logging.Native
                 //Action flush = Flush;
                 //if (m_logTask.IsCompleted)
                 //    m_logTask = flush.OnNewThreadAsync();
-            }
+            //}
         }
 
-        private void Flush(object sender, DoWorkEventArgs e)
+        //private void Flush(object sender, DoWorkEventArgs e)
+        private void Flush(object sender)
         {
+            var token = (CancellationToken)sender;
             //lock(m_logLock)
             //{
-            while(true)
-            { 
+            do
+            {
                 //if (m_logQueue.Count < m_queueSize)
-                while (m_logQueue.Count == 0)
+                while (m_logQueue.Count < m_queueSize) /*&& !m_logWorker.CancellationPending)*/
                     Thread.Sleep(20);
 
                 while (m_logQueue.Count > 0)
@@ -135,8 +171,20 @@ namespace Shin.Framework.Logging.Native
                         entry.Dispose();
                     }
                 }
-            }
+            } while (!token.IsCancellationRequested); //(!m_logWorker.CancellationPending);
             //}
+        }
+
+        private void AddCancellationToken(CancellationToken ctx)
+        {
+            if (ctx == CancellationToken.None || m_token.IsCancellationRequested)
+                return;
+
+            if (m_tokens.Contains(ctx.GetHashCode()))
+                return;
+
+            m_tokenSource = CancellationTokenSource.CreateLinkedTokenSource(m_token, ctx);
+            m_tokens.Add(ctx.GetHashCode());
         }
         #endregion
     }

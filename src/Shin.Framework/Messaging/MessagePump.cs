@@ -192,6 +192,9 @@ namespace Shin.Framework.Messaging
 
         public void Initialize(CancellationToken token)
         {
+            if (m_isInitialized)
+                return;
+
             m_token = token;
             Initialize();
         }
@@ -235,7 +238,7 @@ namespace Shin.Framework.Messaging
             AddCancellationToken(ctx);
 
             var startTime = DateTimeOffset.Now;
-            while (!m_tokenSource.IsCancellationRequested)
+            do
             {
                 Pump(ctx);
                 if (timeout == 0)
@@ -252,14 +255,14 @@ namespace Shin.Framework.Messaging
                     default:
                         return true;
                 }
-            }
+            } while (!m_tokenSource.IsCancellationRequested);
 
             message = default(T);
             return false;
         }
 
         /// <inheritdoc />
-        public bool Wait(out T message, int timeout)
+        public bool Wait(out T message, int timeout = -1)
         {
             return Wait(out message, timeout, CancellationToken.None);
         }
