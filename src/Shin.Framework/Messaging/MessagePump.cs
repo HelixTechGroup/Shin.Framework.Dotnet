@@ -181,6 +181,7 @@ namespace Shin.Framework.Messaging
         {
             m_queue = new ConcurrentQueue<T>();
             m_token = new CancellationToken();
+            m_tokenSource = new CancellationTokenSource();
             m_tokens = new ConcurrentList<int>();
         }
 

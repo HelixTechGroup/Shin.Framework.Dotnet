@@ -43,6 +43,7 @@ namespace Shin.Framework.Logging.Native
             //m_logTask = new Task(Flush);
             m_thread = new Thread(Flush);
             m_token = new CancellationToken();
+            m_tokenSource = new CancellationTokenSource();
             m_tokens = new ConcurrentList<int>();
         }
 
