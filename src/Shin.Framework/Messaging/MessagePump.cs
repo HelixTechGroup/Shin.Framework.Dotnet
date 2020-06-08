@@ -135,7 +135,7 @@ namespace Shin.Framework.Messaging
             catch (Exception ex)
             {
                 m_logger.LogException(ex);
-                message = default(T);
+                message = null;
                 return false;
             }
 
