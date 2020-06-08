@@ -75,7 +75,7 @@ namespace Shin.Framework.Messaging
             AddCancellationToken(ctx);
 
             var startTime = DateTimeOffset.Now;
-            while (m_tokenSource.Token.IsCancellationRequested)
+            while (m_tokenSource.IsCancellationRequested)
             {
                 Pump(ctx);
                 if (timeout == 0)
@@ -125,17 +125,21 @@ namespace Shin.Framework.Messaging
         {
             try
             {
-                m_queue.TryDequeue(out message);
-                MessagePopped.Raise(this, message);
+                if (m_queue.TryDequeue(out message))
+                {
+                    MessagePopped.Raise(this, message);
+                    return true;
+                }
+
             }
             catch (Exception ex)
             {
                 m_logger.LogException(ex);
-                message = null;
+                message = default(T);
                 return false;
             }
 
-            return true;
+            return false;
         }
 
         protected override void DisposeManagedResources()
@@ -231,7 +235,7 @@ namespace Shin.Framework.Messaging
             AddCancellationToken(ctx);
 
             var startTime = DateTimeOffset.Now;
-            while (!m_tokenSource.Token.IsCancellationRequested)
+            while (!m_tokenSource.IsCancellationRequested)
             {
                 Pump(ctx);
                 if (timeout == 0)
@@ -281,8 +285,12 @@ namespace Shin.Framework.Messaging
         {
             try
             {
-                m_queue.TryDequeue(out message);
-                MessagePopped.Raise(this, message);
+                if (m_queue.TryDequeue(out message))
+                {
+                    MessagePopped.Raise(this, message);
+                    return true;
+                }
+                
             }
             catch (Exception ex)
             {
@@ -291,7 +299,7 @@ namespace Shin.Framework.Messaging
                 return false;
             }
 
-            return true;
+            return false;
         }
 
         protected override void DisposeManagedResources()
