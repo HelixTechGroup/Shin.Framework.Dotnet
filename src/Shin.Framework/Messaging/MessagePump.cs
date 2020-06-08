@@ -75,14 +75,8 @@ namespace Shin.Framework.Messaging
             AddCancellationToken(ctx);
 
             var startTime = DateTimeOffset.Now;
-            while (true)
+            while (m_tokenSource.Token.IsCancellationRequested)
             {
-                if (m_tokenSource.Token.IsCancellationRequested)
-                {
-                    message = null;
-                    return false;
-                }
-
                 Pump(ctx);
                 if (timeout == 0)
                     return Pop(out message);
@@ -99,6 +93,9 @@ namespace Shin.Framework.Messaging
                         return true;
                 }
             }
+
+            message = null;
+            return false;
         }
 
         /// <inheritdoc />
@@ -234,14 +231,8 @@ namespace Shin.Framework.Messaging
             AddCancellationToken(ctx);
 
             var startTime = DateTimeOffset.Now;
-            while (!ctx.IsCancellationRequested)
+            while (!m_tokenSource.Token.IsCancellationRequested)
             {
-                if (m_tokenSource.Token.IsCancellationRequested)
-                {
-                    message = default(T);
-                    return false;
-                }
-
                 Pump(ctx);
                 if (timeout == 0)
                     return Pop(out message);
@@ -258,6 +249,9 @@ namespace Shin.Framework.Messaging
                         return true;
                 }
             }
+
+            message = default(T);
+            return false;
         }
 
         /// <inheritdoc />
