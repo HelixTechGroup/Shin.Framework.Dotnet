@@ -127,10 +127,13 @@ namespace Shin.Framework.Logging.Native
                 while (m_logQueue.Count > 0)
                 {
                     m_logQueue.TryDequeue(out var entry);
-                    foreach (var provider in m_loggers)
-                        provider.Flush(entry);
+                    lock (m_logLock)
+                    {
+                        foreach (var provider in m_loggers)
+                            provider.Flush(entry);
 
-                    entry.Dispose();
+                        entry.Dispose();
+                    }
                 }
             }
             //}
