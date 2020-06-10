@@ -17,6 +17,11 @@ namespace Shin.Framework.Logging.Loggers
         protected ConcurrentQueue<string> m_buffer;
         #endregion
 
+        protected TextLogger()
+        {
+            m_buffer = new ConcurrentQueue<string>();
+        }
+
         #region Methods
         public override void Flush(ILogEntry entry)
         {

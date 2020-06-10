@@ -1,5 +1,6 @@
 ﻿#region Usings
 using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using Shin.Framework.Collections.Concurrent;
 #endregion
@@ -10,8 +11,6 @@ namespace Shin.Framework.Logging.Loggers
     {
         public ConsoleLogger()
         {
-            m_buffer = new ConcurrentList<string>();
-
             if (IsConsoleAvailable())
                 m_writer = Console.Out;
             else
