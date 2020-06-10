@@ -20,7 +20,7 @@ namespace Shin.Framework.Logging.Loggers
         protected override bool ShouldBuffer()
         {
             if (!IsConsoleAvailable())
-                return false;
+                return true;
 
             m_writer = Console.Out;
             return false;
