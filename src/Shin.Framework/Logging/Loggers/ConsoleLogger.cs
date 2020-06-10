@@ -30,7 +30,7 @@ namespace Shin.Framework.Logging.Loggers
         {
             try
             {
-                var key = Console.KeyAvailable;
+                var key = Console.WindowHeight;
                 return true;
             }
             catch
