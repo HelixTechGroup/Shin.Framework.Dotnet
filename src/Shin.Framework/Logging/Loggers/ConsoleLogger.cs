@@ -32,7 +32,7 @@ namespace Shin.Framework.Logging.Loggers
             try
             {
                 if (!Environment.UserInteractive)
-                    return false;
+                    return Console.In is StreamReader;
 
                 if (Console.OpenStandardInput(1) == Stream.Null)
                     return false;
