@@ -10,8 +10,11 @@ namespace Shin.Framework.Logging.Loggers
 {
     public class ConsoleLogger : TextLogger
     {
-        public ConsoleLogger()
+        private bool m_checkConsole;
+
+        public ConsoleLogger(bool checkConsole = true)
         {
+            m_checkConsole = checkConsole;
             if (IsConsoleAvailable())
                 m_writer = Console.Out;
             else
@@ -20,6 +23,9 @@ namespace Shin.Framework.Logging.Loggers
 
         protected override bool ShouldBuffer()
         {
+            if (!m_checkConsole)
+                return false;
+
             if (!IsConsoleAvailable())
                 return true;
 
