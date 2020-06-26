@@ -23,9 +23,6 @@ namespace Shin.Framework.Logging.Loggers
 
         protected override bool ShouldBuffer()
         {
-            if (!m_checkConsole)
-                return false;
-
             if (!IsConsoleAvailable())
                 return true;
 
@@ -35,8 +32,11 @@ namespace Shin.Framework.Logging.Loggers
 
         protected bool IsConsoleAvailable()
         {
+            if (!m_checkConsole)
+                return true;
+
             try
-            {
+            {                
                 if (!Environment.UserInteractive)
                     return Console.In is StreamReader;
 
