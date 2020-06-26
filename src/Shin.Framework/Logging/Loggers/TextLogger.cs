@@ -26,7 +26,7 @@ namespace Shin.Framework.Logging.Loggers
         public override void Flush(ILogEntry entry)
         {
             m_isBuffering = ShouldBuffer();
-            var message = string.Format("[{2}]:{0}:{1}",
+            var message = string.Format("[{2}]:{0}:{1} - ",
                                         entry.LogTime,
                                         entry.Message,
                                         entry.Category.ToString().ToUpper(CultureInfo.InvariantCulture));

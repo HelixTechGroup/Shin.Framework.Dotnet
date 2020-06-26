@@ -159,7 +159,7 @@ namespace Shin.Framework.Logging.Native
             {
                 //if (m_logQueue.Count < m_queueSize)
                 while (m_logQueue.Count < m_queueSize && !token.IsCancellationRequested) /*&& !m_logWorker.CancellationPending)*/
-                    Thread.Sleep(20);
+                    Monitor.Pulse(m_logLock); ;
 
                 while (m_logQueue.Count > 0)
                 {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using Shin.Framework.Collections.Concurrent;
 #endregion
 
@@ -30,6 +31,12 @@ namespace Shin.Framework.Logging.Loggers
         {
             try
             {
+                if (!Environment.UserInteractive)
+                    return false;
+
+                if (Console.OpenStandardInput(1) == Stream.Null)
+                    return false;
+
                 var key = Console.WindowHeight;
                 return true;
             }
