@@ -22,15 +22,17 @@ namespace Shin.Framework.Logging.Native
         private readonly Task m_logTask;
         private readonly BackgroundWorker m_logWorker;
         private readonly Thread m_thread;
-        private CancellationTokenSource m_tokenSource;
-        private CancellationToken m_token;
         private readonly ConcurrentList<int> m_tokens;
+        private CancellationToken m_token;
+        private CancellationTokenSource m_tokenSource;
         #endregion
 
+        #region Properties
         public Thread Thread
         {
             get { return m_thread; }
         }
+        #endregion
 
         public Logger()
         {
@@ -47,17 +49,12 @@ namespace Shin.Framework.Logging.Native
             m_tokens = new ConcurrentList<int>();
         }
 
-        #region Methods
-        /// <inheritdoc />
-        protected override void InitializeResources()
+        public Logger(CancellationToken token)
         {
-            base.InitializeResources();
-            AddCancellationToken(m_token);
-            //m_logTask.Start();
-            m_thread.Start(m_tokenSource.Token);
-            //m_logWorker.RunWorkerAsync();
+
         }
 
+        #region Methods
         public void Initialize(CancellationToken token)
         {
             if (m_isInitialized)
@@ -65,24 +62,6 @@ namespace Shin.Framework.Logging.Native
 
             m_token = token;
             Initialize();
-        }
-
-        /// <inheritdoc />
-        protected override void DisposeManagedResources()
-        {
-            if (!m_tokenSource.IsCancellationRequested)
-                m_tokenSource.Cancel();
-
-            m_thread.Join();
-
-            base.DisposeManagedResources();
-
-            //m_logWorker.CancelAsync();
-            //m_logWorker.Dispose();
-            m_tokenSource.Dispose();
-
-            foreach (var logger in m_loggers)
-                logger.Dispose();
         }
 
         /// <inheritdoc />
@@ -135,17 +114,45 @@ namespace Shin.Framework.Logging.Native
             Enqueue(entry);
         }
 
+        /// <inheritdoc />
+        protected override void DisposeManagedResources()
+        {
+            if (!m_tokenSource.IsCancellationRequested)
+                m_tokenSource.Cancel();
+
+            m_thread.Join();
+
+            base.DisposeManagedResources();
+
+            //m_logWorker.CancelAsync();
+            //m_logWorker.Dispose();
+            m_tokenSource.Dispose();
+
+            foreach (var logger in m_loggers)
+                logger.Dispose();
+        }
+
+        /// <inheritdoc />
+        protected override void InitializeResources()
+        {
+            base.InitializeResources();
+            AddCancellationToken(m_token);
+            //m_logTask.Start();
+            m_thread.Start(m_tokenSource.Token);
+            //m_logWorker.RunWorkerAsync();
+        }
+
         private void Enqueue(ILogEntry entry)
         {
             //lock(m_logLock)
             //{
-                m_logQueue.Enqueue(entry);
+            m_logQueue.Enqueue(entry);
 
-                //if (!m_logThread.IsBusy)
-                //    m_logThread.RunWorkerAsync();
-                //Action flush = Flush;
-                //if (m_logTask.IsCompleted)
-                //    m_logTask = flush.OnNewThreadAsync();
+            //if (!m_logThread.IsBusy)
+            //    m_logThread.RunWorkerAsync();
+            //Action flush = Flush;
+            //if (m_logTask.IsCompleted)
+            //    m_logTask = flush.OnNewThreadAsync();
             //}
         }
 
@@ -164,7 +171,7 @@ namespace Shin.Framework.Logging.Native
                 while (m_logQueue.Count > 0)
                 {
                     m_logQueue.TryDequeue(out var entry);
-                    lock (m_logLock)
+                    lock(m_logLock)
                     {
                         foreach (var provider in m_loggers)
                             provider.Flush(entry);
@@ -173,6 +180,7 @@ namespace Shin.Framework.Logging.Native
                     }
                 }
             } while (!token.IsCancellationRequested); //(!m_logWorker.CancellationPending);
+
             //}
         }
 

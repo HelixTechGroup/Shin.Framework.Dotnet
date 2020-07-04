@@ -11,8 +11,8 @@ namespace Shin.Framework
     public abstract class Initializable : Disposable, IInitialize
     {
         #region Events
-        public event EventHandler Initializing;
         public event EventHandler Initialized;
+        public event EventHandler Initializing;
         #endregion
 
         #region Members
@@ -32,19 +32,6 @@ namespace Shin.Framework
         }
 
         #region Methods
-        protected virtual void OnInitializing(object sender, EventArgs e) { }
-
-        protected virtual void OnInitialized(object sender, EventArgs e) { }
-
-        protected virtual void InitializeResources() { }
-
-        protected override void DisposeManagedResources()
-        {
-            Initializing.Dispose();
-            Initialized.Dispose();
-            base.DisposeManagedResources();
-        }
-
         public void Initialize()
         {
             if (m_isInitialized)
@@ -52,8 +39,21 @@ namespace Shin.Framework
 
             Initializing.Raise(this, EventArgs.Empty);
             InitializeResources();
-            Initialized.Raise(this, EventArgs.Empty);
             m_isInitialized = true;
+            Initialized.Raise(this, EventArgs.Empty);
+        }
+
+        protected virtual void InitializeResources() { }
+
+        protected virtual void OnInitialized(object sender, EventArgs e) { }
+
+        protected virtual void OnInitializing(object sender, EventArgs e) { }
+
+        protected override void DisposeManagedResources()
+        {
+            Initializing.Dispose();
+            Initialized.Dispose();
+            base.DisposeManagedResources();
         }
 
         private void WireUpInitializeEvents()

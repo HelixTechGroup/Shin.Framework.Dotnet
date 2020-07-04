@@ -30,6 +30,46 @@ namespace Shin.Framework.Collections.Concurrent
         #endregion
 
         #region Properties
+        public virtual T this[int index]
+        {
+            get
+            {
+                m_lock.EnterReadLock();
+                try
+                {
+                    Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
+
+                    return m_arr[index];
+                }
+                finally
+                {
+                    m_lock.ExitReadLock();
+                }
+            }
+            set
+            {
+                m_lock.EnterUpgradeableReadLock();
+                try
+                {
+                    Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
+
+                    m_lock.EnterWriteLock();
+                    try
+                    {
+                        m_arr[index] = value;
+                    }
+                    finally
+                    {
+                        m_lock.ExitWriteLock();
+                    }
+                }
+                finally
+                {
+                    m_lock.ExitUpgradeableReadLock();
+                }
+            }
+        }
+
         public virtual int Count
         {
             get
@@ -86,50 +126,9 @@ namespace Shin.Framework.Collections.Concurrent
             get { return m_isSynchronized; }
         }
 
-        object IList.this[int index]
+        public object SyncRoot
         {
-            get { return this[index]; }
-            set { this[index] = (T)value; }
-        }
-
-        public virtual T this[int index]
-        {
-            get
-            {
-                m_lock.EnterReadLock();
-                try
-                {
-                    Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
-
-                    return m_arr[index];
-                }
-                finally
-                {
-                    m_lock.ExitReadLock();
-                }
-            }
-            set
-            {
-                m_lock.EnterUpgradeableReadLock();
-                try
-                {
-                    Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
-
-                    m_lock.EnterWriteLock();
-                    try
-                    {
-                        m_arr[index] = value;
-                    }
-                    finally
-                    {
-                        m_lock.ExitWriteLock();
-                    }
-                }
-                finally
-                {
-                    m_lock.ExitUpgradeableReadLock();
-                }
-            }
+            get { return m_syncRoot; }
         }
 
         protected IList<T> Items
@@ -137,9 +136,10 @@ namespace Shin.Framework.Collections.Concurrent
             get { return m_arr; }
         }
 
-        public object SyncRoot
+        object IList.this[int index]
         {
-            get { return m_syncRoot; }
+            get { return this[index]; }
+            set { this[index] = (T)value; }
         }
 
         object ICollection.SyncRoot
@@ -170,13 +170,6 @@ namespace Shin.Framework.Collections.Concurrent
         }
 
         #region Methods
-        private static bool IsCompatibleObject(object value)
-        {
-            // Non-null values are fine.  Only accept nulls if T is a class or Nullable<U>.
-            // Note that default(T) is not equal to null for value types except when T is Nullable<U>. 
-            return value is T || value == null && default(T) == null;
-        }
-
         public virtual void Add(T item)
         {
             m_lock.EnterWriteLock();
@@ -393,62 +386,6 @@ namespace Shin.Framework.Collections.Concurrent
             }
         }
 
-        protected virtual void EnsureCapacity(int capacity)
-        {
-            if (m_arr.Length >= capacity)
-                return;
-
-            int doubled;
-            checked
-            {
-                try
-                {
-                    doubled = m_arr.Length * 2;
-                }
-                catch (OverflowException)
-                {
-                    doubled = int.MaxValue;
-                }
-            }
-
-            var newLength = Math.Max(doubled, capacity);
-            Array.Resize(ref m_arr, newLength);
-        }
-
-        protected virtual int IndexOfInternal(T item)
-        {
-            return Array.FindIndex(m_arr, 0, m_count, x => x.Equals(item));
-        }
-
-        protected virtual void RemoveAtInternal(int index)
-        {
-            Array.Copy(m_arr, index + 1, m_arr, index, m_count - index - 1);
-            m_count--;
-
-            // release last element
-            Array.Clear(m_arr, m_count, 1);
-        }
-
-        protected virtual void ClearItems()
-        {
-            Array.Clear(m_arr, m_count, 1);
-        }
-
-        protected virtual void InsertItem(int index, T item)
-        {
-            Insert(index, item);
-        }
-
-        protected virtual void RemoveItem(int index)
-        {
-            RemoveAt(index);
-        }
-
-        protected virtual void SetItem(int index, T item)
-        {
-            this[index] = item;
-        }
-
         public int Add(object value)
         {
             Add((T)value);
@@ -509,6 +446,69 @@ namespace Shin.Framework.Collections.Concurrent
                     Throw.Exception().ArgumentException(nameof(array));
                 }
             }
+        }
+
+        protected virtual void ClearItems()
+        {
+            Array.Clear(m_arr, m_count, 1);
+        }
+
+        protected virtual void EnsureCapacity(int capacity)
+        {
+            if (m_arr.Length >= capacity)
+                return;
+
+            int doubled;
+            checked
+            {
+                try
+                {
+                    doubled = m_arr.Length * 2;
+                }
+                catch (OverflowException)
+                {
+                    doubled = int.MaxValue;
+                }
+            }
+
+            var newLength = Math.Max(doubled, capacity);
+            Array.Resize(ref m_arr, newLength);
+        }
+
+        protected virtual int IndexOfInternal(T item)
+        {
+            return Array.FindIndex(m_arr, 0, m_count, x => x.Equals(item));
+        }
+
+        protected virtual void InsertItem(int index, T item)
+        {
+            Insert(index, item);
+        }
+
+        protected virtual void RemoveAtInternal(int index)
+        {
+            Array.Copy(m_arr, index + 1, m_arr, index, m_count - index - 1);
+            m_count--;
+
+            // release last element
+            Array.Clear(m_arr, m_count, 1);
+        }
+
+        protected virtual void RemoveItem(int index)
+        {
+            RemoveAt(index);
+        }
+
+        protected virtual void SetItem(int index, T item)
+        {
+            this[index] = item;
+        }
+
+        private static bool IsCompatibleObject(object value)
+        {
+            // Non-null values are fine.  Only accept nulls if T is a class or Nullable<U>.
+            // Note that default(T) is not equal to null for value types except when T is Nullable<U>. 
+            return value is T || value == null && default(T) == null;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

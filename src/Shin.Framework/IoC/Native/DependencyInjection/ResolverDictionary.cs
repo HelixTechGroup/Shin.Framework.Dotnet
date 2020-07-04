@@ -11,10 +11,10 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
     {
         #region Events
         /// <inheritdoc />
-        public event EventHandler Disposing;
+        public event EventHandler Disposed;
 
         /// <inheritdoc />
-        public event EventHandler Disposed;
+        public event EventHandler Disposing;
         #endregion
 
         #region Members

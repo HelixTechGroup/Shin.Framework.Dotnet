@@ -39,20 +39,20 @@ namespace Shin.Framework.Messaging.Subscriptions
         }
 
         #region Methods
-        protected virtual void InvokeAction(Action action)
-        {
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            action();
-        }
-
         public Action<object[]> GetExecutionStrategy()
         {
             if (m_actionReference.Target is Action action)
                 return arguments => InvokeAction(action);
 
             return null;
+        }
+
+        protected virtual void InvokeAction(Action action)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            action();
         }
         #endregion
     }
@@ -101,14 +101,6 @@ namespace Shin.Framework.Messaging.Subscriptions
         }
 
         #region Methods
-        protected virtual void InvokeAction(Action<TPayload> action, TPayload argument)
-        {
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-
-            action(argument);
-        }
-
         public Action<object[]> GetExecutionStrategy()
         {
             if (m_actionReference.Target is Action<TPayload> action && m_filterReference.Target is Predicate<TPayload> filter)
@@ -125,6 +117,14 @@ namespace Shin.Framework.Messaging.Subscriptions
             }
 
             return null;
+        }
+
+        protected virtual void InvokeAction(Action<TPayload> action, TPayload argument)
+        {
+            if (action == null)
+                throw new ArgumentNullException(nameof(action));
+
+            action(argument);
         }
         #endregion
     }

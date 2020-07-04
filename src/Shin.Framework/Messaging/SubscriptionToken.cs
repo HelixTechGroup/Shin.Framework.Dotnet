@@ -10,13 +10,13 @@ namespace Shin.Framework.Messaging
     public sealed class SubscriptionToken : IEquatable<SubscriptionToken>, IDispose
     {
         #region Events
-        public event Action<IDispose> OnDispose;
+        /// <inheritdoc />
+        public event EventHandler Disposed;
 
         /// <inheritdoc />
         public event EventHandler Disposing;
 
-        /// <inheritdoc />
-        public event EventHandler Disposed;
+        public event Action<IDispose> OnDispose;
         #endregion
 
         #region Members

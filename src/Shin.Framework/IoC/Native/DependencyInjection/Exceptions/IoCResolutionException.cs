@@ -1,5 +1,7 @@
-﻿using System;
+﻿#region Usings
+using System;
 using System.Runtime.Serialization;
+#endregion
 
 namespace Shield.Framework.IoC.Native.DependencyInjection.Exceptions
 {
@@ -13,7 +15,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection.Exceptions
         public IoCResolutionException(string message, Exception innerException)
             : base(message, innerException) { }
 
-        protected IoCResolutionException(SerializationInfo info, StreamingContext context) 
+        protected IoCResolutionException(SerializationInfo info, StreamingContext context)
             : base(info, context) { }
     }
 }

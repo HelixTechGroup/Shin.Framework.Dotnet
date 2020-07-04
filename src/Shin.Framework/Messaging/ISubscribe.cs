@@ -1,25 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#region Usings
+using System;
 using System.Threading;
+#endregion
 
 namespace Shin.Framework.Messaging
 {
     public interface ISubscribe
     {
+        #region Properties
         SynchronizationContext Context { get; set; }
 
         int SubscriptionCount { get; }
+        #endregion
 
+        #region Methods
         void Unsubscribe(SubscriptionToken token);
 
         void ClearSubscriptions();
 
         bool ContainsSubscription(SubscriptionToken token);
+        #endregion
     }
 
     public interface ISubscribe<in TSubscriber> : ISubscribe where TSubscriber : Delegate
     {
+        #region Methods
         SubscriptionToken Subscribe(TSubscriber subscriber);
 
         SubscriptionToken Subscribe(TSubscriber subscriber, ThreadOption threadOption);
@@ -31,5 +36,6 @@ namespace Shin.Framework.Messaging
         void Unsubscribe(TSubscriber subscriber);
 
         bool ContainsSubscription(TSubscriber subscriber);
+        #endregion
     }
 }

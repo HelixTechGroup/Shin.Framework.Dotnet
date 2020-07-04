@@ -33,6 +33,46 @@ namespace Shin.Framework.Collections.Concurrent
         #endregion
 
         #region Properties
+        public virtual object this[int index]
+        {
+            get
+            {
+                m_lock.EnterReadLock();
+                try
+                {
+                    Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
+
+                    return m_arr[index];
+                }
+                finally
+                {
+                    m_lock.ExitReadLock();
+                }
+            }
+            set
+            {
+                m_lock.EnterUpgradeableReadLock();
+                try
+                {
+                    m_lock.EnterWriteLock();
+                    try
+                    {
+                        Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
+
+                        m_arr[index] = value;
+                    }
+                    finally
+                    {
+                        m_lock.ExitWriteLock();
+                    }
+                }
+                finally
+                {
+                    m_lock.ExitUpgradeableReadLock();
+                }
+            }
+        }
+
         public virtual int Count
         {
             get
@@ -78,46 +118,6 @@ namespace Shin.Framework.Collections.Concurrent
         public bool IsSynchronized
         {
             get { return m_arr.IsSynchronized; }
-        }
-
-        public virtual object this[int index]
-        {
-            get
-            {
-                m_lock.EnterReadLock();
-                try
-                {
-                    Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
-
-                    return m_arr[index];
-                }
-                finally
-                {
-                    m_lock.ExitReadLock();
-                }
-            }
-            set
-            {
-                m_lock.EnterUpgradeableReadLock();
-                try
-                {
-                    m_lock.EnterWriteLock();
-                    try
-                    {
-                        Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
-
-                        m_arr[index] = value;
-                    }
-                    finally
-                    {
-                        m_lock.ExitWriteLock();
-                    }
-                }
-                finally
-                {
-                    m_lock.ExitUpgradeableReadLock();
-                }
-            }
         }
 
         public object SyncRoot
@@ -416,6 +416,46 @@ namespace Shin.Framework.Collections.Concurrent
         #endregion
 
         #region Properties
+        public virtual T this[int index]
+        {
+            get
+            {
+                m_lock.EnterReadLock();
+                try
+                {
+                    Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
+
+                    return m_arr[index];
+                }
+                finally
+                {
+                    m_lock.ExitReadLock();
+                }
+            }
+            set
+            {
+                m_lock.EnterUpgradeableReadLock();
+                try
+                {
+                    Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
+
+                    m_lock.EnterWriteLock();
+                    try
+                    {
+                        m_arr[index] = value;
+                    }
+                    finally
+                    {
+                        m_lock.ExitWriteLock();
+                    }
+                }
+                finally
+                {
+                    m_lock.ExitUpgradeableReadLock();
+                }
+            }
+        }
+
         public virtual int Count
         {
             get
@@ -463,55 +503,15 @@ namespace Shin.Framework.Collections.Concurrent
             get { return m_isSynchronized; }
         }
 
+        public object SyncRoot
+        {
+            get { return m_syncRoot; }
+        }
+
         object IList.this[int index]
         {
             get { return this[index]; }
             set { this[index] = (T)value; }
-        }
-
-        public virtual T this[int index]
-        {
-            get
-            {
-                m_lock.EnterReadLock();
-                try
-                {
-                    Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
-
-                    return m_arr[index];
-                }
-                finally
-                {
-                    m_lock.ExitReadLock();
-                }
-            }
-            set
-            {
-                m_lock.EnterUpgradeableReadLock();
-                try
-                {
-                    Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
-
-                    m_lock.EnterWriteLock();
-                    try
-                    {
-                        m_arr[index] = value;
-                    }
-                    finally
-                    {
-                        m_lock.ExitWriteLock();
-                    }
-                }
-                finally
-                {
-                    m_lock.ExitUpgradeableReadLock();
-                }
-            }
-        }
-
-        public object SyncRoot
-        {
-            get { return m_syncRoot; }
         }
         #endregion
 
@@ -728,6 +728,37 @@ namespace Shin.Framework.Collections.Concurrent
             }
         }
 
+        public void CopyTo(Array array, int index)
+        {
+            CopyTo((T[])array, index);
+        }
+
+        public int Add(object value)
+        {
+            Add((T)value);
+            return IndexOf(value);
+        }
+
+        public bool Contains(object value)
+        {
+            return Contains((T)value);
+        }
+
+        public int IndexOf(object value)
+        {
+            return IndexOf((T)value);
+        }
+
+        public void Insert(int index, object value)
+        {
+            Insert(index, (T)value);
+        }
+
+        public void Remove(object value)
+        {
+            Remove((T)value);
+        }
+
         protected virtual void EnsureCapacity(int capacity)
         {
             if (m_arr.Length >= capacity)
@@ -762,37 +793,6 @@ namespace Shin.Framework.Collections.Concurrent
 
             // release last element
             Array.Clear(m_arr, m_count, 1);
-        }
-
-        public void CopyTo(Array array, int index)
-        {
-            CopyTo((T[])array, index);
-        }
-
-        public int Add(object value)
-        {
-            Add((T)value);
-            return IndexOf(value);
-        }
-
-        public bool Contains(object value)
-        {
-            return Contains((T)value);
-        }
-
-        public int IndexOf(object value)
-        {
-            return IndexOf((T)value);
-        }
-
-        public void Insert(int index, object value)
-        {
-            Insert(index, (T)value);
-        }
-
-        public void Remove(object value)
-        {
-            Remove((T)value);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

@@ -20,6 +20,13 @@ namespace Shin.Framework.Messaging.Messages
 
         #region Properties
         /// <inheritdoc />
+        public SynchronizationContext Context
+        {
+            get { return m_context; }
+            set { m_context = value; }
+        }
+
+        /// <inheritdoc />
         public int SubscriptionCount
         {
             get { return m_subscriptions.Count; }
@@ -57,6 +64,12 @@ namespace Shin.Framework.Messaging.Messages
             return subscription != null;
         }
 
+        /// <inheritdoc />
+        public void ClearSubscriptions()
+        {
+            m_subscriptions.Clear();
+        }
+
         internal SubscriptionToken Subscribe(ISubscription subscription)
         {
             if (subscription == null)
@@ -82,19 +95,6 @@ namespace Shin.Framework.Messaging.Messages
 
             return returnList;
         }
-
-        /// <inheritdoc />
-        public void ClearSubscriptions()
-        {
-            m_subscriptions.Clear();
-        }
         #endregion
-
-        /// <inheritdoc />
-        public SynchronizationContext Context
-        {
-            get { return m_context; }
-            set { m_context = value; }
-        }
     }
 }

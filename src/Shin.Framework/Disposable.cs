@@ -9,10 +9,10 @@ namespace Shin.Framework
     {
         #region Events
         /// <inheritdoc />
-        public event EventHandler Disposing;
+        public event EventHandler Disposed;
 
         /// <inheritdoc />
-        public event EventHandler Disposed;
+        public event EventHandler Disposing;
         #endregion
 
         #region Members
@@ -38,19 +38,19 @@ namespace Shin.Framework
         }
 
         #region Methods
-        protected virtual void DisposeManagedResources() { }
-
-        protected virtual void DisposeUnmanagedResources() { }
-
-        protected virtual void OnDisposing(object sender, EventArgs e) { }
-
-        protected virtual void OnDisposed(object sender, EventArgs e) { }
-
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        protected virtual void DisposeManagedResources() { }
+
+        protected virtual void DisposeUnmanagedResources() { }
+
+        protected virtual void OnDisposed(object sender, EventArgs e) { }
+
+        protected virtual void OnDisposing(object sender, EventArgs e) { }
 
         private void Dispose(bool disposing)
         {

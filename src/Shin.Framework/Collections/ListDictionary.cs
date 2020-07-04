@@ -17,23 +17,6 @@ namespace Shin.Framework.Collections
 
         #region Properties
         /// <summary>
-        /// Gets the number of lists in the dictionary.
-        /// </summary>
-        /// <value>Value indicating the values count.</value>
-        public int Count
-        {
-            get { return m_innerValues.Count; }
-        }
-
-        /// <summary>
-        /// See <see cref="ICollection{TValue}.IsReadOnly"/> for more information.
-        /// </summary>
-        bool ICollection<KeyValuePair<TKey, IList<TValue>>>.IsReadOnly
-        {
-            get { return ((ICollection<KeyValuePair<TKey, IList<TValue>>>)m_innerValues).IsReadOnly; }
-        }
-
-        /// <summary>
         /// Gets or sets the list associated with the given key. The
         /// access always succeeds, eventually returning an empty list.
         /// </summary>
@@ -48,6 +31,15 @@ namespace Shin.Framework.Collections
                 return m_innerValues[key];
             }
             set { m_innerValues[key] = value; }
+        }
+
+        /// <summary>
+        /// Gets the number of lists in the dictionary.
+        /// </summary>
+        /// <value>Value indicating the values count.</value>
+        public int Count
+        {
+            get { return m_innerValues.Count; }
         }
 
         /// <summary>
@@ -73,6 +65,14 @@ namespace Shin.Framework.Collections
 
                 return values;
             }
+        }
+
+        /// <summary>
+        /// See <see cref="ICollection{TValue}.IsReadOnly"/> for more information.
+        /// </summary>
+        bool ICollection<KeyValuePair<TKey, IList<TValue>>>.IsReadOnly
+        {
+            get { return ((ICollection<KeyValuePair<TKey, IList<TValue>>>)m_innerValues).IsReadOnly; }
         }
 
         /// <summary>

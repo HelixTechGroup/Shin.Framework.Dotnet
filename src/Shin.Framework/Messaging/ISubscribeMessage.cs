@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#region Usings
+using System;
+#endregion
 
 namespace Shin.Framework.Messaging
 {
     public interface ISubscribeMessage
     {
+        #region Methods
         SubscriptionToken Subscribe<TMessage, TSubscriber>(TSubscriber subscriber) where TMessage : IMessage, new() where TSubscriber : Delegate;
 
         SubscriptionToken Subscribe<TMessage, TSubscriber>(TSubscriber subscriber, ThreadOption threadOption)
@@ -28,5 +29,6 @@ namespace Shin.Framework.Messaging
         bool ContainsSubscription(SubscriptionToken token);
 
         bool ContainsSubscription<TMessage, TSubscriber>(TSubscriber subscriber) where TMessage : IMessage, new() where TSubscriber : Delegate;
+        #endregion
     }
 }

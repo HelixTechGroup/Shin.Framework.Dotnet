@@ -12,8 +12,8 @@ namespace Shin.Framework
     public interface IDispose : IDisposable
     {
         #region Events
-        event EventHandler Disposing;
         event EventHandler Disposed;
+        event EventHandler Disposing;
         #endregion
 
         #region Properties

@@ -10,8 +10,8 @@ namespace Shin.Framework
     public interface IInitialize
     {
         #region Events
-        event EventHandler Initializing;
         event EventHandler Initialized;
+        event EventHandler Initializing;
         #endregion
 
         #region Properties

@@ -8,7 +8,9 @@ namespace Shin.Framework.Messaging.Collections
 {
     public interface IMessageCollection
     {
+        #region Properties
         int Count { get; }
+        #endregion
 
         #region Methods
         bool ContainsMessage<TMessage>() where TMessage : IMessage, new();

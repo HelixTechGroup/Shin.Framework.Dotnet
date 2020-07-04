@@ -1,16 +1,16 @@
 ﻿#region Usings
 using System;
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
-using Shin.Framework.Collections.Concurrent;
 #endregion
 
 namespace Shin.Framework.Logging.Loggers
 {
     public class ConsoleLogger : TextLogger
     {
-        private bool m_checkConsole;
+        #region Members
+        private readonly bool m_checkConsole;
+        #endregion
 
         public ConsoleLogger(bool checkConsole = true)
         {
@@ -21,6 +21,7 @@ namespace Shin.Framework.Logging.Loggers
                 m_isBuffering = true;
         }
 
+        #region Methods
         protected override bool ShouldBuffer()
         {
             if (!IsConsoleAvailable())
@@ -36,7 +37,7 @@ namespace Shin.Framework.Logging.Loggers
                 return true;
 
             try
-            {                
+            {
                 if (!Environment.UserInteractive)
                     return Console.In is StreamReader;
 
@@ -52,5 +53,6 @@ namespace Shin.Framework.Logging.Loggers
                 return false;
             }
         }
+        #endregion
     }
 }

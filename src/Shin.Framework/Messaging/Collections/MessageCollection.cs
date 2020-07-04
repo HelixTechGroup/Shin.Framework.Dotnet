@@ -16,6 +16,14 @@ namespace Shin.Framework.Messaging.Collections
         private readonly ConcurrentDictionary<Type, IMessage> m_messages;
         #endregion
 
+        #region Properties
+        /// <inheritdoc />
+        public int Count
+        {
+            get { return m_messages.Count; }
+        }
+        #endregion
+
         public MessageCollection() : this(SynchronizationContext.Current) { }
 
         public MessageCollection(SynchronizationContext context)
@@ -25,12 +33,6 @@ namespace Shin.Framework.Messaging.Collections
         }
 
         #region Methods
-        /// <inheritdoc />
-        public int Count
-        {
-            get { return m_messages.Count; }
-        }
-
         public bool ContainsMessage<T>() where T : IMessage, new()
         {
             return m_messages.ContainsKey(typeof(T));

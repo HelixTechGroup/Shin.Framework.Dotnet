@@ -5,7 +5,6 @@
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.IO;
-using Shin.Framework.Collections.Concurrent;
 #endregion
 
 namespace Shin.Framework.Logging.Loggers
@@ -13,8 +12,8 @@ namespace Shin.Framework.Logging.Loggers
     public abstract class TextLogger : PlatformLogger
     {
         #region Members
-        protected TextWriter m_writer;
         protected ConcurrentQueue<string> m_buffer;
+        protected TextWriter m_writer;
         #endregion
 
         protected TextLogger()

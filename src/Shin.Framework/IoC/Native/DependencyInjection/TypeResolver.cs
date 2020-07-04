@@ -24,12 +24,6 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
         #endregion
 
         #region Methods
-        protected override void DisposeManagedResources()
-        {
-            m_instance = null;
-            CreateInstanceFunc = null;
-        }
-
         public object GetObject()
         {
             if (!Singleton)
@@ -44,6 +38,12 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             //    CreateInstanceFunc = null;
 
             return m_instance;
+        }
+
+        protected override void DisposeManagedResources()
+        {
+            m_instance = null;
+            CreateInstanceFunc = null;
         }
         #endregion
     }

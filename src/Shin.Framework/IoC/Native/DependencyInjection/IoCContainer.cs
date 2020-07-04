@@ -46,11 +46,6 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
         }
 
         #region Methods
-        protected override void DisposeManagedResources()
-        {
-            Release();
-        }
-
         public IContainer CreateChildContainer()
         {
             throw new NotImplementedException();
@@ -143,8 +138,8 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         public IEnumerable<T> ResolveAll<T>()
         {
-            Type fromType = typeof(T);
-            ConcurrentList<T> list = new ConcurrentList<T>();
+            var fromType = typeof(T);
+            var list = new ConcurrentList<T>();
 
             ResolverDictionary dictionary;
             bool retrieved;
@@ -258,9 +253,14 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             return false;
         }
 
+        protected override void DisposeManagedResources()
+        {
+            Release();
+        }
+
         private object ResolveAux(Type type, string key = null, Dictionary<string, object> resolvedObjects = null)
         {
-            bool alreadyResolved = false;
+            var alreadyResolved = false;
             object result = null;
             if (resolvedObjects != null && key != null)
             {
@@ -327,7 +327,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         private Type ResolveType(string key)
         {
-            Type result = GetTypeFromContainer(key);
+            var result = GetTypeFromContainer(key);
             if (result != null) return result;
 
             /*  Not in the container? Try the Assembly. */
@@ -348,18 +348,18 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         private void ResolveProperties(object instance, Dictionary<string, object> resolvedObjects)
         {
-            Type type = instance.GetType();
+            var type = instance.GetType();
             ConcurrentList<PropertyInfo> injectableProperties;
 
             m_lockSlim.EnterReadLock();
             try
             {
-                bool hasCachedInjectableProperties = m_injectablePropertyDictionary.TryGetValue(type, out injectableProperties);
+                var hasCachedInjectableProperties = m_injectablePropertyDictionary.TryGetValue(type, out injectableProperties);
 
                 if (!hasCachedInjectableProperties)
                 {
                     PropertyInfo[] properties;
-                    bool hasCachedProperties = m_propertyDictionary.TryGetValue(type, out properties);
+                    var hasCachedProperties = m_propertyDictionary.TryGetValue(type, out properties);
 
                     if (!hasCachedProperties)
                     {
@@ -373,7 +373,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
                     injectableProperties = new ConcurrentList<PropertyInfo>();
 
-                    foreach (PropertyInfo propertyInfo in properties)
+                    foreach (var propertyInfo in properties)
                     {
                         var dependencyAttributes = propertyInfo.GetCustomAttributes(typeof(InjectPropertyAttribute), false);
 #if NETFX_CORE
@@ -400,13 +400,13 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             if (resolvedObjects == null)
                 resolvedObjects = new Dictionary<string, object>();
 
-            string typeName = type.FullName + ".";
+            var typeName = type.FullName + ".";
 
-            foreach (PropertyInfo propertyInfo in injectableProperties)
+            foreach (var propertyInfo in injectableProperties)
             {
-                string fullPropertyName = typeName + propertyInfo.Name;
+                var fullPropertyName = typeName + propertyInfo.Name;
 
-                object propertyValue = ResolveAux(propertyInfo.PropertyType, fullPropertyName, resolvedObjects);
+                var propertyValue = ResolveAux(propertyInfo.PropertyType, fullPropertyName, resolvedObjects);
 
                 Action<object, object> setter;
 
@@ -451,10 +451,10 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             var constructorParameters = info.ParameterInfos;
             var length = constructorParameters.Length;
             var parametersList = new object[length];
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
-                ParameterInfo parameterInfo = constructorParameters[i];
-                object parameter = Resolve(parameterInfo.ParameterType);
+                var parameterInfo = constructorParameters[i];
+                var parameter = Resolve(parameterInfo.ParameterType);
                 if (parameter == null && !parameterInfo.IsOptional)
                 {
                     throw new IoCResolutionException(
@@ -501,9 +501,9 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             if (constructors.Length > 0)
             {
                 ConstructorInfo bestMatch = null;
-                int biggestLength = -1;
+                var biggestLength = -1;
 
-                foreach (ConstructorInfo constructorInfo in constructors)
+                foreach (var constructorInfo in constructors)
                 {
                     var dependencyAttributes = constructorInfo.GetCustomAttributes(typeof(InjectConstructorAttribute), false);
 #if NETFX_CORE
@@ -511,7 +511,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 #else
                     var attributeCount = dependencyAttributes.Length;
 #endif
-                    bool hasAttribute = attributeCount > 0;
+                    var hasAttribute = attributeCount > 0;
 
                     if (hasAttribute)
                     {
@@ -534,13 +534,13 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             {
 #if !NETFX_CORE
                 ConstructorInfo bestMatch = null;
-                int biggestLength = -1;
+                var biggestLength = -1;
 
                 constructors = type.GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic);
 
                 if (constructors.Length > 0)
                 {
-                    foreach (ConstructorInfo constructorInfo in constructors)
+                    foreach (var constructorInfo in constructors)
                     {
                         if (constructorInfo.GetCustomAttributes(typeof(InjectConstructorAttribute), false).Length > 0)
                         {

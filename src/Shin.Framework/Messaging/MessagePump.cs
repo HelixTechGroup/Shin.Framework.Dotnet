@@ -1,21 +1,28 @@
-﻿using System;
+﻿#region Usings
+using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using Shin.Framework.Collections.Concurrent;
 using Shin.Framework.Extensions;
+#endregion
 
 namespace Shin.Framework.Messaging
 {
     public abstract class MessagePump : Initializable, IMessagePump
     {
+        #region Events
         public event EventHandler<IMessage> MessagePopped;
         public event EventHandler<IMessage> MessagePushed;
+        #endregion
+
+        #region Members
+        protected readonly ConcurrentList<int> m_tokens;
+        protected ILogger m_logger;
 
         protected ConcurrentQueue<IMessage> m_queue;
-        protected CancellationTokenSource m_tokenSource;
         protected CancellationToken m_token;
-        protected ILogger m_logger;
-        protected readonly ConcurrentList<int> m_tokens;
+        protected CancellationTokenSource m_tokenSource;
+        #endregion
 
         protected MessagePump(ILogger logger)
         {
@@ -24,12 +31,7 @@ namespace Shin.Framework.Messaging
             m_tokens = new ConcurrentList<int>();
         }
 
-        protected override void InitializeResources()
-        {
-            base.InitializeResources();
-            m_tokenSource = CancellationTokenSource.CreateLinkedTokenSource(m_token);
-        }
-
+        #region Methods
         public void Initialize(CancellationToken token)
         {
             m_token = token;
@@ -84,7 +86,7 @@ namespace Shin.Framework.Messaging
                 switch (Pop(out message))
                 {
                     case false:
-                        if (timeout > 0 && (DateTimeOffset.Now.Subtract(startTime).TotalMilliseconds > timeout))
+                        if (timeout > 0 && DateTimeOffset.Now.Subtract(startTime).TotalMilliseconds > timeout)
                             return false;
 
                         Thread.Sleep(10);
@@ -130,7 +132,6 @@ namespace Shin.Framework.Messaging
                     MessagePopped.Raise(this, message);
                     return true;
                 }
-
             }
             catch (Exception ex)
             {
@@ -153,6 +154,12 @@ namespace Shin.Framework.Messaging
             MessagePopped.Dispose();
         }
 
+        protected override void InitializeResources()
+        {
+            base.InitializeResources();
+            m_tokenSource = CancellationTokenSource.CreateLinkedTokenSource(m_token);
+        }
+
         protected void AddCancellationToken(CancellationToken ctx)
         {
             if (ctx == CancellationToken.None || m_token.IsCancellationRequested)
@@ -164,18 +171,24 @@ namespace Shin.Framework.Messaging
             m_tokenSource = CancellationTokenSource.CreateLinkedTokenSource(m_token, ctx);
             m_tokens.Add(ctx.GetHashCode());
         }
+        #endregion
     }
 
     public abstract class MessagePump<T> : Initializable, IMessagePump<T> where T : IMessage
     {
+        #region Events
         public event EventHandler<T> MessagePopped;
         public event EventHandler<T> MessagePushed;
+        #endregion
+
+        #region Members
+        protected readonly ConcurrentList<int> m_tokens;
+        protected ILogger m_logger;
 
         protected ConcurrentQueue<T> m_queue;
-        protected CancellationTokenSource m_tokenSource;
         protected CancellationToken m_token;
-        protected ILogger m_logger;
-        protected readonly ConcurrentList<int> m_tokens;
+        protected CancellationTokenSource m_tokenSource;
+        #endregion
 
         protected MessagePump(ILogger logger)
         {
@@ -185,12 +198,7 @@ namespace Shin.Framework.Messaging
             m_tokens = new ConcurrentList<int>();
         }
 
-        protected override void InitializeResources()
-        {
-            base.InitializeResources();
-            AddCancellationToken(m_token);
-        }
-
+        #region Methods
         public void Initialize(CancellationToken token)
         {
             if (m_isInitialized)
@@ -210,7 +218,7 @@ namespace Shin.Framework.Messaging
             catch (Exception ex)
             {
                 m_logger.LogException(ex);
-                message = default(T);
+                message = default;
                 return false;
             }
         }
@@ -248,7 +256,7 @@ namespace Shin.Framework.Messaging
                 switch (Pop(out message))
                 {
                     case false:
-                        if (timeout > 0 && (DateTimeOffset.Now.Subtract(startTime).TotalMilliseconds > timeout))
+                        if (timeout > 0 && DateTimeOffset.Now.Subtract(startTime).TotalMilliseconds > timeout)
                             return false;
 
                         Thread.Sleep(10);
@@ -258,7 +266,7 @@ namespace Shin.Framework.Messaging
                 }
             } while (!m_tokenSource.IsCancellationRequested);
 
-            message = default(T);
+            message = default;
             return false;
         }
 
@@ -294,12 +302,11 @@ namespace Shin.Framework.Messaging
                     MessagePopped.Raise(this, message);
                     return true;
                 }
-                
             }
             catch (Exception ex)
             {
                 m_logger.LogException(ex);
-                message = default(T);
+                message = default;
                 return false;
             }
 
@@ -317,16 +324,23 @@ namespace Shin.Framework.Messaging
             MessagePopped.Dispose();
         }
 
+        protected override void InitializeResources()
+        {
+            base.InitializeResources();
+            AddCancellationToken(m_token);
+        }
+
         protected void AddCancellationToken(CancellationToken ctx)
         {
-            if (ctx == CancellationToken.None || m_token.IsCancellationRequested) 
+            if (ctx == CancellationToken.None || m_token.IsCancellationRequested)
                 return;
 
-            if (m_tokens.Contains(ctx.GetHashCode())) 
+            if (m_tokens.Contains(ctx.GetHashCode()))
                 return;
 
             m_tokenSource = CancellationTokenSource.CreateLinkedTokenSource(m_token, ctx);
             m_tokens.Add(ctx.GetHashCode());
         }
+        #endregion
     }
 }
