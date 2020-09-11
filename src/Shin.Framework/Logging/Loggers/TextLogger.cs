@@ -2,9 +2,11 @@
 #endregion
 
 #region Usings
+using System;
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.IO;
+using Shin.Framework.Messaging.Messages;
 #endregion
 
 namespace Shin.Framework.Logging.Loggers
@@ -24,15 +26,20 @@ namespace Shin.Framework.Logging.Loggers
         #region Methods
         public override void Flush(ILogEntry entry)
         {
+            //m_isBuffering = ShouldBuffer();
             m_isBuffering = ShouldBuffer();
-            var message = string.Format("[{2}]:{0}:{1} - ",
-                                        entry.LogTime,
-                                        entry.Message,
-                                        entry.Category.ToString().ToUpper(CultureInfo.InvariantCulture));
+            var message = entry.Message;
+            
+            switch (entry.Level)
+            {
+                case LogLevel.None:
+                    break;
+                default:
+                    message = $"{entry}\r\n";
+                    break;
+            }
 
-            if (m_isBuffering)
-                m_buffer.Enqueue(message);
-            else
+            if (!m_isBuffering)
             {
                 while (m_buffer.Count > 0)
                 {
@@ -40,8 +47,10 @@ namespace Shin.Framework.Logging.Loggers
                     m_writer.WriteLine(bMessage);
                 }
 
-                m_writer.WriteLine(message);
+                m_writer.Write(message);
             }
+            else
+                m_buffer.Enqueue(message);
         }
 
         protected override void DisposeManagedResources()

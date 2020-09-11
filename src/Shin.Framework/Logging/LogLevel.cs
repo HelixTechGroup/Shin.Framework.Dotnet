@@ -3,7 +3,7 @@ namespace Shin.Framework.Logging
     /// <summary>
     /// Defines values for the categories used by <see cref="ILogProvider"/>.
     /// </summary>
-    public enum LogCategory
+    public enum LogLevel
     {
         /// <summary>
         /// Debug category.
@@ -23,6 +23,7 @@ namespace Shin.Framework.Logging
         /// <summary>
         /// Warning category.
         /// </summary>
-        Warn
+        Warn,
+        None
     }
 }

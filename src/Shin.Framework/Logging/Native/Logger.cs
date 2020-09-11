@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Shin.Framework.Collections.Concurrent;
@@ -15,7 +16,10 @@ namespace Shin.Framework.Logging.Native
     public sealed class Logger : Initializable, ILogger
     {
         #region Members
-        private const int m_queueSize = 2;
+        private const int m_maxQueueSize = 1000;
+        private const int m_maxStackTraceSize = 1500;
+        private int m_queueSize = 10;
+        private int m_currentQueueSize = 0;
         private readonly ConcurrentList<ILogProvider> m_loggers;
         private readonly object m_logLock;
         private readonly ConcurrentQueue<ILogEntry> m_logQueue;
@@ -31,6 +35,20 @@ namespace Shin.Framework.Logging.Native
         public Thread Thread
         {
             get { return m_thread; }
+        }
+
+        public int QueueSize
+        {
+            get { return m_queueSize; }
+            set { AdjustQueue(value); }
+        }
+
+        private void AdjustQueue(in int requestedValue)
+        {
+            if (requestedValue > m_maxQueueSize)
+                Throw.Exception().InvalidOperationException();
+
+            m_queueSize = requestedValue;
         }
         #endregion
 
@@ -71,32 +89,37 @@ namespace Shin.Framework.Logging.Native
                 m_loggers.Add(logProvider);
         }
 
+        public void LogNone(string message)
+        {
+            Log(new LogEntry(message, LogLevel.None));
+        }
+
         public void LogInfo(string message)
         {
-            Log(new LogEntry(message, LogCategory.Info));
+            Log(new LogEntry(message, LogLevel.Info));
         }
 
         public void LogWarn(string message)
         {
-            Log(new LogEntry(message, LogCategory.Warn));
+            Log(new LogEntry(message, LogLevel.Warn));
         }
 
         public void LogError(string message)
         {
-            Log(new LogEntry(message, LogCategory.Exception));
+            Log(new LogEntry(message, LogLevel.Exception));
         }
 
         public void LogDebug(string message)
         {
-            Log(new LogEntry(message, LogCategory.Debug));
+            Log(new LogEntry(message, LogLevel.Debug));
         }
 
         public void LogException(Exception exception)
         {
             var trace = exception.StackTrace;
 
-            if (exception.StackTrace.Length > 1300)
-                trace = exception.StackTrace.Substring(0, 1300) + " [...] (stacktrace cut short)";
+            if (exception.StackTrace.Length > m_maxStackTraceSize)
+                trace = exception.StackTrace.Substring(0, m_maxStackTraceSize) + " [...] (stacktrace cut short)";
 
             LogError(string.Format("{0}\n{1}\n{2}",
                                    exception.Message,
@@ -104,7 +127,7 @@ namespace Shin.Framework.Logging.Native
                                    trace));
         }
 
-        public void Log(string message, LogCategory category, LogPriority priority)
+        public void Log(string message, LogLevel category, LogPriority priority)
         {
             Log(new LogEntry(message, category));
         }
@@ -166,7 +189,7 @@ namespace Shin.Framework.Logging.Native
             {
                 //if (m_logQueue.Count < m_queueSize)
                 while (m_logQueue.Count < m_queueSize && !token.IsCancellationRequested) /*&& !m_logWorker.CancellationPending)*/
-                    Thread.Sleep(100);
+                    Thread.Sleep(250);
 
                 while (m_logQueue.Count > 0)
                 {
@@ -175,9 +198,9 @@ namespace Shin.Framework.Logging.Native
                     {
                         foreach (var provider in m_loggers)
                             provider.Flush(entry);
-
-                        entry.Dispose();
                     }
+
+                    entry.Dispose();
                 }
             } while (!token.IsCancellationRequested); //(!m_logWorker.CancellationPending);
 

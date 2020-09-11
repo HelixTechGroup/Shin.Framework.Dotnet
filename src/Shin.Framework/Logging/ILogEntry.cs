@@ -10,7 +10,7 @@ namespace Shin.Framework.Logging
     public interface ILogEntry : IDispose
     {
         #region Properties
-        LogCategory Category { get; }
+        LogLevel Level { get; }
         Guid Id { get; }
 
         string LogDate { get; }

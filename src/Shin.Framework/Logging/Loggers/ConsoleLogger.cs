@@ -28,6 +28,7 @@ namespace Shin.Framework.Logging.Loggers
                 return true;
 
             m_writer = Console.Out;
+
             return false;
         }
 

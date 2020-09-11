@@ -6,7 +6,7 @@ namespace Shin.Framework.Logging.Loggers
     public abstract class PlatformLogger : Disposable, ILogProvider
     {
         #region Members
-        protected bool m_isBuffering;
+        protected bool m_isBuffering = false;
         #endregion
 
         #region Properties

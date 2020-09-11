@@ -49,13 +49,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ReflectionCompiler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ResolverDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\TypeResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\LogLevel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Collections\IMessageCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessageProxy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessagePump.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\ILogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\ILogProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\LogCategory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Loggers\ConsoleLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Loggers\PlatformLogger.cs" />

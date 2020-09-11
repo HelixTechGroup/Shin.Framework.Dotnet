@@ -3,6 +3,7 @@
 
 #region Usings
 using System;
+using System.Globalization;
 #endregion
 
 namespace Shin.Framework.Logging
@@ -10,7 +11,7 @@ namespace Shin.Framework.Logging
     public sealed class LogEntry : Disposable, ILogEntry, IEquatable<LogEntry>
     {
         #region Members
-        private readonly LogCategory m_category;
+        private readonly LogLevel m_level;
         private readonly object m_entryLock;
         private readonly Guid m_id;
         private readonly LogPriority m_priority;
@@ -20,9 +21,9 @@ namespace Shin.Framework.Logging
         #endregion
 
         #region Properties
-        public LogCategory Category
+        public LogLevel Level
         {
-            get { return m_category; }
+            get { return m_level; }
         }
 
         public Guid Id
@@ -65,22 +66,22 @@ namespace Shin.Framework.Logging
         }
         #endregion
 
-        public LogEntry() : this("", LogCategory.Info, LogPriority.None) { }
+        public LogEntry() : this("", LogLevel.Info, LogPriority.None) { }
 
-        public LogEntry(LogCategory level) : this("", level, LogPriority.None) { }
+        public LogEntry(LogLevel level) : this("", level, LogPriority.None) { }
 
-        public LogEntry(LogCategory level, LogPriority priority) : this("", level, priority) { }
+        public LogEntry(LogLevel level, LogPriority priority) : this("", level, priority) { }
 
-        public LogEntry(LogPriority priority) : this("", LogCategory.Info, priority) { }
+        public LogEntry(LogPriority priority) : this("", LogLevel.Info, priority) { }
 
-        public LogEntry(string message, LogCategory level) : this(message, level, LogPriority.None) { }
+        public LogEntry(string message, LogLevel level) : this(message, level, LogPriority.None) { }
 
-        public LogEntry(string message, LogCategory level, LogPriority priority)
+        public LogEntry(string message, LogLevel level, LogPriority priority)
         {
             m_id = Guid.NewGuid();
             m_entryLock = new object();
             m_message = message;
-            m_category = level;
+            m_level = level;
             m_priority = priority;
             SetLogDate();
         }
@@ -125,6 +126,15 @@ namespace Shin.Framework.Logging
         {
             m_logDate = DateTime.Now.ToString("yyyy-MM-dd");
             m_logTime = DateTime.Now.ToString("hh:mm:ss.fff tt");
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return string.Format("[{2}]:{0}:{1}",
+                                 LogTime,
+                                 Message,
+                                 Level.ToString().ToUpper(CultureInfo.InvariantCulture));
         }
         #endregion
     }
