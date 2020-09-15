@@ -24,8 +24,8 @@ namespace Shin.Framework.Extensions
             if (!t.IsInterface)
                 return false;
 
-            var allInterfaces = test.GetType().GetInterfaces();
-            return allInterfaces.Any(i => i == t);
+            return t.IsInstanceOfType(test);
+            //return allInterfaces != null;//.Any(i => i == t);
         }
 
         public static bool ContainsInterface<T>(this object test)

@@ -34,6 +34,31 @@ namespace Shin.Framework.Extensions
         {
             return (from assembly in assemblies from attribute in assembly.GetCustomAttributes(typeof(T), false) select attribute).OfType<T>();
         }
+
+        public static IEnumerable<Type> GetLoadableTypes(this Assembly assembly)
+        {
+            if (assembly == null) throw new ArgumentNullException("assembly");
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                return e.Types.Where(t => t != null);
+            }
+        }
+
+        public static IEnumerable<Type> GetTypesWithInterface<TInterface>(this IEnumerable<Assembly> assemblies)
+        {
+            var it = typeof(TInterface);
+            var res = new List<Type>();
+            foreach (var asm in assemblies)
+            {
+                res.AddRange(asm.GetLoadableTypes().Where(it.IsAssignableFrom).ToList());
+            }
+
+            return res;
+        }
         #endregion
     }
 }
