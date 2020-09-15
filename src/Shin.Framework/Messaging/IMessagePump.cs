@@ -29,7 +29,7 @@ namespace Shin.Framework.Messaging
         #endregion
     }
 
-    public interface IMessagePump<T> : IInitialize, IDispose where T : IMessage
+    public interface IMessagePump<T> : IMessagePump where T : IMessage
     {
         #region Methods
         void Initialize(CancellationToken token);

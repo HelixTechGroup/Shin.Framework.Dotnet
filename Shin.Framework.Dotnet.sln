@@ -35,10 +35,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F997FA0E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sandbox", "Sandbox", "{CAA13F07-C88B-49C8-A626-5E3B1C55B628}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreSandbox", "sandbox\CoreSandbox\CoreSandbox.csproj", "{0E27F09C-2C4C-4487-83B9-044A82DAADBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreSandbox", "sandbox\CoreSandbox\CoreSandbox.csproj", "{0E27F09C-2C4C-4487-83B9-044A82DAADBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetCore", "NetCore", "{B12062BF-DD4C-4855-B725-BF9308870285}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shin.Framework.NetCore", "src\NetCore\Shin.Framework.NetCore\Shin.Framework.NetCore.csproj", "{07B929E6-9B57-4348-9380-05BFD5701220}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Shin.Framework\Shin.Framework.projitems*{07b929e6-9b57-4348-9380-05bfd5701220}*SharedItemsImports = 5
 		src\Shin.Framework\Shin.Framework.projitems*{ce636a6d-423b-4011-8a67-c2fa02cf1a8c}*SharedItemsImports = 5
 		src\Shin.Framework\Shin.Framework.projitems*{f7ef21b1-ee13-4b24-99b6-cb79bbcb71ce}*SharedItemsImports = 13
 	EndGlobalSection
@@ -55,6 +60,10 @@ Global
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07B929E6-9B57-4348-9380-05BFD5701220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07B929E6-9B57-4348-9380-05BFD5701220}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07B929E6-9B57-4348-9380-05BFD5701220}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07B929E6-9B57-4348-9380-05BFD5701220}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +71,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C} = {FCDC1DAE-0B6D-4FB3-83A3-8543A5368870}
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA} = {CAA13F07-C88B-49C8-A626-5E3B1C55B628}
+		{07B929E6-9B57-4348-9380-05BFD5701220} = {B12062BF-DD4C-4855-B725-BF9308870285}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E19F08BB-A8A3-402E-ABF8-1D5E72FD43E8}

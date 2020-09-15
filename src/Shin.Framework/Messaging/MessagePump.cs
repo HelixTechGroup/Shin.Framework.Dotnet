@@ -29,6 +29,7 @@ namespace Shin.Framework.Messaging
             m_queue = new ConcurrentQueue<IMessage>();
             m_token = new CancellationToken();
             m_tokens = new ConcurrentList<int>();
+            m_logger = logger;
         }
 
         #region Methods
@@ -77,7 +78,7 @@ namespace Shin.Framework.Messaging
             AddCancellationToken(ctx);
 
             var startTime = DateTimeOffset.Now;
-            while (m_tokenSource.IsCancellationRequested)
+            do
             {
                 Pump(ctx);
                 if (timeout == 0)
@@ -94,9 +95,9 @@ namespace Shin.Framework.Messaging
                     default:
                         return true;
                 }
-            }
+            } while (!m_tokenSource.IsCancellationRequested);
 
-            message = null;
+            message = default;
             return false;
         }
 
@@ -174,173 +175,135 @@ namespace Shin.Framework.Messaging
         #endregion
     }
 
-    public abstract class MessagePump<T> : Initializable, IMessagePump<T> where T : IMessage
-    {
-        #region Events
-        public event EventHandler<T> MessagePopped;
-        public event EventHandler<T> MessagePushed;
-        #endregion
+    //public abstract class MessagePump<T> : MessagePump, IMessagePump<T> where T : IMessage
+    //{
+    //    #region Events
+    //    public event EventHandler<T> MessagePopped;
+    //    public event EventHandler<T> MessagePushed;
+    //    #endregion
 
-        #region Members
-        protected readonly ConcurrentList<int> m_tokens;
-        protected ILogger m_logger;
+    //    #region Members
+    //    protected readonly ConcurrentList<int> m_tokens;
+    //    protected ILogger m_logger;
 
-        protected ConcurrentQueue<T> m_queue;
-        protected CancellationToken m_token;
-        protected CancellationTokenSource m_tokenSource;
-        #endregion
+    //    protected ConcurrentQueue<T> m_queue;
+    //    protected CancellationToken m_token;
+    //    protected CancellationTokenSource m_tokenSource;
+    //    #endregion
 
-        protected MessagePump(ILogger logger)
-        {
-            m_queue = new ConcurrentQueue<T>();
-            m_token = new CancellationToken();
-            m_tokenSource = new CancellationTokenSource();
-            m_tokens = new ConcurrentList<int>();
-        }
+    //    protected MessagePump(ILogger logger) : base(logger)
+    //    {
+    //        m_queue = new ConcurrentQueue<T>();
+    //        m_token = new CancellationToken();
+    //        m_tokenSource = new CancellationTokenSource();
+    //        m_tokens = new ConcurrentList<int>();
+    //    }
 
-        #region Methods
-        public void Initialize(CancellationToken token)
-        {
-            if (m_isInitialized)
-                return;
+    //    #region Methods
+    //    /// <inheritdoc />
+    //    public virtual bool Peek(out T message)
+    //    {
+    //        try
+    //        {
+    //            return m_queue.TryPeek(out message);
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            m_logger.LogException(ex);
+    //            message = default;
+    //            return false;
+    //        }
+    //    }
 
-            m_token = token;
-            Initialize();
-        }
+    //    /// <inheritdoc />
+    //    public virtual bool Poll(out T message, CancellationToken ctx)
+    //    {
+    //        return Wait(out message, 0, ctx);
+    //    }
 
-        /// <inheritdoc />
-        public virtual bool Peek(out T message)
-        {
-            try
-            {
-                return m_queue.TryPeek(out message);
-            }
-            catch (Exception ex)
-            {
-                m_logger.LogException(ex);
-                message = default;
-                return false;
-            }
-        }
+    //    /// <inheritdoc />
+    //    public bool Poll(out T message)
+    //    {
+    //        return Poll(out message, CancellationToken.None);
+    //    }
 
-        /// <inheritdoc />
-        public virtual bool Poll(out T message, CancellationToken ctx)
-        {
-            return Wait(out message, 0, ctx);
-        }
+    //    /// <inheritdoc />
+    //    public virtual bool Wait(out T message, int timeout, CancellationToken ctx)
+    //    {
+    //        AddCancellationToken(ctx);
 
-        /// <inheritdoc />
-        public bool Poll(out T message)
-        {
-            return Poll(out message, CancellationToken.None);
-        }
+    //        var startTime = DateTimeOffset.Now;
+    //        do
+    //        {
+    //            Pump(ctx);
+    //            if (timeout == 0)
+    //                return Pop(out message);
 
-        /// <inheritdoc />
-        public abstract void Pump(CancellationToken ctx);
+    //            switch (Pop(out message))
+    //            {
+    //                case false:
+    //                    if (timeout > 0 && DateTimeOffset.Now.Subtract(startTime).TotalMilliseconds > timeout)
+    //                        return false;
 
-        /// <inheritdoc />
-        public abstract void Pump();
+    //                    Thread.Sleep(10);
+    //                    break;
+    //                default:
+    //                    return true;
+    //            }
+    //        } while (!m_tokenSource.IsCancellationRequested);
 
-        /// <inheritdoc />
-        public virtual bool Wait(out T message, int timeout, CancellationToken ctx)
-        {
-            AddCancellationToken(ctx);
+    //        message = default;
+    //        return false;
+    //    }
 
-            var startTime = DateTimeOffset.Now;
-            do
-            {
-                Pump(ctx);
-                if (timeout == 0)
-                    return Pop(out message);
+    //    /// <inheritdoc />
+    //    public bool Wait(out T message, int timeout = -1)
+    //    {
+    //        return Wait(out message, timeout, CancellationToken.None);
+    //    }
 
-                switch (Pop(out message))
-                {
-                    case false:
-                        if (timeout > 0 && DateTimeOffset.Now.Subtract(startTime).TotalMilliseconds > timeout)
-                            return false;
+    //    /// <inheritdoc />
+    //    public virtual bool Push(T message)
+    //    {
+    //        try
+    //        {
+    //            m_queue.Enqueue(message);
+    //            MessagePushed.Raise(this, message);
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            m_logger.LogException(ex);
+    //            return false;
+    //        }
 
-                        Thread.Sleep(10);
-                        break;
-                    default:
-                        return true;
-                }
-            } while (!m_tokenSource.IsCancellationRequested);
+    //        return true;
+    //    }
 
-            message = default;
-            return false;
-        }
+    //    public virtual bool Pop(out T message)
+    //    {
+    //        try
+    //        {
+    //            if (m_queue.TryDequeue(out message))
+    //            {
+    //                MessagePopped.Raise(this, message);
+    //                return true;
+    //            }
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            m_logger.LogException(ex);
+    //            message = default;
+    //            return false;
+    //        }
 
-        /// <inheritdoc />
-        public bool Wait(out T message, int timeout = -1)
-        {
-            return Wait(out message, timeout, CancellationToken.None);
-        }
+    //        return false;
+    //    }
 
-        /// <inheritdoc />
-        public virtual bool Push(T message)
-        {
-            try
-            {
-                m_queue.Enqueue(message);
-                MessagePushed.Raise(this, message);
-            }
-            catch (Exception ex)
-            {
-                m_logger.LogException(ex);
-                return false;
-            }
-
-            return true;
-        }
-
-        public virtual bool Pop(out T message)
-        {
-            try
-            {
-                if (m_queue.TryDequeue(out message))
-                {
-                    MessagePopped.Raise(this, message);
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                m_logger.LogException(ex);
-                message = default;
-                return false;
-            }
-
-            return false;
-        }
-
-        protected override void DisposeManagedResources()
-        {
-            if (!m_tokenSource.IsCancellationRequested)
-                m_tokenSource.Cancel();
-
-            base.DisposeManagedResources();
-            m_tokenSource.Dispose();
-            MessagePushed.Dispose();
-            MessagePopped.Dispose();
-        }
-
-        protected override void InitializeResources()
-        {
-            base.InitializeResources();
-            AddCancellationToken(m_token);
-        }
-
-        protected void AddCancellationToken(CancellationToken ctx)
-        {
-            if (ctx == CancellationToken.None || m_token.IsCancellationRequested)
-                return;
-
-            if (m_tokens.Contains(ctx.GetHashCode()))
-                return;
-
-            m_tokenSource = CancellationTokenSource.CreateLinkedTokenSource(m_token, ctx);
-            m_tokens.Add(ctx.GetHashCode());
-        }
-        #endregion
-    }
+    //    protected override void DisposeManagedResources()
+    //    {
+    //        MessagePushed.Dispose();
+    //        MessagePopped.Dispose();
+    //    }
+    //    #endregion
+    //}
 }
