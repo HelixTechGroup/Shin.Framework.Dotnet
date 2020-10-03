@@ -134,14 +134,14 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             throw new NotImplementedException();
         }
 
-        public T Resolve<T>(string key = null)
+        public T Resolve<T>(string key = null, params object[] parameters)
         {
-            return (T)ResolveAux(typeof(T), key);
+            return (T)ResolveAux(typeof(T), key, null, parameters);
         }
 
-        public object Resolve(Type T, string key = null)
+        public object Resolve(Type T, string key = null, params object[] parameters)
         {
-            return ResolveAux(T, key);
+            return ResolveAux(T, key, null, parameters);
         }
 
         public IEnumerable<T> ResolveAll<T>()
@@ -265,7 +265,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             Release();
         }
 
-        private object ResolveAux(Type type, string key = null, Dictionary<string, object> resolvedObjects = null)
+        private object ResolveAux(Type type, string key = null, Dictionary<string, object> resolvedObjects = null, params object[] parameters)
         {
             var alreadyResolved = false;
             object result = null;
@@ -295,7 +295,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             return result;
         }
 
-        private object ResolveCore(Type type, string key)
+        private object ResolveCore(Type type, string key, params object[] parameters)
         {
             key = GetKeyValueOrDefault(key);
 
@@ -328,7 +328,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 m_lockSlim.ExitReadLock();
             }
 
-            if (resolvers == null) return BuildUp(type, key);
+            if (resolvers == null) return BuildUp(type, key, parameters);
 
             if (resolver != null) return resolver.GetObject();
 
@@ -430,7 +430,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             }
         }
 
-        private object BuildUp(Type type, string key)
+        private object BuildUp(Type type, string key, params object[] parameters)
         {
             if (type == null)
                 throw new IoCResolutionException("type cannot not be null.");
@@ -453,25 +453,29 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 m_lockSlim.ExitReadLock();
             }
 
-            return instance ?? Instantiate(type);
+            return instance ?? Instantiate(type, parameters);
         }
 
-        private object Instantiate(ConstructorInvokeInfo info)
+        private object Instantiate(ConstructorInvokeInfo info, params object[] parameters)
         {
             var constructorParameters = info.ParameterInfos;
             var length = constructorParameters.Length;
-            var parametersList = new object[length];
-            for (var i = 0; i < length; i++)
+            var test = parameters.Length == length;
+            var parametersList = test ? parameters : new object[length];
+            if (!test)
             {
-                var parameterInfo = constructorParameters[i];
-                var parameter = Resolve(parameterInfo.ParameterType);
-                if (parameter == null && !parameterInfo.IsOptional)
+                for (var i = 0; i < length; i++)
                 {
-                    throw new IoCResolutionException(
-                                                     "Failed to instantiate parameter " + parameterInfo.Name);
-                }
+                    var parameterInfo = constructorParameters[i];
+                    var parameter = Resolve(parameterInfo.ParameterType);
+                    if (parameter == null && !parameterInfo.IsOptional)
+                    {
+                        throw new IoCResolutionException(
+                                                         "Failed to instantiate parameter " + parameterInfo.Name);
+                    }
 
-                parametersList[i] = parameter;
+                    parametersList[i] = parameter;
+                }
             }
 
             var constructorFunc = info.ConstructorFunc;
@@ -485,7 +489,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             }
         }
 
-        private object Instantiate(Type type)
+        private object Instantiate(Type type, params object[] parameters)
         {
             ConstructorInvokeInfo invokeInfo;
             m_constructorDictionaryLockSlim.EnterReadLock();
@@ -595,7 +599,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 m_constructorDictionaryLockSlim.ExitWriteLock();
             }
 
-            return Instantiate(invokeInfo);
+            return Instantiate(invokeInfo, parameters);
         }
 
         private string GetKeyValueOrDefault(string key)

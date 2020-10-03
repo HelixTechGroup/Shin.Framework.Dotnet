@@ -40,9 +40,9 @@ namespace Shin.Framework.IoC.DependencyInjection
 
         void UnregisterAll<T>();
 
-        T Resolve<T>(string key = null);
+        T Resolve<T>(string key = null, params object[] parameters);
 
-        object Resolve(Type T, string key = null);
+        object Resolve(Type T, string key = null, params object[] parameters);
 
         IEnumerable<T> ResolveAll<T>();
 
