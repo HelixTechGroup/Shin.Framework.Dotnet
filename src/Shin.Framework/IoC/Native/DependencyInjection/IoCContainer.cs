@@ -94,6 +94,12 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             CreateResolver(T, () => Instantiate(T), key, asSingleton, overrideExisting);
         }
 
+        /// <inheritdoc />
+        public void Register<T>(Type C, bool asSingleton = true, string key = null, bool overrideExisting = false)
+        {
+            CreateResolver(typeof(T), () => Instantiate(C), key, asSingleton, overrideExisting);
+        }
+
         public void Register<T, C>(C value, bool asSingleton = true, string key = null, bool overrideExisting = false) where C : class, T
         {
             CreateResolver(typeof(T), () => value, key, asSingleton, overrideExisting);

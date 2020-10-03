@@ -24,6 +24,8 @@ namespace Shin.Framework.IoC.DependencyInjection
 
         void Register(Type T, bool asSingleton = true, string key = null, bool overrideExisting = false);
 
+        void Register<T>(Type C, bool asSingleton = true, string key = null, bool overrideExisting = false);
+
         void Register<T, C>(C value, bool asSingleton = true, string key = null, bool overrideExisting = false) where C : class, T;
 
         void Register<T, C>(bool asSingleton = true, string key = null, bool overrideExisting = false) where C : class, T;
