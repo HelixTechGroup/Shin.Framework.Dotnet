@@ -27,9 +27,11 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
         private ConcurrentDictionary<string, Action<object, object>> m_propertyActionDictionary;
         private ConcurrentDictionary<Type, PropertyInfo[]> m_propertyDictionary;
         private ConcurrentDictionary<Type, ResolverDictionary> m_typeDictionary;
+        private ConcurrentDictionary<string, IContainer> m_childContainers;
+        private IContainer m_parentContainer;
         #endregion
 
-        public IoCContainer()
+        public IoCContainer(IContainer parent)
         {
             m_typeDictionary = new ConcurrentDictionary<Type, ResolverDictionary>();
             m_keyDictionary = new ConcurrentDictionary<string, Type>();
@@ -41,14 +43,20 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             m_injectablePropertyDictionary = new ConcurrentDictionary<Type, ConcurrentList<PropertyInfo>>();
             m_propertyActionDictionary = new ConcurrentDictionary<string, Action<object, object>>();
             m_propertyDictionary = new ConcurrentDictionary<Type, PropertyInfo[]>();
+            m_childContainers = new ConcurrentDictionary<string, IContainer>();
+            m_parentContainer = parent;
 
             Register<IContainer>(this);
         }
 
+        public IoCContainer() : this(null) { }
+
         #region Methods
         public IContainer CreateChildContainer()
         {
-            throw new NotImplementedException();
+            var container =  new IoCContainer(this);
+            m_childContainers[Guid.NewGuid().ToString()] = container;
+            return container;
         }
 
         public void Load(params IBindings[] bindings)
@@ -154,10 +162,9 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 m_lockSlim.ExitReadLock();
             }
 
-            if (!retrieved)
-                return list;
+            if (retrieved)
+                list.AddRange(dictionary.Values.Select(resolver => (T)resolver.GetObject()));
 
-            list.AddRange(dictionary.Values.Select(resolver => (T)resolver.GetObject()));
             return list;
         }
 
@@ -178,17 +185,17 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 m_lockSlim.ExitReadLock();
             }
 
-            if (!retrievedValue)
-                return list;
-
-            if (resolverDictionary == null)
+            if (retrievedValue)
             {
-                var builtObject = BuildUp(T, null);
-                if (builtObject != null)
-                    list.Add(builtObject);
+                if (resolverDictionary == null)
+                {
+                    var builtObject = BuildUp(T, null);
+                    if (builtObject != null)
+                        list.Add(builtObject);
+                }
+                else
+                    list.AddRange(resolverDictionary.Values.Select(resolver => resolver.GetObject()));
             }
-            else
-                list.AddRange(resolverDictionary.Values.Select(resolver => resolver.GetObject()));
 
             return list;
         }
@@ -263,10 +270,8 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             var alreadyResolved = false;
             object result = null;
             if (resolvedObjects != null && key != null)
-            {
                 if (resolvedObjects.TryGetValue(key, out result))
                     alreadyResolved = true;
-            }
 
             if (!alreadyResolved)
             {
@@ -277,11 +282,16 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 if (result != null) ResolveProperties(result, resolvedObjects);
             }
 
-            if (resolvedObjects != null) resolvedObjects.Clear();
+            resolvedObjects?.Clear();
 
             if (result == null)
-                throw new IoCResolutionException();
+            {
+                if (m_parentContainer == null)
+                    throw new IoCResolutionException();
 
+                result = m_parentContainer.Resolve(type, key);
+
+            }
             return result;
         }
 
@@ -498,7 +508,9 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
             ConstructorInfo constructor = null;
 
-            if (constructors.Length > 0)
+            if (constructors.Length == 1)
+                constructor = constructors[0];
+            else if (constructors.Length > 1)
             {
                 ConstructorInfo bestMatch = null;
                 var biggestLength = -1;
@@ -519,12 +531,15 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                         break;
                     }
 
-                    var length = constructorInfo.GetParameters().Length;
-
-                    if (length > biggestLength)
+                    if (constructors.Length >= 1)
                     {
-                        biggestLength = length;
-                        bestMatch = constructorInfo;
+                        var length = constructorInfo.GetParameters().Length;
+
+                        if (length > biggestLength)
+                        {
+                            biggestLength = length;
+                            bestMatch = constructorInfo;
+                        }
                     }
                 }
 
