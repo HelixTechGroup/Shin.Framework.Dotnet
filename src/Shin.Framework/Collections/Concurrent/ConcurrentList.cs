@@ -679,7 +679,23 @@ namespace Shin.Framework.Collections.Concurrent
 
         public virtual bool Remove(T item)
         {
-            m_lock.EnterUpgradeableReadLock();
+            //if (m_lock.IsUpgradeableReadLockHeld)
+            //{
+            //    while(m_lock.IsUpgradeableReadLockHeld)
+            //    {
+            //        Thread.Sleep(250);
+            //    }
+            //}
+
+            //if (m_lock.IsReadLockHeld)
+            //{
+            //    while (m_lock.IsReadLockHeld)
+            //    {
+            //        Thread.Sleep(250);
+            //    }
+            //}
+
+            m_lock.TryEnterUpgradeableReadLock(1000);
 
             try
             {

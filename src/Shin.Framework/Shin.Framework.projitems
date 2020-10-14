@@ -27,10 +27,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EventHandlerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExceptionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExpressionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\IntExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TypeExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\UintExceptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\UintExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDispose.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IId.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IInitialize.cs" />

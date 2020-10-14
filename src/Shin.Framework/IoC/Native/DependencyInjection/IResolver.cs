@@ -8,23 +8,24 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
     internal interface IResolver : IDispose
     {
         #region Properties
-        Func<object> CreateInstanceFunc { get; set; }
+        Func<object[], object> CreateInstanceFunc { get; set; }
         bool Singleton { get; set; }
+        bool HasInstance { get; }
         #endregion
 
         #region Methods
-        object GetObject();
+        object GetObject(params object[] parameters);
         #endregion
     }
 
     internal interface IResolver<T> : IResolver
     {
         #region Properties
-        new Func<T> CreateInstanceFunc { get; set; }
+        new Func<object[], T> CreateInstanceFunc { get; set; }
         #endregion
 
         #region Methods
-        new T GetObject();
+        new T GetObject(params object[] parameters);
         #endregion
     }
 }

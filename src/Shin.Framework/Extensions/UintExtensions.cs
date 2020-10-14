@@ -1,4 +1,6 @@
-﻿namespace Shin.Framework.Extensions
+﻿using System;
+
+namespace Shin.Framework.Extensions
 {
     public static class UintExtensions
     {
@@ -31,6 +33,11 @@
         public static uint HighAsUInt(this uint dword)
         {
             return dword >> 16 & ushort.MaxValue;
+        }
+
+        public static int ToUint(this uint value)
+        {
+            return Convert.ToInt32(value);
         }
         #endregion
     }

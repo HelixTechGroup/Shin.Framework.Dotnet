@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Shield.Framework.IoC.Native.DependencyInjection.Exceptions;
 using Shin.Framework;
 using Shin.Framework.Collections.Concurrent;
+using Shin.Framework.Extensions;
 using Shin.Framework.IoC.DependencyInjection;
 #endregion
 
@@ -19,16 +21,16 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
         private readonly ReaderWriterLockSlim m_constructorDictionaryLockSlim;
         private readonly string m_defaultKey;
         private readonly ReaderWriterLockSlim m_lockSlim;
-        private ConcurrentDictionary<Type, ConstructorInvokeInfo> m_constructorDictionary;
+        private readonly ConcurrentDictionary<string, IContainer> m_childContainers;
+        private ConcurrentDictionary<Type, ConstructorInvokeInfo[]> m_constructorDictionary;
         private ConcurrentDictionary<Type, ConcurrentList<string>> m_cycleDictionary;
         private ConcurrentDictionary<Type, ConcurrentList<PropertyInfo>> m_injectablePropertyDictionary;
 
         private ConcurrentDictionary<string, Type> m_keyDictionary;
+        private readonly IContainer m_parentContainer;
         private ConcurrentDictionary<string, Action<object, object>> m_propertyActionDictionary;
         private ConcurrentDictionary<Type, PropertyInfo[]> m_propertyDictionary;
         private ConcurrentDictionary<Type, ResolverDictionary> m_typeDictionary;
-        private ConcurrentDictionary<string, IContainer> m_childContainers;
-        private IContainer m_parentContainer;
         #endregion
 
         public IoCContainer(IContainer parent)
@@ -39,7 +41,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             m_lockSlim = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
             m_constructorDictionaryLockSlim = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
             m_cycleDictionary = new ConcurrentDictionary<Type, ConcurrentList<string>>();
-            m_constructorDictionary = new ConcurrentDictionary<Type, ConstructorInvokeInfo>();
+            m_constructorDictionary = new ConcurrentDictionary<Type, ConstructorInvokeInfo[]>();
             m_injectablePropertyDictionary = new ConcurrentDictionary<Type, ConcurrentList<PropertyInfo>>();
             m_propertyActionDictionary = new ConcurrentDictionary<string, Action<object, object>>();
             m_propertyDictionary = new ConcurrentDictionary<Type, PropertyInfo[]>();
@@ -54,7 +56,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
         #region Methods
         public IContainer CreateChildContainer()
         {
-            var container =  new IoCContainer(this);
+            var container = new IoCContainer(this);
             m_childContainers[Guid.NewGuid().ToString()] = container;
             return container;
         }
@@ -81,7 +83,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         public void Register<T>(bool asSingleton = true, string key = null, bool overrideExisting = false)
         {
-            CreateResolver<T>(() => Instantiate(typeof(T)), key, asSingleton, overrideExisting);
+            CreateResolver<T>((p) => Instantiate(typeof(T), typeof(T), p), key, asSingleton, overrideExisting);
         }
 
         public void Register(Type T, object value, bool asSingleton = true, string key = null, bool overrideExisting = false)
@@ -91,13 +93,13 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         public void Register(Type T, bool asSingleton = true, string key = null, bool overrideExisting = false)
         {
-            CreateResolver(T, () => Instantiate(T), key, asSingleton, overrideExisting);
+            CreateResolver(T, (p) => Instantiate(T, T, p), key, asSingleton, overrideExisting);
         }
 
         /// <inheritdoc />
         public void Register<T>(Type C, bool asSingleton = true, string key = null, bool overrideExisting = false)
         {
-            CreateResolver(typeof(T), () => Instantiate(C), key, asSingleton, overrideExisting);
+            CreateResolver(typeof(T), (p) => Instantiate(typeof(T), C, p), key, asSingleton, overrideExisting);
         }
 
         public void Register<T, C>(C value, bool asSingleton = true, string key = null, bool overrideExisting = false) where C : class, T
@@ -107,12 +109,12 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         public void Register<T, C>(bool asSingleton = true, string key = null, bool overrideExisting = false) where C : class, T
         {
-            CreateResolver<T>(() => Instantiate(typeof(C)), key, asSingleton, overrideExisting);
+            CreateResolver<T>((p) => Instantiate(typeof(T), typeof(C), p), key, asSingleton, overrideExisting);
         }
 
         public void Register(Type T, Type C, bool asSingleton = true, string key = null, bool overrideExisting = false)
         {
-            CreateResolver(T, () => Instantiate(C), key, asSingleton, overrideExisting);
+            CreateResolver(T, (p) => Instantiate(T, C, p), key, asSingleton, overrideExisting);
         }
 
         public void Unregister<T>(string key = null)
@@ -156,12 +158,28 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             var list = new ConcurrentList<T>();
 
             ResolverDictionary dictionary;
-            bool retrieved;
+            var retrieved = false;
 
             m_lockSlim.EnterReadLock();
             try
             {
-                retrieved = m_typeDictionary.TryGetValue(fromType, out dictionary);
+                if (m_typeDictionary.TryGetValue(fromType, out dictionary))
+                    retrieved = true;
+                if (fromType.IsInterface)
+                {
+                    foreach (var k in m_typeDictionary)
+                    {
+                        if (!k.Key.ContainsInterface(fromType)) 
+                            continue;
+
+                        //foreach (var r in k.Value.Values)
+                        //    if (r.HasInstance)
+                        //        list.Add((T)r.GetObject());
+                        list.AddRange(k.Value.Values
+                                       //.Where(resolver => resolver.HasInstance)
+                                       .Select(resolver => (T)resolver.GetObject()));
+                    }
+                }
             }
             finally
             {
@@ -169,7 +187,9 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             }
 
             if (retrieved)
-                list.AddRange(dictionary.Values.Select(resolver => (T)resolver.GetObject()));
+                list.AddRange(dictionary.Values
+                               //.Where(resolver => resolver.HasInstance)
+                               .Select(resolver => (T)resolver.GetObject()));
 
             return list;
         }
@@ -200,7 +220,26 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                         list.Add(builtObject);
                 }
                 else
-                    list.AddRange(resolverDictionary.Values.Select(resolver => resolver.GetObject()));
+                    list.AddRange(resolverDictionary.Values
+                                   //.Where(resolver => resolver.HasInstance)
+                                   .Select(resolver => resolver.GetObject()));
+            }
+
+            if (T.IsInterface)
+            {
+                foreach (var k in m_typeDictionary)
+                {
+                    if (!k.Key.ContainsInterface(T)) 
+                        continue;
+
+                    //foreach (var r in k.Value.Values)
+                    //    if (r.HasInstance)
+                    //        list.Add(r.GetObject());
+
+                    list.AddRange(k.Value.Values
+                                   //.Where(resolver => resolver.HasInstance)
+                                   .Select(resolver => resolver.GetObject()));
+                }
             }
 
             return list;
@@ -238,7 +277,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             m_typeDictionary = new ConcurrentDictionary<Type, ResolverDictionary>();
             m_keyDictionary = new ConcurrentDictionary<string, Type>();
             m_cycleDictionary = new ConcurrentDictionary<Type, ConcurrentList<string>>();
-            m_constructorDictionary = new ConcurrentDictionary<Type, ConstructorInvokeInfo>();
+            m_constructorDictionary = new ConcurrentDictionary<Type, ConstructorInvokeInfo[]>();
             m_injectablePropertyDictionary = new ConcurrentDictionary<Type, ConcurrentList<PropertyInfo>>();
             m_propertyActionDictionary = new ConcurrentDictionary<string, Action<object, object>>();
             m_propertyDictionary = new ConcurrentDictionary<Type, PropertyInfo[]>();
@@ -276,12 +315,25 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             var alreadyResolved = false;
             object result = null;
             if (resolvedObjects != null && key != null)
+            {
                 if (resolvedObjects.TryGetValue(key, out result))
                     alreadyResolved = true;
+            }
 
             if (!alreadyResolved)
             {
-                result = ResolveCore(type, key);
+                key = GetKeyFromType(type);
+                if (type.IsInterface)
+                {
+                    var match = m_typeDictionary.Keys.FirstOrDefault(k => k.ContainsInterface(type));
+                    if (match != null)
+                    {
+                        var mKey = GetKeyFromType(match);
+                        result = ResolveCore(match, key, parameters);
+                    }
+                }
+                else
+                    result = ResolveCore(type, key, parameters);
 
                 if (key != null && resolvedObjects != null) resolvedObjects[key] = result;
 
@@ -296,9 +348,31 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                     throw new IoCResolutionException();
 
                 result = m_parentContainer.Resolve(type, key);
-
             }
+
             return result;
+        }
+
+        private string GetKeyFromType(Type type)
+        {
+            var t = type;
+            if (t.IsInterface)
+            {
+                foreach (var k in m_keyDictionary)
+                {
+                    if (k.Value.ContainsInterface(t))
+                        return k.Key;
+                }
+            }
+
+            if (m_keyDictionary.Values.Contains(t))
+            {
+                return m_keyDictionary.Where(k => k.Value == type)
+                                      .Select(k => k.Key)
+                                      .FirstOrDefault();
+            }
+
+            return null;
         }
 
         private object ResolveCore(Type type, string key, params object[] parameters)
@@ -322,11 +396,11 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 {
                     /* If the ResolveProperties method calls through here, it may be searching for a registration per
                      * strongly-typed name that does not exist. In this case, just get the default registration. */
-                    if (!resolvers.TryGetValue(key, out resolver))
-                    {
-                        key = GetKeyValueOrDefault(null);
-                        resolver = resolvers[key];
-                    }
+                    //if (!resolvers.TryGetValue(key, out resolver))
+                    //{
+                    //    key = GetKeyValueOrDefault(null);
+                    //    resolver = resolvers[key];
+                    //}
                 }
             }
             finally
@@ -336,9 +410,12 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
             if (resolvers == null) return BuildUp(type, key, parameters);
 
-            if (resolver != null) return resolver.GetObject();
+            foreach (var r in resolvers.Values)
+            {
+                return r.GetObject(parameters);
+            }
 
-            return BuildUp(type, key);
+            return BuildUp(type, key, parameters);
         }
 
         private Type ResolveType(string key)
@@ -459,21 +536,36 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 m_lockSlim.ExitReadLock();
             }
 
-            return instance ?? Instantiate(type, parameters);
+            return instance ?? Instantiate(type, type, parameters);
         }
 
         private object Instantiate(ConstructorInvokeInfo info, params object[] parameters)
         {
             var constructorParameters = info.ParameterInfos;
             var length = constructorParameters.Length;
-            var test = parameters.Length == length;
-            var parametersList = test ? parameters : new object[length];
-            if (!test)
-            {
+            var test = (parameters.Length) == length;
+            var parametersList = /*test ? parameters :*/ new object[length];
+            //if (!test)
+            //{
                 for (var i = 0; i < length; i++)
                 {
                     var parameterInfo = constructorParameters[i];
-                    var parameter = Resolve(parameterInfo.ParameterType);
+                    object parameter = null;
+                    if (test)
+                    {
+                        try
+                        {
+                            parameter = parameters[i];
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            parameter = Resolve(parameterInfo.ParameterType);
+                        }
+                    }
+                    else
+                        parameter = Resolve(parameterInfo.ParameterType);
+
                     if (parameter == null && !parameterInfo.IsOptional)
                     {
                         throw new IoCResolutionException(
@@ -482,7 +574,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
                     parametersList[i] = parameter;
                 }
-            }
+            //}
 
             var constructorFunc = info.ConstructorFunc;
             try
@@ -495,31 +587,43 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             }
         }
 
-        private object Instantiate(Type type, params object[] parameters)
+        private object Instantiate(Type type, Type cType, params object[] parameters)
         {
-            ConstructorInvokeInfo invokeInfo;
+            Throw.If(cType.IsInterface || cType.IsAbstract).InvalidOperationException();
+
+            ConstructorInvokeInfo[] invokeInfo;
             m_constructorDictionaryLockSlim.EnterReadLock();
 
             try
             {
                 if (m_constructorDictionary.TryGetValue(type, out invokeInfo))
-                    return Instantiate(invokeInfo);
+                    foreach (var i in invokeInfo)
+                    {
+                        var val = Instantiate(i, parameters);
+                        if (val != null)
+                            return  val;
+                    }
+                    
             }
             finally
             {
                 m_constructorDictionaryLockSlim.ExitReadLock();
             }
 
+            var cons = new ConcurrentList<ConstructorInfo>();
 #if NETFX_CORE
-            var constructors = type.GetTypeInfo().DeclaredConstructors.Where(x => !x.IsStatic && x.IsPublic).ToArray();
+            var constructors = cType.GetTypeInfo().DeclaredConstructors.Where(x => !x.IsStatic && x.IsPublic).ToArray();
 #else
-            var constructors = type.GetConstructors();
+            var constructors = cType.GetConstructors();
 #endif
 
             ConstructorInfo constructor = null;
 
             if (constructors.Length == 1)
+            {
                 constructor = constructors[0];
+                cons.Add(constructor);
+            }
             else if (constructors.Length > 1)
             {
                 ConstructorInfo bestMatch = null;
@@ -538,6 +642,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                     if (hasAttribute)
                     {
                         constructor = constructorInfo;
+                        cons.Add(constructorInfo);
                         break;
                     }
 
@@ -549,6 +654,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                         {
                             biggestLength = length;
                             bestMatch = constructorInfo;
+                            cons.Add(constructorInfo);
                         }
                     }
                 }
@@ -562,7 +668,6 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 var biggestLength = -1;
 
                 constructors = type.GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic);
-
                 if (constructors.Length > 0)
                 {
                     foreach (var constructorInfo in constructors)
@@ -570,6 +675,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                         if (constructorInfo.GetCustomAttributes(typeof(InjectConstructorAttribute), false).Length > 0)
                         {
                             constructor = constructorInfo;
+                            cons.Add(constructorInfo);
                             break;
                         }
 
@@ -579,7 +685,9 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                             continue;
 
                         biggestLength = length;
+                        cons.Add(constructorInfo);
                         bestMatch = constructorInfo;
+
                     }
 
                     if (constructor == null)
@@ -594,43 +702,45 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                                                  "Could not locate a constructor for " + type.FullName);
             }
 
-            invokeInfo = new ConstructorInvokeInfo(constructor);
+            var ci = cons.Select(i => new ConstructorInvokeInfo(i));
+            cons = new ConcurrentList<ConstructorInfo>();
             m_constructorDictionaryLockSlim.EnterWriteLock();
+            var infos = ci as ConstructorInvokeInfo[] ?? ci.ToArray();
             try
             {
-                m_constructorDictionary[type] = invokeInfo;
+                m_constructorDictionary[type] = infos;
             }
             finally
             {
                 m_constructorDictionaryLockSlim.ExitWriteLock();
             }
 
-            return Instantiate(invokeInfo, parameters);
+            foreach (var i in infos)
+            {
+                var v = Instantiate(i, parameters);
+                if (v != null)
+                    return v;
+            }
+
+            return null;
         }
 
         private string GetKeyValueOrDefault(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
-                key = m_defaultKey;
+                key = Guid.NewGuid().ToString(); //m_defaultKey;
 
             return key;
         }
 
-        private void CreateResolver<T>(Func<object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
-        {
-            CreateResolver(typeof(T), getInstanceFunc, key, asSingleton, overrideExisting);
-        }
-
-        private void CreateResolver(Type T, Func<object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
+        private void CreateResolver(Type T, Func<object[], object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
         {
             m_lockSlim.EnterWriteLock();
             try
             {
                 key = GetKeyValueOrDefault(key);
                 ResolverDictionary resolverDictionary;
-                if (overrideExisting)
-                    resolverDictionary = new ResolverDictionary();
-                else if (!m_typeDictionary.TryGetValue(T, out resolverDictionary))
+                if (overrideExisting || !m_typeDictionary.TryGetValue(T, out resolverDictionary))
                     resolverDictionary = new ResolverDictionary();
 
                 var resolver = new TypeResolver
@@ -646,6 +756,21 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             {
                 m_lockSlim.ExitWriteLock();
             }
+        }
+
+        private void CreateResolver<T>(Func<object[], object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
+        {
+            CreateResolver(typeof(T), getInstanceFunc, key, asSingleton, overrideExisting);
+        }
+
+        private void CreateResolver<T>(Func<object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
+        {
+            CreateResolver(typeof(T), getInstanceFunc, key, asSingleton, overrideExisting);
+        }
+
+        private void CreateResolver(Type T, Func<object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
+        {
+            CreateResolver(T, (p) => getInstanceFunc(), key, asSingleton, overrideExisting);
         }
         #endregion
     }
