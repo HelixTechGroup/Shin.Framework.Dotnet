@@ -14,6 +14,8 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         /// <inheritdoc />
         private bool m_hasInstance;
+
+        private Type m_type;
         #endregion
 
         #region Properties
@@ -31,6 +33,9 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
         {
             get { return m_hasInstance; }
         }
+
+        /// <inheritdoc />
+        public Type Type { get; set; }
         #endregion
 
         #region Methods

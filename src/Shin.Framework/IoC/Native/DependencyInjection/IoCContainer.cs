@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -18,16 +17,16 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
     public sealed class IoCContainer : Disposable, IContainer
     {
         #region Members
+        private readonly ConcurrentDictionary<string, IContainer> m_childContainers;
         private readonly ReaderWriterLockSlim m_constructorDictionaryLockSlim;
         private readonly string m_defaultKey;
         private readonly ReaderWriterLockSlim m_lockSlim;
-        private readonly ConcurrentDictionary<string, IContainer> m_childContainers;
+        private readonly IContainer m_parentContainer;
         private ConcurrentDictionary<Type, ConstructorInvokeInfo[]> m_constructorDictionary;
         private ConcurrentDictionary<Type, ConcurrentList<string>> m_cycleDictionary;
         private ConcurrentDictionary<Type, ConcurrentList<PropertyInfo>> m_injectablePropertyDictionary;
 
         private ConcurrentDictionary<string, Type> m_keyDictionary;
-        private readonly IContainer m_parentContainer;
         private ConcurrentDictionary<string, Action<object, object>> m_propertyActionDictionary;
         private ConcurrentDictionary<Type, PropertyInfo[]> m_propertyDictionary;
         private ConcurrentDictionary<Type, ResolverDictionary> m_typeDictionary;
@@ -83,7 +82,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         public void Register<T>(bool asSingleton = true, string key = null, bool overrideExisting = false)
         {
-            CreateResolver<T>((p) => Instantiate(typeof(T), typeof(T), p), key, asSingleton, overrideExisting);
+            CreateResolver<T>(p => Instantiate(typeof(T), typeof(T), p), key, asSingleton, overrideExisting);
         }
 
         public void Register(Type T, object value, bool asSingleton = true, string key = null, bool overrideExisting = false)
@@ -93,28 +92,28 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         public void Register(Type T, bool asSingleton = true, string key = null, bool overrideExisting = false)
         {
-            CreateResolver(T, (p) => Instantiate(T, T, p), key, asSingleton, overrideExisting);
+            CreateResolver(T, T, p => Instantiate(T, T, p), key, asSingleton, overrideExisting);
         }
 
         /// <inheritdoc />
         public void Register<T>(Type C, bool asSingleton = true, string key = null, bool overrideExisting = false)
         {
-            CreateResolver(typeof(T), (p) => Instantiate(typeof(T), C, p), key, asSingleton, overrideExisting);
+            CreateResolver(typeof(T), C, p => Instantiate(typeof(T), C, p), key, asSingleton, overrideExisting);
         }
 
         public void Register<T, C>(C value, bool asSingleton = true, string key = null, bool overrideExisting = false) where C : class, T
         {
-            CreateResolver(typeof(T), () => value, key, asSingleton, overrideExisting);
+            CreateResolver<T, C>(p => value, key, asSingleton, overrideExisting);
         }
 
         public void Register<T, C>(bool asSingleton = true, string key = null, bool overrideExisting = false) where C : class, T
         {
-            CreateResolver<T>((p) => Instantiate(typeof(T), typeof(C), p), key, asSingleton, overrideExisting);
+            CreateResolver<T, C>(p => Instantiate(typeof(T), typeof(C), p), key, asSingleton, overrideExisting);
         }
 
         public void Register(Type T, Type C, bool asSingleton = true, string key = null, bool overrideExisting = false)
         {
-            CreateResolver(T, (p) => Instantiate(T, C, p), key, asSingleton, overrideExisting);
+            CreateResolver(T, C, p => Instantiate(T, C, p), key, asSingleton, overrideExisting);
         }
 
         public void Unregister<T>(string key = null)
@@ -169,14 +168,14 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 {
                     foreach (var k in m_typeDictionary)
                     {
-                        if (!k.Key.ContainsInterface(fromType)) 
+                        if (!k.Key.ContainsInterface(fromType))
                             continue;
 
                         //foreach (var r in k.Value.Values)
                         //    if (r.HasInstance)
                         //        list.Add((T)r.GetObject());
                         list.AddRange(k.Value.Values
-                                       //.Where(resolver => resolver.HasInstance)
+                                        //.Where(resolver => resolver.HasInstance)
                                        .Select(resolver => (T)resolver.GetObject()));
                     }
                 }
@@ -187,9 +186,11 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             }
 
             if (retrieved)
+            {
                 list.AddRange(dictionary.Values
-                               //.Where(resolver => resolver.HasInstance)
-                               .Select(resolver => (T)resolver.GetObject()));
+                                         //.Where(resolver => resolver.HasInstance)
+                                        .Select(resolver => (T)resolver.GetObject()));
+            }
 
             return list;
         }
@@ -220,16 +221,18 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                         list.Add(builtObject);
                 }
                 else
+                {
                     list.AddRange(resolverDictionary.Values
-                                   //.Where(resolver => resolver.HasInstance)
-                                   .Select(resolver => resolver.GetObject()));
+                                                     //.Where(resolver => resolver.HasInstance)
+                                                    .Select(resolver => resolver.GetObject()));
+                }
             }
 
             if (T.IsInterface)
             {
                 foreach (var k in m_typeDictionary)
                 {
-                    if (!k.Key.ContainsInterface(T)) 
+                    if (!k.Key.ContainsInterface(T))
                         continue;
 
                     //foreach (var r in k.Value.Values)
@@ -237,7 +240,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                     //        list.Add(r.GetObject());
 
                     list.AddRange(k.Value.Values
-                                   //.Where(resolver => resolver.HasInstance)
+                                    //.Where(resolver => resolver.HasInstance)
                                    .Select(resolver => resolver.GetObject()));
                 }
             }
@@ -326,6 +329,35 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 if (type.IsInterface)
                 {
                     var match = m_typeDictionary.Keys.FirstOrDefault(k => k.ContainsInterface(type));
+                    if (match == null)
+                    {
+                        //try 
+                        //{
+                            foreach (var td in m_typeDictionary.Values)
+                            {
+                                foreach (var resolver in td.Values)
+                                {
+                                    if (resolver.Type.ContainsInterface(type))
+                                    {
+                                        match = resolver.Type;
+                                        break;
+                                    }
+
+                                    if (match != null)
+                                        break;
+                                }
+
+                                if (match != null)
+                                    break;
+                            }
+                            //match = m_typeDictionary.Values
+                            //                    .Select(v => v.Values)
+                            //                    .FirstOrDefault(r => r
+                            //                                       .Any(r => r.Type.ContainsInterface(type)))
+                            //                        .FirstOrDefault().Type;
+                        //} catch { }
+                    }
+
                     if (match != null)
                     {
                         var mKey = GetKeyFromType(match);
@@ -410,10 +442,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
             if (resolvers == null) return BuildUp(type, key, parameters);
 
-            foreach (var r in resolvers.Values)
-            {
-                return r.GetObject(parameters);
-            }
+            foreach (var r in resolvers.Values) return r.GetObject(parameters);
 
             return BuildUp(type, key, parameters);
         }
@@ -543,37 +572,37 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
         {
             var constructorParameters = info.ParameterInfos;
             var length = constructorParameters.Length;
-            var test = (parameters.Length) == length;
+            var test = parameters.Length == length;
             var parametersList = /*test ? parameters :*/ new object[length];
             //if (!test)
             //{
-                for (var i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
+            {
+                var parameterInfo = constructorParameters[i];
+                object parameter = null;
+                if (test)
                 {
-                    var parameterInfo = constructorParameters[i];
-                    object parameter = null;
-                    if (test)
+                    try
                     {
-                        try
-                        {
-                            parameter = parameters[i];
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                            parameter = Resolve(parameterInfo.ParameterType);
-                        }
+                        parameter = parameters[i];
                     }
-                    else
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
                         parameter = Resolve(parameterInfo.ParameterType);
-
-                    if (parameter == null && !parameterInfo.IsOptional)
-                    {
-                        throw new IoCResolutionException(
-                                                         "Failed to instantiate parameter " + parameterInfo.Name);
                     }
-
-                    parametersList[i] = parameter;
                 }
+                else
+                    parameter = Resolve(parameterInfo.ParameterType);
+
+                if (parameter == null && !parameterInfo.IsOptional)
+                {
+                    throw new IoCResolutionException(
+                                                     "Failed to instantiate parameter " + parameterInfo.Name);
+                }
+
+                parametersList[i] = parameter;
+            }
             //}
 
             var constructorFunc = info.ConstructorFunc;
@@ -597,13 +626,14 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             try
             {
                 if (m_constructorDictionary.TryGetValue(type, out invokeInfo))
+                {
                     foreach (var i in invokeInfo)
                     {
                         var val = Instantiate(i, parameters);
                         if (val != null)
-                            return  val;
+                            return val;
                     }
-                    
+                }
             }
             finally
             {
@@ -687,7 +717,6 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                         biggestLength = length;
                         cons.Add(constructorInfo);
                         bestMatch = constructorInfo;
-
                     }
 
                     if (constructor == null)
@@ -733,7 +762,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             return key;
         }
 
-        private void CreateResolver(Type T, Func<object[], object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
+        private void CreateResolver(Type T, Type cT, Func<object[], object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
         {
             m_lockSlim.EnterWriteLock();
             try
@@ -746,7 +775,8 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 var resolver = new TypeResolver
                                {
                                    CreateInstanceFunc = getInstanceFunc,
-                                   Singleton = asSingleton
+                                   Singleton = asSingleton,
+                                   Type = cT
                                };
                 resolverDictionary[key] = resolver;
                 m_typeDictionary[T] = resolverDictionary;
@@ -758,9 +788,19 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             }
         }
 
+        private void CreateResolver<T, C>(Func<object[], object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
+        {
+            CreateResolver(typeof(T), typeof(C), getInstanceFunc, key, asSingleton, overrideExisting);
+        }
+
+        private void CreateResolver<T>(Type cT, Func<object[], object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
+        {
+            CreateResolver(typeof(T), cT, getInstanceFunc, key, asSingleton, overrideExisting);
+        }
+
         private void CreateResolver<T>(Func<object[], object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
         {
-            CreateResolver(typeof(T), getInstanceFunc, key, asSingleton, overrideExisting);
+            CreateResolver(typeof(T), typeof(T), getInstanceFunc, key, asSingleton, overrideExisting);
         }
 
         private void CreateResolver<T>(Func<object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
@@ -770,7 +810,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         private void CreateResolver(Type T, Func<object> getInstanceFunc, string key, bool asSingleton, bool overrideExisting)
         {
-            CreateResolver(T, (p) => getInstanceFunc(), key, asSingleton, overrideExisting);
+            CreateResolver(T, T, p => getInstanceFunc(), key, asSingleton, overrideExisting);
         }
         #endregion
     }

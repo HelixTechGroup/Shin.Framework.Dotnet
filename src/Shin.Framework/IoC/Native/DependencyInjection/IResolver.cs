@@ -11,6 +11,7 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
         Func<object[], object> CreateInstanceFunc { get; set; }
         bool Singleton { get; set; }
         bool HasInstance { get; }
+        Type Type { get; set; }
         #endregion
 
         #region Methods

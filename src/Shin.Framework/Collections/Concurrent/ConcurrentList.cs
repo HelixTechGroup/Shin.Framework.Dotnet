@@ -528,7 +528,8 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitWriteLock();
+                if (m_lock.IsWriteLockHeld)
+                    m_lock.ExitWriteLock();
             }
         }
 
@@ -547,7 +548,8 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitWriteLock();
+                if (m_lock.IsWriteLockHeld)
+                    m_lock.ExitWriteLock();
             }
         }
 
@@ -561,7 +563,8 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitWriteLock();
+                if (m_lock.IsWriteLockHeld)
+                    m_lock.ExitWriteLock();
             }
         }
 
@@ -574,7 +577,8 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitReadLock();
+                if (m_lock.IsReadLockHeld)
+                    m_lock.ExitReadLock();
             }
         }
 
@@ -589,7 +593,8 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitReadLock();
+                if (m_lock.IsReadLockHeld)
+                    m_lock.ExitReadLock();
             }
         }
 
@@ -615,7 +620,8 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitReadLock();
+                if (m_lock.IsReadLockHeld)
+                    m_lock.ExitReadLock();
             }
         }
 
@@ -628,7 +634,8 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitWriteLock();
+                if (m_lock.IsWriteLockHeld)
+                    m_lock.ExitWriteLock();
             }
         }
 
@@ -641,7 +648,8 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitReadLock();
+                if (m_lock.IsReadLockHeld)
+                    m_lock.ExitReadLock();
             }
         }
 
@@ -668,12 +676,14 @@ namespace Shin.Framework.Collections.Concurrent
                 }
                 finally
                 {
-                    m_lock.ExitWriteLock();
+                    if (m_lock.IsWriteLockHeld)
+                        m_lock.ExitWriteLock();
                 }
             }
             finally
             {
-                m_lock.ExitUpgradeableReadLock();
+                if (m_lock.IsUpgradeableReadLockHeld)
+                    m_lock.ExitUpgradeableReadLock();
             }
         }
 
@@ -712,12 +722,14 @@ namespace Shin.Framework.Collections.Concurrent
                 }
                 finally
                 {
-                    m_lock.ExitWriteLock();
+                    if (m_lock.IsWriteLockHeld)
+                        m_lock.ExitWriteLock();
                 }
             }
             finally
             {
-                m_lock.ExitUpgradeableReadLock();
+                if (m_lock.IsUpgradeableReadLockHeld)
+                    m_lock.ExitUpgradeableReadLock();
             }
         }
 
@@ -735,12 +747,14 @@ namespace Shin.Framework.Collections.Concurrent
                 }
                 finally
                 {
-                    m_lock.ExitWriteLock();
+                    if (m_lock.IsWriteLockHeld)
+                        m_lock.ExitWriteLock();
                 }
             }
             finally
             {
-                m_lock.ExitUpgradeableReadLock();
+                if (m_lock.IsUpgradeableReadLockHeld)
+                    m_lock.ExitUpgradeableReadLock();
             }
         }
 
