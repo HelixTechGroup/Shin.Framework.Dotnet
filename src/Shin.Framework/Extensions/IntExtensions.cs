@@ -10,5 +10,10 @@ namespace Shin.Framework.Extensions
         {
             return Convert.ToUInt32(value);
         }
+
+        public static float ToFloat(this int value)
+        {
+            return (float)Convert.ToDecimal(value);
+        }
     }
 }

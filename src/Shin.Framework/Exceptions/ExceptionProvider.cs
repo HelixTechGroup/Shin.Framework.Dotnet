@@ -26,6 +26,9 @@ namespace Shin.Framework.Exceptions
                                                                params KeyValuePair<string, object>[] data)
             where TException : Exception, new()
         {
+            if (string.IsNullOrEmpty(message))
+                message = string.Empty;
+
             var tmp = new ConcurrentList<object> {message};
 
             if (args != null)

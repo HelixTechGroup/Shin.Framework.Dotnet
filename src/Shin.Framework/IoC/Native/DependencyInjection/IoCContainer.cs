@@ -153,46 +153,53 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
 
         public IEnumerable<T> ResolveAll<T>()
         {
-            var fromType = typeof(T);
-            var list = new ConcurrentList<T>();
+            //var fromType = typeof(T);
+            //var list = new ConcurrentList<T>();
 
-            ResolverDictionary dictionary;
-            var retrieved = false;
+            //ResolverDictionary dictionary;
+            //var retrieved = false;
 
-            m_lockSlim.EnterReadLock();
-            try
-            {
-                if (m_typeDictionary.TryGetValue(fromType, out dictionary))
-                    retrieved = true;
-                if (fromType.IsInterface)
-                {
-                    foreach (var k in m_typeDictionary)
-                    {
-                        if (!k.Key.ContainsInterface(fromType))
-                            continue;
+            //m_lockSlim.EnterReadLock();
+            //try
+            //{
+            //    if (m_typeDictionary.TryGetValue(fromType, out dictionary))
+            //        retrieved = true;
+            //    if (fromType.IsInterface)
+            //    {
+            //        foreach (var k in m_typeDictionary)
+            //        {
+            //            if (!k.Key.ContainsInterface(fromType))
+            //                continue;
 
-                        //foreach (var r in k.Value.Values)
-                        //    if (r.HasInstance)
-                        //        list.Add((T)r.GetObject());
-                        list.AddRange(k.Value.Values
-                                        //.Where(resolver => resolver.HasInstance)
-                                       .Select(resolver => (T)resolver.GetObject()));
-                    }
-                }
-            }
-            finally
-            {
-                m_lockSlim.ExitReadLock();
-            }
+            //            //foreach (var r in k.Value.Values)
+            //            //    if (r.HasInstance)
+            //            //        list.Add((T)r.GetObject());
+            //            list.AddRange(k.Value.Values
+            //                            //.Where(resolver => resolver.HasInstance)
+            //                           .Select(resolver => (T)resolver.GetObject()));
+            //        }
+            //    }
+            //}
+            //finally
+            //{
+            //    m_lockSlim.ExitReadLock();
+            //}
 
-            if (retrieved)
-            {
-                list.AddRange(dictionary.Values
-                                         //.Where(resolver => resolver.HasInstance)
-                                        .Select(resolver => (T)resolver.GetObject()));
-            }
+            //if (retrieved)
+            //{
+            //    list.AddRange(dictionary.Values
+            //                             //.Where(resolver => resolver.HasInstance)
+            //                            .Select(resolver => (T)resolver.GetObject()));
+            //}
 
-            return list;
+            //return list;
+
+            var list = ResolveAll(typeof(T));
+            var finalList = new ConcurrentList<T>();
+            foreach (var o in list)
+                finalList.Add((T)o);
+
+            return finalList;
         }
 
         public IEnumerable<object> ResolveAll(Type T)

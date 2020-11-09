@@ -1,11 +1,12 @@
 #region Usings
 using System;
+using System.Runtime.ConstrainedExecution;
 using Shin.Framework.Extensions;
 #endregion
 
 namespace Shin.Framework
 {
-    public abstract class Disposable : IDispose
+    public abstract class Disposable : CriticalFinalizerObject, IDispose
     {
         #region Events
         /// <inheritdoc />

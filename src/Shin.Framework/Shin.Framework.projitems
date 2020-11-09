@@ -29,6 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExpressionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IntExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ObjectExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\SafeHandleExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\TypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\UintExtensions.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ThreadOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PropertyChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PropertyChangingEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\ConcurrentSafeHandle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\SafeMemoryHandle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Throw.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Throw.DefaultConditions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ThrowExceptionSelector.cs" />
