@@ -4,10 +4,10 @@ using System.Resources;
 using System.Runtime.InteropServices;
 #endregion
 
-[assembly: AssemblyCompany("HelixTechGroup,llc")]
-[assembly: AssemblyCopyright("Copyright © HelixTechGroup,llc 2017-2020")]
+//[assembly: AssemblyCompany("HelixTechGroup,llc")]
+//[assembly: AssemblyCopyright("Copyright © HelixTechGroup,llc 2017-2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyProduct("Shin.Framework")]
+//[assembly: AssemblyProduct("Shin.Framework")]
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: ComVisible(false)]
