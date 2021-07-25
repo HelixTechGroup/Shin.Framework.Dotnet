@@ -47,6 +47,7 @@ namespace Shin.Framework.Collections.Concurrent
 
         public ConcurrentHashSet()
         {
+            var s = new SortedList();
             m_hashSet = new HashSet<T>();
             m_lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         }

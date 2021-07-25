@@ -117,7 +117,7 @@ namespace Shin.Framework.Collections.Concurrent
 
         public bool IsSynchronized
         {
-            get { return m_arr.IsSynchronized; }
+            get { return true; }
         }
 
         public object SyncRoot

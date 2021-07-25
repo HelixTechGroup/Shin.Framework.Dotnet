@@ -37,6 +37,7 @@ namespace Shin.Framework
             if (m_isInitialized)
                 return;
 
+            m_isDisposed = false;
             Initializing.Raise(this, EventArgs.Empty);
             InitializeResources();
             m_isInitialized = true;
@@ -53,6 +54,7 @@ namespace Shin.Framework
         {
             Initializing.Dispose();
             Initialized.Dispose();
+            m_isInitialized = false;
             base.DisposeManagedResources();
         }
 

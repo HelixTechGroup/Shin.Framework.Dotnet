@@ -11,11 +11,12 @@ using Shin.Framework.Collections.Concurrent;
 
 namespace Shin.Framework.Messaging.Messages
 {
-    public abstract class Message : IMessage
+    public abstract class Message : IMessage, IEquatable<Message>
     {
         #region Members
         internal readonly ConcurrentList<ISubscription> m_subscriptions;
         protected SynchronizationContext m_context;
+        private readonly DateTime m_dateCreated;
         #endregion
 
         #region Properties
@@ -35,6 +36,7 @@ namespace Shin.Framework.Messaging.Messages
 
         protected Message()
         {
+            m_dateCreated = DateTime.UtcNow.Date;
             m_subscriptions = new ConcurrentList<ISubscription>();
         }
 
@@ -96,5 +98,38 @@ namespace Shin.Framework.Messaging.Messages
             return returnList;
         }
         #endregion
+
+        /// <inheritdoc />
+        public bool Equals(Message other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return true;
+        }
+
+        /// <inheritdoc />
+        public bool Equals(IMessage other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            return ReferenceEquals(this, obj) || obj is Message other && Equals(other);
+        }
+
+
+        public static bool operator ==(Message left, Message right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Message left, Message right)
+        {
+            return !Equals(left, right);
+        }
     }
 }

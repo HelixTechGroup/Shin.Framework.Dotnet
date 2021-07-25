@@ -1,4 +1,5 @@
 ﻿#region Usings
+using System;
 using System.Threading;
 #endregion
 
@@ -6,30 +7,33 @@ namespace Shin.Framework.Messaging
 {
     public interface IMessagePump : IInitialize, IDispose
     {
+        event EventHandler<IPumpMessage> MessagePopped;
+        event EventHandler<IPumpMessage> MessagePushed;
+
         #region Methods
         void Initialize(CancellationToken token);
 
-        bool Peek(out IMessage message);
+        bool Peek(out IPumpMessage message);
 
-        bool Poll(out IMessage message, CancellationToken ctx);
+        bool Poll(out IPumpMessage message, CancellationToken ctx);
 
-        bool Poll(out IMessage message);
+        bool Poll(out IPumpMessage message);
 
         void Pump(CancellationToken ctx);
 
         void Pump();
 
-        bool Wait(out IMessage message, int timeout, CancellationToken ctx);
+        bool Wait(out IPumpMessage message, int timeout, CancellationToken ctx);
 
-        bool Wait(out IMessage message, int timeout);
+        bool Wait(out IPumpMessage message, int timeout);
 
-        bool Pop(out IMessage message);
+        bool Pop(out IPumpMessage message);
 
-        bool Push(IMessage message);
+        bool Push(IPumpMessage message);
         #endregion
     }
 
-    public interface IMessagePump<T> : IMessagePump where T : IMessage
+    public interface IMessagePump<T> : IMessagePump where T : IPumpMessage
     {
         #region Methods
         void Initialize(CancellationToken token);

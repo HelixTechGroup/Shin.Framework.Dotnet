@@ -1,9 +1,13 @@
 ﻿#region Usings
 #endregion
 
+using System;
+
 namespace Shin.Framework.Messaging
 {
-    public interface IMessage { }
+    public interface IMessage : IEquatable<IMessage>
+    {
+    }
 
-    public interface IMessage<out TId> : IMessage, IId<TId> { }
+    public interface IMessage<TId> : IMessage, IId<TId>, IEquatable<IMessage<TId>> { }
 }

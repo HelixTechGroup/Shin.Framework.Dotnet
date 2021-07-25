@@ -1,6 +1,8 @@
 ﻿#region Usings
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading;
 using Shin.Framework.Collections.Concurrent;
 using Shin.Framework.Extensions;
@@ -11,22 +13,24 @@ namespace Shin.Framework.Messaging
     public abstract class MessagePump : Initializable, IMessagePump
     {
         #region Events
-        public event EventHandler<IMessage> MessagePopped;
-        public event EventHandler<IMessage> MessagePushed;
+        public event EventHandler<IPumpMessage> MessagePopped;
+        public event EventHandler<IPumpMessage> MessagePushed;
         #endregion
 
         #region Members
         protected readonly ConcurrentList<int> m_tokens;
         protected ILogger m_logger;
-
-        protected ConcurrentQueue<IMessage> m_queue;
+        protected IPumpMessage m_last;
+        protected ConcurrentQueue<IPumpMessage> m_queue;
+        protected ConcurrentQueue<IPumpMessage> m_deferred;
         protected CancellationToken m_token;
         protected CancellationTokenSource m_tokenSource;
         #endregion
 
         protected MessagePump(ILogger logger)
         {
-            m_queue = new ConcurrentQueue<IMessage>();
+            m_queue = new ConcurrentQueue<IPumpMessage>();
+            m_deferred = new ConcurrentQueue<IPumpMessage>();
             m_token = new CancellationToken();
             m_tokens = new ConcurrentList<int>();
             m_logger = logger;
@@ -40,7 +44,7 @@ namespace Shin.Framework.Messaging
         }
 
         /// <inheritdoc />
-        public virtual bool Peek(out IMessage message)
+        public virtual bool Peek(out IPumpMessage message)
         {
             try
             {
@@ -55,13 +59,13 @@ namespace Shin.Framework.Messaging
         }
 
         /// <inheritdoc />
-        public virtual bool Poll(out IMessage message, CancellationToken ctx)
+        public virtual bool Poll(out IPumpMessage message, CancellationToken ctx)
         {
             return Wait(out message, 0, ctx);
         }
 
         /// <inheritdoc />
-        public bool Poll(out IMessage message)
+        public bool Poll(out IPumpMessage message)
         {
             return Poll(out message, CancellationToken.None);
         }
@@ -73,7 +77,7 @@ namespace Shin.Framework.Messaging
         public abstract void Pump();
 
         /// <inheritdoc />
-        public virtual bool Wait(out IMessage message, int timeout, CancellationToken ctx)
+        public virtual bool Wait(out IPumpMessage message, int timeout, CancellationToken ctx)
         {
             AddCancellationToken(ctx);
 
@@ -102,18 +106,22 @@ namespace Shin.Framework.Messaging
         }
 
         /// <inheritdoc />
-        public bool Wait(out IMessage message, int timeout)
+        public bool Wait(out IPumpMessage message, int timeout)
         {
             return Wait(out message, timeout, CancellationToken.None);
         }
 
         /// <inheritdoc />
-        public virtual bool Push(IMessage message)
+        public virtual bool Push(IPumpMessage message)
         {
             try
             {
+                if (m_deferred.ToArray().ToList().Contains(message))
+                    return true;
                 m_queue.Enqueue(message);
+                m_deferred.Enqueue(message);
                 MessagePushed.Raise(this, message);
+                m_last = message;
             }
             catch (Exception ex)
             {
@@ -124,12 +132,14 @@ namespace Shin.Framework.Messaging
             return true;
         }
 
-        public virtual bool Pop(out IMessage message)
+        public virtual bool Pop(out IPumpMessage message)
         {
             try
             {
                 if (m_queue.TryDequeue(out message))
                 {
+                    m_deferred.TryDequeue(out var res);
+
                     MessagePopped.Raise(this, message);
                     return true;
                 }

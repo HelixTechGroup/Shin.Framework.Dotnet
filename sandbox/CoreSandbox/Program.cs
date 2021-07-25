@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Threading;
 
 namespace CoreSandbox
 {
     class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            //var lockSlimTests = new LockSlimTests();
+            //lockSlimTests.Start().StartRecursion().Finish();
+            Console.ReadKey();
+            
         }
     }
 }

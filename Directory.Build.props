@@ -1,26 +1,27 @@
 ﻿<Project>
-  <PropertyGroup Condition="$(SolutionDir) == ''">
-    <SolutionDir>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))</SolutionDir>
+  <PropertyGroup>
+    <SectionSymbol>@</SectionSymbol>
+    <LocalNugetRepo>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>
+    <PrometheusDetectPlatform>False</PrometheusDetectPlatform>
+    <IsLibraryProject>true</IsLibraryProject>
+    <IsPackable>True</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Copyright>copyright © HelixTechGroup,llc 2017-2020</Copyright>
-    <Product>Shin.Framework</Product>
-    <Company>HelixTechGroup,llc</Company>
-    <Authors>Bryan M. Longacre</Authors>
-    <Owners>HelixTechGroup,llc</Owners>
-    <Version>0.0.0.1</Version>
-    <FileVersion>0.0.0.1</FileVersion>
+    <ProductName>Shin.Framework</ProductName>
+    <CompanyName>HelixTechGroup,llc</CompanyName>
+    <AuthorName>Bryan M. Longacre</AuthorName>
+    <ProductVersion>0.0.1</ProductVersion>
     <Description>Shin.Framework</Description>
   </PropertyGroup>
 
   <PropertyGroup>
     <GitHubRepositoryUrl>https://github.com/HelixTechGroup/Shin.Framework.Dotnet</GitHubRepositoryUrl>
-    <GitHubOrg>$([System.Text.RegularExpressions.Regex]::Match($(GitHubRepositoryUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[1].Value)</GitHubOrg>
-    <GitHubProject>$([System.Text.RegularExpressions.Regex]::Match($(GitHubRepositoryUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[2].Value)</GitHubProject>
+    <!--<GitHubOrg>$([System.Text.RegularExpressions.Regex]::Match($(GitHubRepositoryUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[1].Value)</GitHubOrg>
+    <GitHubProject>$([System.Text.RegularExpressions.Regex]::Match($(GitHubRepositoryUrl), `https://github.com/([^/]*)/([^/]*)`).Groups[2].Value)</GitHubProject>-->
   </PropertyGroup>
 
-  <PropertyGroup>
+  <!--<PropertyGroup>
     <RepositoryUrl>https://github.com/$(GitHubOrg)/$(GitHubProject).git</RepositoryUrl>
     <PackageProjectUrl>https://github.com/$(GitHubOrg)/$(GitHubProject)</PackageProjectUrl>
     <PackageReleaseNotes>See https://github.com/$(GitHubOrg)/$(GitHubProject)/releases/</PackageReleaseNotes>
@@ -35,18 +36,18 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Deterministic>true</Deterministic>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
   <PropertyGroup Label="Configure assembly names and namespaces">
-    <TargetFrameworks>netstandard2.1;net5.0;netcoreapp3.1</TargetFrameworks>
-    <AssemblyName>$(Product)<!--$(SolutionName).$(MSBuildProjectName)--></AssemblyName>
+    <!--<TargetFrameworks>netstandard2.1;net5.0;netcoreapp31;net48</TargetFrameworks>-->
+    <!--<AssemblyName>$(Product)--><!--$(SolutionName).$(MSBuildProjectName)--><!--</AssemblyName>
     <RootNamespace>$(AssemblyName)</RootNamespace>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <OutputType>Library</OutputType>
-    <OutputPath>$(SolutionDir)\build\$(AssemblyName)\$(Configuration)\</OutputPath>
+    <OutputPath>$(SolutionDir)\build\$(AssemblyName)\$(Configuration)\</OutputPath>-->
   </PropertyGroup>
 
-  <PropertyGroup Label="Normalize stack trace file locations" Condition="$(BuildingInsideVisualStudio) != 'true'">
+  <!--<PropertyGroup Label="Normalize stack trace file locations" Condition="$(BuildingInsideVisualStudio) != 'true'">
     <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=X:\</PathMap>
   </PropertyGroup>
 
@@ -63,5 +64,5 @@
   <ItemGroup>
     <Compile Include="$(SolutionDir)\src\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
     <Compile Include="$(SolutionDir)\src\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
-  </ItemGroup>
+  </ItemGroup>-->
 </Project>

@@ -1,105 +1,92 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Microsoft.Win32.SafeHandles;
+using Shin.Framework.Extensions;
+using Shin.Framework.Threading;
 
 namespace Shin.Framework.Runtime
 {
     public class ConcurrentSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
         protected readonly ReaderWriterLockSlim m_lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        protected bool m_ownsHandle;
         //protected static readonly object m_lock = new object();
         //protected static readonly Mutex m_mutex = new Mutex(true);
         //protected static readonly SemaphoreSlim m_semaphore = new SemaphoreSlim(0, 1);
-        protected bool m_hasLock;
+        //protected bool m_hasLock;
 
         /// <inheritdoc />
         public ConcurrentSafeHandle(bool ownsHandle) : base(ownsHandle)
         {
-            //m_mutex = new Mutex(true);
+            m_ownsHandle = ownsHandle;
         }
 
         /// <inheritdoc />
         protected override bool ReleaseHandle()
         {
-            m_lock.Dispose();
-            //m_semaphore.Release();
-            //if (m_hasLock)
-            //m_mutex.ReleaseMutex();
-                //Monitor.Exit(m_lock);
+            if (m_lock.IsLockHeld())
+                m_lock.TryExit();
 
-            return m_hasLock;
+            return m_lock.IsLockHeld();
         }
 
-        protected bool TryLock(int maxRetries = 3, int retryDelay = 50, int lockTimeout = 250)
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
         {
-            for (var i = 0; i <= maxRetries; i++)
-            {
-                if (m_hasLock)
-                    Thread.Sleep(retryDelay);
+            m_lock.Dispose();
 
-                m_hasLock = m_lock.TryEnterReadLock(lockTimeout);
-                //m_hasLock = true;
-                //m_semaphore.Wait();
-                if (!m_hasLock)
-                    Thread.Sleep(retryDelay);
-                else
-                    return true;
-
-                //if (m_hasLock)
-                //    return true;
-                //    return null;
-            }
-
-            return false;
+            base.Dispose(disposing);
         }
 
         public ConcurrentSafeHandle Lock()
         {
-            TryLock();
-            //Monitor.Enter(m_lock);
-            //lock (m_lock)
-            //{
-                try
-                {
-                    //Monitor.Enter(m_lock, ref m_hasLock);
-                    //m_wait = m_semaphore.AvailableWaitHandle;
-                    //m_hasLock = m_mutex.WaitOne();
-                    //m_hasLock = m_semaphore.AvailableWaitHandle.WaitOne();
-                    return this;
-                }
-                catch
-                {
-                    //Monitor.Exit(m_lock);
-                    //m_mutex.ReleaseMutex();
-                    
-                    m_lock.ExitReadLock();
-                    m_hasLock = false;
-                    throw;
-                }
-                finally
-                {
-                    //Monitor.Exit(m_lock);
-                }
-            //}
+            m_lock.TryEnter();
+            try
+            {
+                return this;
+            }
+            finally
+            {
+                m_lock.TryExit();
+            }
         }
 
         public void Unlock()
         {
-            if (!m_hasLock) 
+            if (!m_lock.IsLockHeld()) 
                 return;
 
-            m_lock.ExitReadLock();
-            //lock (m_lock)
-            //{
-                //Monitor.Wait(m_lock);
-                //Monitor.Exit(m_lock);
-                //m_mutex.ReleaseMutex();
-                //m_semaphore.Release();
-                m_hasLock = false;
-            //}
+            m_lock.TryExit();
+        }
+
+        protected new void SetHandle(IntPtr handle)
+        {
+            m_lock.TryEnter(SynchronizationAccess.Write);
+            try
+            {
+                this.handle = handle;
+            }
+            finally
+            {
+                m_lock.TryExit(SynchronizationAccess.Write);
+            }
+        }
+
+        public new IntPtr DangerousGetHandle()
+        {
+            m_lock.TryEnter();
+            try
+            {
+                return handle;
+            }
+            finally
+            {
+                m_lock.TryExit();
+            }
         }
     }
 }

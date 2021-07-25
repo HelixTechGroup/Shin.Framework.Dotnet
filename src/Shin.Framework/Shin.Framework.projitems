@@ -28,6 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExceptionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExpressionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IntExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\LockExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\SafeHandleExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
@@ -68,8 +69,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IActionMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IDelegateReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessageThrottle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IPublish.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IPublishMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IPumpMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ISubscribe.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ISubscribeMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ISubscription.cs" />
@@ -85,8 +88,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\ThreadOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PropertyChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PropertyChangingEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\ConcurrentSafeBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\ConcurrentSafeHandle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\SafeMemoryBuffer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\SafeMemoryHandle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\ISynchronize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\ISynchronizeContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\ISynchronizeLock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\LockSlimExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\MonitorSynchronizable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Synchronizable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationAccess.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizeLock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Throw.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Throw.DefaultConditions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ThrowExceptionSelector.cs" />

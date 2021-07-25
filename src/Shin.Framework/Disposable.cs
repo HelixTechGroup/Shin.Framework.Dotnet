@@ -17,7 +17,7 @@ namespace Shin.Framework
         #endregion
 
         #region Members
-        private bool m_isDisposed;
+        protected bool m_isDisposed;
         #endregion
 
         #region Properties
@@ -30,6 +30,7 @@ namespace Shin.Framework
 
         protected Disposable()
         {
+            m_isDisposed = false;
             WireUpDisposeEvents();
         }
 
