@@ -7,8 +7,8 @@ namespace CoreSandbox
     {
         private static void Main(string[] args)
         {
-            //var lockSlimTests = new LockSlimTests();
-            //lockSlimTests.Start().StartRecursion().Finish();
+            var lockSlimTests = new LockSlimTests();
+            lockSlimTests.Start().StartRecursion().Finish();
             Console.ReadKey();
             
         }

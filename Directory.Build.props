@@ -2,7 +2,7 @@
   <PropertyGroup>
     <SectionSymbol>@</SectionSymbol>
     <LocalNugetRepo>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>
-    <PrometheusDetectPlatform>False</PrometheusDetectPlatform>
+    <!--<PrometheusDetectPlatform>False</PrometheusDetectPlatform>-->
     <IsLibraryProject>true</IsLibraryProject>
     <IsPackable>True</IsPackable>
   </PropertyGroup>
@@ -11,7 +11,7 @@
     <ProductName>Shin.Framework</ProductName>
     <CompanyName>HelixTechGroup,llc</CompanyName>
     <AuthorName>Bryan M. Longacre</AuthorName>
-    <ProductVersion>0.0.1</ProductVersion>
+    <ProductVersion>0.1.1-preview</ProductVersion>
     <Description>Shin.Framework</Description>
   </PropertyGroup>
 

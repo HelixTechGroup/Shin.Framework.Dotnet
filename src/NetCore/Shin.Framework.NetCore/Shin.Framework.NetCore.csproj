@@ -1,10 +1,12 @@
-﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.0.1">
+﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.2.0-preview">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net5.0;netcoreapp31</TargetFrameworks>
+    <!--<TargetFrameworks>netstandard2.1;net5.0;net6.0;netcoreapp31;net48</TargetFrameworks>-->
+    <TargetPlatforms>net6.0;net5.0;net48</TargetPlatforms>
+    <TargetFrameworks>$(TargetPlatforms)</TargetFrameworks>
+    <!--<TargetPlatform>net6.0</TargetPlatform>-->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsLibraryProject>True</IsLibraryProject>
+    <!--<MergeBinary>False</MergeBinary>-->
   </PropertyGroup>
   <Import Project="..\..\Shin.Framework\Shin.Framework.projitems" Label="Shared" />
-  <ItemGroup>
-    <None Include="FodyWeavers.xsd" />
-  </ItemGroup>
 </Project>

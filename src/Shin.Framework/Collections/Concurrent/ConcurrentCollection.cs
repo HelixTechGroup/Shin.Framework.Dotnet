@@ -527,7 +527,7 @@ namespace Shin.Framework.Collections.Concurrent
 
         public ConcurrentCollection(IEnumerable<T> items)
         {
-            Throw.IfNull(m_arr).InvalidOperationException();
+            Throw.IfNull(items).ArgumentNullException(nameof(items));
 
             m_arr = items.ToArray();
             m_count = m_arr.Length;

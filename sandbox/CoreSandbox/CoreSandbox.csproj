@@ -1,8 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.2.0-preview">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <!--<OutputType>Exe</OutputType>-->
+    <TargetPlatform>net6.0</TargetPlatform>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <!--<TargetFrameworks></TargetFrameworks>-->
     <StartupObject>CoreSandbox.Program</StartupObject>
   </PropertyGroup>
 
