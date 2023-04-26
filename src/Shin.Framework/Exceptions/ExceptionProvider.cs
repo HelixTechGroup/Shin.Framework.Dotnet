@@ -21,9 +21,9 @@ namespace Shin.Framework.Exceptions
             return GenerateException(ArgumentExceptionFactory<TException>(argumentName, message), data);
         }
 
-        public static TException GenerateException<TException>(string message = null,
-                                                               object[] args = null,
-                                                               params KeyValuePair<string, object>[] data)
+        public static Exception GenerateException<TException>(string message = null,
+                                                         object[] args = null,
+                                                         params KeyValuePair<string, object>[] data)
             where TException : Exception, new()
         {
             if (string.IsNullOrEmpty(message))

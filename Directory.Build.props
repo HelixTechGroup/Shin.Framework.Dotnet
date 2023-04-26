@@ -3,17 +3,19 @@
     <SectionSymbol>@</SectionSymbol>
     <LocalNugetRepo>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>
     <!--<PrometheusDetectPlatform>False</PrometheusDetectPlatform>-->
-    <IsLibraryProject>true</IsLibraryProject>
-    <IsPackable>True</IsPackable>
+    <!--<IsLibraryProject>true</IsLibraryProject>
+    <IsPackable>True</IsPackable>-->
   </PropertyGroup>
 
-  <PropertyGroup>
+  <!--<PropertyGroup>
     <ProductName>Shin.Framework</ProductName>
+    --><!--<PackageId>$(ProductName)</PackageId>--><!--
     <CompanyName>HelixTechGroup,llc</CompanyName>
-    <AuthorName>Bryan M. Longacre</AuthorName>
+    <AuthorName>Bryan M. Longacre</AuthorName> 
     <ProductVersion>0.1.1-preview</ProductVersion>
     <Description>Shin.Framework</Description>
-  </PropertyGroup>
+    <CopyrightStartYear>2017</CopyrightStartYear>
+  </PropertyGroup>-->
 
   <PropertyGroup>
     <GitHubRepositoryUrl>https://github.com/HelixTechGroup/Shin.Framework.Dotnet</GitHubRepositoryUrl>

@@ -6,29 +6,15 @@
     <!--<PrometheusDetectPlatform>False</PrometheusDetectPlatform>-->
     <!--<IsLibraryProject>true</IsLibraryProject>
     <IsPackable>True</IsPackable>-->
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <!--<PropertyGroup>
-    <ProductName>Shin.Framework</ProductName>
-    -->
-  <!--<PackageId>$(ProductName)</PackageId>-->
-  <!--
-    <CompanyName>HelixTechGroup,llc</CompanyName>
-    <AuthorName>Bryan M. Longacre</AuthorName> 
-    <ProductVersion>0.1.1-preview</ProductVersion>
-    <Description>Shin.Framework</Description>
-    <CopyrightStartYear>2017</CopyrightStartYear>
-  </PropertyGroup>-->
 
   <PropertyGroup>
     <!--<TargetFrameworks>netstandard2.1;net5.0;net6.0;netcoreapp31;net48</TargetFrameworks>-->
     <!--<PrometheusPlatformEnabled>True</PrometheusPlatformEnabled>-->
     <!--<PrometheusTasksEnabled>False</PrometheusTasksEnabled>-->
-    <TargetFrameworks>net6.0;
-      net5.0;
-      net48
-    </TargetFrameworks>
+    <!--<TargetFramework>net6.0</TargetFramework>-->
+    <TargetPlatform>net6.0</TargetPlatform>
     <!--<TargetPlatforms>net6.0;net5.0;net48</TargetPlatforms>-->
     <!--<TargetPlatform>net6.0</TargetPlatform>-->
     <!--<TargetFrameworks>$(TargetPlatforms)</TargetFrameworks>-->
@@ -42,16 +28,15 @@
     <LocalNugetRepo>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>
     <!--<PrometheusDetectPlatform>False</PrometheusDetectPlatform>-->
     <IsLibraryProject>true</IsLibraryProject>
-    <IsPackable>True</IsPackable>
+    <IsPackable>False</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
     <UseGitHub>True</UseGitHub>
-    <ProductName>Shin.Framework</ProductName>
-    <!--<PackageId>$(ProductName)</PackageId>-->
+    <ProductName>Shin.Framework.Net6</ProductName>
     <CompanyName>HelixTechGroup,llc</CompanyName>
     <AuthorName>Bryan M. Longacre</AuthorName>
-    <ProductVersion>0.1.5-beta-build037</ProductVersion>
+    <ProductVersion>0.1.5-beta-build030</ProductVersion>
     <Description>Shin.Framework</Description>
     <CopyrightStartYear>2017</CopyrightStartYear>
     <RepositoryHttpUrl>https://github.com/HelixTechGroup/Shin.Framework.Dotnet</RepositoryHttpUrl>

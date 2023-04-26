@@ -1,13 +1,10 @@
-﻿#region Usings
-#endregion
-
 using System;
-using System.Collections.Concurrent;
+using System.Runtime.ConstrainedExecution;
 using Shin.Framework.Extensions;
 
-namespace Shin.Framework.IoC.Native.DependencyInjection
+namespace Shin.Framework
 {
-    internal sealed class ResolverDictionary : ConcurrentDictionary<string, IResolver>, IDispose
+    public abstract class CriticalDisposable : CriticalFinalizerObject, IDispose
     {
         #region Events
         /// <inheritdoc />
@@ -18,22 +15,24 @@ namespace Shin.Framework.IoC.Native.DependencyInjection
         #endregion
 
         #region Members
-        private bool m_isDisposed;
+        protected bool m_isDisposed;
         #endregion
 
         #region Properties
+        /// <inheritdoc />
         public bool IsDisposed
         {
             get { return m_isDisposed; }
         }
         #endregion
 
-        public ResolverDictionary()
+        protected CriticalDisposable()
         {
+            m_isDisposed = false;
             WireUpDisposeEvents();
         }
 
-        ~ResolverDictionary()
+        ~CriticalDisposable()
         {
             Dispose(false);
         }
@@ -45,17 +44,13 @@ namespace Shin.Framework.IoC.Native.DependencyInjection
             GC.SuppressFinalize(this);
         }
 
-        private void DisposeManagedResources()
-        {
-            foreach (var value in Values)
-                value.Dispose();
-        }
+        protected virtual void DisposeManagedResources() { }
 
-        private void DisposeUnmanagedResources() { }
+        protected virtual void DisposeUnmanagedResources() { }
 
-        private void OnDisposing(object sender, EventArgs e) { }
+        protected virtual void OnDisposed(object sender, EventArgs e) { }
 
-        private void OnDisposed(object sender, EventArgs e) { }
+        protected virtual void OnDisposing(object sender, EventArgs e) { }
 
         private void Dispose(bool disposing)
         {

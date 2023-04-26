@@ -1,10 +1,11 @@
 ﻿#region Usings
+#endregion
+
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
-#endregion
 
-namespace Shield.Framework.IoC.Native.DependencyInjection
+namespace Shin.Framework.IoC.Native.DependencyInjection
 {
     internal static class ReflectionCompiler
     {
@@ -323,7 +324,6 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
             var compiledExpression = CreateCompiledExpression(method, parameters);
 
             var parametersLength = parameters.Length;
-
             switch (parametersLength)
             {
                 case 0:
@@ -335,7 +335,12 @@ namespace Shield.Framework.IoC.Native.DependencyInjection
                 case 1:
                 {
                     var func = (Func<object, object>)compiledExpression;
-                    result = args => func(args[0]);
+                    result = args => 
+                    { 
+                        if (args is null || args[0] is null) 
+                            return null; 
+                        return func(args[0]); 
+                    };
                     break;
                 }
                 case 2:

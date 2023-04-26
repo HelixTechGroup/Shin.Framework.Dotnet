@@ -6,7 +6,7 @@ using Shin.Framework.Extensions;
 
 namespace Shin.Framework
 {
-    public abstract class Disposable : CriticalFinalizerObject, IDispose
+    public abstract class Disposable : IDispose
     {
         #region Events
         /// <inheritdoc />

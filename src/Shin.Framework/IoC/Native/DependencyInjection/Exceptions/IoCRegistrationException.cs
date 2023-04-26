@@ -1,9 +1,10 @@
 ﻿#region Usings
-using System;
-using System.Runtime.Serialization;
 #endregion
 
-namespace Shield.Framework.IoC.Native.DependencyInjection.Exceptions
+using System;
+using System.Runtime.Serialization;
+
+namespace Shin.Framework.IoC.Native.DependencyInjection.Exceptions
 {
     [Serializable]
     public class IoCRegistrationException : Exception

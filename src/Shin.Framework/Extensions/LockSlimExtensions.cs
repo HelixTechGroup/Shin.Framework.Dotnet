@@ -1,15 +1,32 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Shin.Framework.Threading;
 
 namespace Shin.Framework.Extensions
 {
     public static class LockSlimExtensions
     {
+        public static bool TryExitAll(this ReaderWriterLockSlim lockSlim)
+        {
+            while (lockSlim.RecursiveWriteCount > 0)
+                lockSlim.ExitWriteLock();
+
+            while (lockSlim.RecursiveReadCount > 0)
+                lockSlim.ExitReadLock();
+
+            while (lockSlim.RecursiveUpgradeCount > 0)
+                lockSlim.ExitUpgradeableReadLock();
+
+            return true;
+        }
+
         public static bool TryExit(this ReaderWriterLockSlim lockSlim, SynchronizationAccess access = SynchronizationAccess.Read, int maxRetries = 3, int retryDelay = 50, int lockTimeout = 50)
         {
             //if (lockSlim.IsWriteLockHeld && access == SynchronizationAccess.Write)
             //    Thread.Sleep(retryDelay);
 
+            if (!lockSlim.IsLockHeld())
+                return false;
 
             var locked = true;
             for (var i = 0; i <= maxRetries; i++)
@@ -21,7 +38,10 @@ namespace Shin.Framework.Extensions
                             lockSlim.ExitWriteLock();
                         locked = false;
                         break;
-                    default:
+                    case SynchronizationAccess.Read:
+                        if (lockSlim.RecursiveReadCount > 0)
+                            lockSlim.ExitReadLock();
+
                         if (lockSlim.RecursiveUpgradeCount > 0)
                             lockSlim.ExitUpgradeableReadLock();
 
@@ -48,7 +68,7 @@ namespace Shin.Framework.Extensions
         {
             var locked = false;
 
-            if (lockSlim.IsWriteLockHeld && access == SynchronizationAccess.Write)
+            if (lockSlim.IsLockHeld() && access == SynchronizationAccess.Write)
                 Thread.Sleep(retryDelay);
 
             //try
@@ -58,10 +78,38 @@ namespace Shin.Framework.Extensions
                     switch (access)
                     {
                         case SynchronizationAccess.Write:
-                            locked = lockSlim.TryEnterWriteLock(lockTimeout);
+                            try
+                            {
+                                if (lockSlim.IsReadLockHeld)
+                                {
+                                    lockSlim.ExitReadLock();
+                                }
+                                //    break;
+
+                                if (lockSlim.IsUpgradeableReadLockHeld)
+                                {
+                                    locked = lockSlim.TryUpgradeLock();
+                                    break;
+                                }
+
+                                locked = lockSlim.TryEnterWriteLock(lockTimeout);
+                            }
+                            catch (LockRecursionException lrEx)
+                            {
+                                if (lockSlim.IsUpgradeableReadLockHeld)
+                                    locked = lockSlim.TryUpgradeLock();
+                            }
+                            break;
+                        case SynchronizationAccess.Read:
+                            locked = lockSlim.TryEnterReadLock(lockTimeout);
                             break;
                         default:
-                            locked = lockSlim.TryEnterUpgradeableReadLock(lockTimeout);
+                            //if (lockSlim.IsReadLockHeld)
+                            //    locked = lockSlim.TryEnterReadLock(lockTimeout);
+
+                            //if (!locked)
+                            //    locked = lockSlim.TryEnterUpgradeableReadLock(lockTimeout);
+
                             break;
                     }
 
@@ -74,7 +122,7 @@ namespace Shin.Framework.Extensions
             //catch
             //{
             //    if (lockSlim.IsWriteLockHeld)
-            //        lockSlim.ExitWriteLock();
+            //        lockSlim.TryExit(SynchronizationAccess.Write);
             //    else if (lockSlim.IsUpgradeableReadLockHeld)
             //        lockSlim.ExitUpgradeableReadLock();
 

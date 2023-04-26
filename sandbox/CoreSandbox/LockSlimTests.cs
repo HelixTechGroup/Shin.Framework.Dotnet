@@ -29,10 +29,10 @@ namespace CoreSandbox
             Console.WriteLine("--------------------");
             Console.WriteLine("Starting Tests...");
             PrintLockState();
-            Debug.Assert(!m_lock.IsWriteLockHeld);
+            Debug.Assert(!m_lock.IsReadLockHeld);
             m_lock.TryEnter(SynchronizationAccess.Read);
             PrintLockState();
-            Debug.Assert(!m_lock.IsWriteLockHeld);
+            Debug.Assert(m_lock.IsReadLockHeld);
             Console.WriteLine("--------------------");
 
             return this;
@@ -43,32 +43,55 @@ namespace CoreSandbox
             Console.WriteLine("--------------------");
             Console.WriteLine("Finishing Tests...");
             PrintLockState();
-            Debug.Assert(!m_lock.IsWriteLockHeld);
-            m_lock.TryExit(SynchronizationAccess.Read);
+            Debug.Assert(m_lock.IsLockHeld());
+            m_lock.TryExitAll();
             PrintLockState();
-            Debug.Assert(!m_lock.IsWriteLockHeld);
+            Debug.Assert(!m_lock.IsLockHeld());
             Console.WriteLine("--------------------");
         }
 
-        public LockSlimTests StartRecursion()
+        public LockSlimTests StartReadRecursion()
         {
             Console.WriteLine("--------------------");
-            Console.WriteLine("Starting Recursion Tests...");
-            try
-            {
+            Console.WriteLine("Starting Read Recursion Tests...");
+            //try
+            //{
                 PrintLockState();
-                Debug.Assert(!m_lock.IsWriteLockHeld);
+                var count = m_lock.RecursiveReadCount;
+                //Debug.Assert(!m_lock.IsReadLockHeld);
                 m_lock.TryEnter(SynchronizationAccess.Read);
                 PrintLockState();
-                Debug.Assert(!m_lock.IsWriteLockHeld);
+                Debug.Assert(m_lock.RecursiveReadCount > count);
                 Console.WriteLine("--------------------");
 
                 return this;
-            }
-            finally
-            {
-                Finish();
-            }
+            //}
+            //finally
+            //{
+            //    Finish();
+            //}
+        }
+
+        public LockSlimTests StartWriteRecursion()
+        {
+            Console.WriteLine("--------------------");
+            Console.WriteLine("Starting Write Recursion Tests...");
+            //try
+            //{
+                PrintLockState();
+                var count = m_lock.RecursiveWriteCount;
+            //Debug.Assert(m_lock.IsLockHeld());
+            m_lock.TryEnter(SynchronizationAccess.Write);
+                PrintLockState();
+            Debug.Assert(m_lock.RecursiveWriteCount > count);
+            Console.WriteLine("--------------------");
+
+                return this;
+            //}
+            //finally
+            //{
+            //    Finish();
+            //}
         }
 
         private void PrintLockState()

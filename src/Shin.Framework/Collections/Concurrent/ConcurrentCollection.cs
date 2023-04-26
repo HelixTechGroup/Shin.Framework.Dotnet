@@ -7,6 +7,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Shin.Framework.Extensions;
+using Shin.Framework.Threading;
 #endregion
 
 namespace Shin.Framework.Collections.Concurrent
@@ -34,7 +36,7 @@ namespace Shin.Framework.Collections.Concurrent
         {
             get
             {
-                m_lock.EnterReadLock();
+                m_lock.TryEnter();
                 try
                 {
                     Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
@@ -43,7 +45,7 @@ namespace Shin.Framework.Collections.Concurrent
                 }
                 finally
                 {
-                    m_lock.ExitReadLock();
+                    m_lock.TryExit();
                 }
             }
             set
@@ -53,14 +55,14 @@ namespace Shin.Framework.Collections.Concurrent
                 {
                     Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
 
-                    m_lock.EnterWriteLock();
+                    m_lock.TryEnter(SynchronizationAccess.Write);
                     try
                     {
                         m_arr[index] = value;
                     }
                     finally
                     {
-                        m_lock.ExitWriteLock();
+                        m_lock.TryExit(SynchronizationAccess.Write);
                     }
                 }
                 finally
@@ -74,14 +76,14 @@ namespace Shin.Framework.Collections.Concurrent
         {
             get
             {
-                m_lock.EnterReadLock();
+                m_lock.TryEnter();
                 try
                 {
                     return m_count;
                 }
                 finally
                 {
-                    m_lock.ExitReadLock();
+                    m_lock.TryExit();
                 }
             }
         }
@@ -90,14 +92,14 @@ namespace Shin.Framework.Collections.Concurrent
         {
             get
             {
-                m_lock.EnterReadLock();
+                m_lock.TryEnter();
                 try
                 {
                     return m_arr.Length;
                 }
                 finally
                 {
-                    m_lock.ExitReadLock();
+                    m_lock.TryExit();
                 }
             }
         }
@@ -172,7 +174,7 @@ namespace Shin.Framework.Collections.Concurrent
         #region Methods
         public virtual void Add(T item)
         {
-            m_lock.EnterWriteLock();
+            m_lock.TryEnter(SynchronizationAccess.Write);
             try
             {
                 var newCount = m_count + 1;
@@ -182,7 +184,7 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitWriteLock();
+                m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -190,7 +192,7 @@ namespace Shin.Framework.Collections.Concurrent
         {
             Throw.IfNull(items).ArgumentNullException(nameof(items));
 
-            m_lock.EnterWriteLock();
+            m_lock.TryEnter(SynchronizationAccess.Write);
             try
             {
                 var arr = items as T[] ?? items.ToArray();
@@ -201,13 +203,13 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitWriteLock();
+                m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
         public virtual void Clear()
         {
-            m_lock.EnterWriteLock();
+            m_lock.TryEnter(SynchronizationAccess.Write);
             try
             {
                 Array.Clear(m_arr, 0, m_count);
@@ -215,26 +217,26 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitWriteLock();
+                m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
         public virtual bool Contains(T item)
         {
-            m_lock.EnterReadLock();
+            m_lock.TryEnter();
             try
             {
                 return IndexOfInternal(item) != -1;
             }
             finally
             {
-                m_lock.ExitReadLock();
+                m_lock.TryExit();
             }
         }
 
         public virtual void CopyTo(T[] array, int arrayIndex)
         {
-            m_lock.EnterReadLock();
+            m_lock.TryEnter();
             try
             {
                 Throw.If(array == null).ArgumentNullException(nameof(array));
@@ -247,7 +249,7 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitReadLock();
+                m_lock.TryExit();
             }
         }
 
@@ -262,7 +264,7 @@ namespace Shin.Framework.Collections.Concurrent
 
         public virtual IEnumerator<T> GetEnumerator()
         {
-            m_lock.EnterReadLock();
+            m_lock.TryEnter();
 
             try
             {
@@ -273,33 +275,33 @@ namespace Shin.Framework.Collections.Concurrent
             }
             finally
             {
-                m_lock.ExitReadLock();
+                m_lock.TryExit();
             }
         }
 
         public virtual TResult GetSync<TResult>(Func<ConcurrentCollection<T>, TResult> func)
         {
-            m_lock.EnterWriteLock();
+            m_lock.TryEnter(SynchronizationAccess.Write);
             try
             {
                 return func(this);
             }
             finally
             {
-                m_lock.ExitWriteLock();
+                m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
         public virtual int IndexOf(T item)
         {
-            m_lock.EnterReadLock();
+            m_lock.TryEnter();
             try
             {
                 return IndexOfInternal(item);
             }
             finally
             {
-                m_lock.ExitReadLock();
+                m_lock.TryExit();
             }
         }
 
@@ -311,7 +313,7 @@ namespace Shin.Framework.Collections.Concurrent
             {
                 Throw.If(index > m_count).ArgumentOutOfRangeException(nameof(index), m_count);
 
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 try
                 {
                     var newCount = m_count + 1;
@@ -326,7 +328,7 @@ namespace Shin.Framework.Collections.Concurrent
                 }
                 finally
                 {
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
                 }
             }
             finally
@@ -346,7 +348,7 @@ namespace Shin.Framework.Collections.Concurrent
                 if (i == -1)
                     return false;
 
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 try
                 {
                     RemoveAtInternal(i);
@@ -354,7 +356,7 @@ namespace Shin.Framework.Collections.Concurrent
                 }
                 finally
                 {
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
                 }
             }
             finally
@@ -370,14 +372,14 @@ namespace Shin.Framework.Collections.Concurrent
             {
                 Throw.If(index >= m_count).ArgumentOutOfRangeException(nameof(index), m_count);
 
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 try
                 {
                     RemoveAtInternal(index);
                 }
                 finally
                 {
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
                 }
             }
             finally

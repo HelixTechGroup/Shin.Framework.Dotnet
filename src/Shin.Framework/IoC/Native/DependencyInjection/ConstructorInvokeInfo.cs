@@ -1,9 +1,10 @@
 ﻿#region Usings
-using System;
-using System.Reflection;
 #endregion
 
-namespace Shield.Framework.IoC.Native.DependencyInjection
+using System;
+using System.Reflection;
+
+namespace Shin.Framework.IoC.Native.DependencyInjection
 {
     internal sealed class ConstructorInvokeInfo
     {

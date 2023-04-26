@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Concurrent\ConcurrentHashSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Concurrent\ConcurrentList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\ListDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CriticalDispose.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ExceptionNotRegisteredException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\ExceptionProvider.cs" />
@@ -21,6 +22,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ActionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\AssemblyExtionsions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\CollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDIChildContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDIParentContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDIRootContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Extensions\DIContainerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumExtensions.cs" />
@@ -38,16 +43,19 @@
     <Compile Include="$(MSBuildThisFileDirectory)IId.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IInitialize.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ILogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\DIResolutionStrategy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IBindings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDIContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDepend.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDependency.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\InjectConstructorAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\InjectPropertyAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\Extensions\IDIContainerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ConstructorInvokeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Exceptions\IoCRegistrationException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Exceptions\IoCResolutionException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\IoCContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ShinDIContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ICachedResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\IResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ReflectionCompiler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ResolverDictionary.cs" />
@@ -107,6 +115,8 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Collections\Concurrent\" />
     <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\" />
+    <Folder Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\Extensions\" />
+    <Folder Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Extensions\" />
     <Folder Include="$(MSBuildThisFileDirectory)Messaging\Exceptions\" />
     <Folder Include="$(MSBuildThisFileDirectory)Messaging\Collections\" />
   </ItemGroup>

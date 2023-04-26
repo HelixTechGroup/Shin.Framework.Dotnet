@@ -2,7 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using Shin.Framework.Collections.Concurrent;
 using Shin.Framework.Exceptions;
 #endregion
 
@@ -69,6 +73,35 @@ namespace Shin.Framework.Extensions
         {
             return ReferenceEquals(value, test);
         }
+
+        public static bool ContainsFlag(this Enum value, Enum test)
+        {
+            var intValue = Convert.ToUInt64(value);
+            var intTest = Convert.ToUInt64(test);
+            return ((intValue & intTest) == intTest);
+        }
+
+        public static bool[] ContainsFlags(this Enum value, params Enum[] test)
+        {
+            var found = new ConcurrentList<bool>();
+
+            foreach (var t in test)
+                found.Add(value.HasFlag(t));
+
+            return found.ToArray();
+        }
+
+        //public static void SelectAndExecute<TParam>(this Enum value, Enum test, params Func<TParam, bool>[] actions)
+        //{
+        //    //foreach (var et in value.GetType().GetEnumValues())
+        //    //{
+        //    if ((!value.HasFlag(test)))
+        //        return;
+
+        //    _ = actions?.Any(a => a != null && !a.Invoke(test));
+        //    //}
+
+        //}
         #endregion
     }
 }

@@ -7,6 +7,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Threading;
+using Shin.Framework.Extensions;
+using Shin.Framework.Threading;
 #endregion
 
 namespace Shin.Framework.Collections.Concurrent
@@ -28,13 +30,13 @@ namespace Shin.Framework.Collections.Concurrent
             {
                 try
                 {
-                    m_lock.EnterReadLock();
+                    m_lock.TryEnter();
                     return m_hashSet.Count;
                 }
                 finally
                 {
                     if (m_lock.IsReadLockHeld)
-                        m_lock.ExitReadLock();
+                        m_lock.TryExit();
                 }
             }
         }
@@ -63,13 +65,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 return m_hashSet.Add(item);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -77,13 +79,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 m_hashSet.UnionWith(other);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -91,13 +93,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 m_hashSet.IntersectWith(other);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -105,13 +107,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 m_hashSet.ExceptWith(other);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -119,13 +121,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 m_hashSet.SymmetricExceptWith(other);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -133,13 +135,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 return m_hashSet.IsSubsetOf(other);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -147,13 +149,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 return m_hashSet.IsSupersetOf(other);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -161,13 +163,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 return m_hashSet.IsProperSupersetOf(other);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -175,13 +177,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 return m_hashSet.IsProperSubsetOf(other);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -189,13 +191,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 return m_hashSet.Overlaps(other);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -203,13 +205,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 return m_hashSet.SetEquals(other);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -217,13 +219,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 m_hashSet.Clear();
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -231,13 +233,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterReadLock();
+                m_lock.TryEnter();
                 return m_hashSet.Contains(item);
             }
             finally
             {
                 if (m_lock.IsReadLockHeld)
-                    m_lock.ExitReadLock();
+                    m_lock.TryExit();
             }
         }
 
@@ -245,13 +247,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 m_hashSet.CopyTo(array, arrayIndex);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -259,13 +261,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 return m_hashSet.Remove(item);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -273,13 +275,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 return m_hashSet.GetEnumerator();
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 
@@ -299,13 +301,13 @@ namespace Shin.Framework.Collections.Concurrent
         {
             try
             {
-                m_lock.EnterWriteLock();
+                m_lock.TryEnter(SynchronizationAccess.Write);
                 m_hashSet.Add(item);
             }
             finally
             {
                 if (m_lock.IsWriteLockHeld)
-                    m_lock.ExitWriteLock();
+                    m_lock.TryExit(SynchronizationAccess.Write);
             }
         }
 

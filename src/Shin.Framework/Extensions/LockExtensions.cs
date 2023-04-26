@@ -74,7 +74,7 @@ namespace Shin.Framework.Extensions
             //catch
             //{
             //    if (lockSlim.IsWriteLockHeld)
-            //        lockSlim.ExitWriteLock();
+            //        lockSlim.TryExit(SynchronizationAccess.Write);
             //    else if (lockSlim.IsUpgradeableReadLockHeld)
             //        lockSlim.ExitUpgradeableReadLock();
 

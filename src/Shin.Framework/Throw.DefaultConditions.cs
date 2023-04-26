@@ -12,6 +12,15 @@ namespace Shin.Framework
     public static partial class Throw
     {
         #region Methods
+        public static void IfNullArgument<T> (T obj,
+                                      string message = null,
+                                      object[] args = null,
+                                      params KeyValuePair<string, object>[] data)
+        {
+            if (obj == null)
+                throw ExceptionProvider.GenerateException<ArgumentNullException>(message, args, data);
+        }
+
         public static void IfNull<T, TException>(T obj,
                                                  string message = null,
                                                  object[] args = null,
