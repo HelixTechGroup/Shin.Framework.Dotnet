@@ -1,6 +1,7 @@
 ﻿#region Usings
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,36 +16,37 @@ namespace Shin.Framework.Exceptions
         #region Methods
         public static TException GenerateArgumentException<TException>(string argumentName,
                                                                        string message = null,
+                                                                       StackFrame frame = default,
                                                                        params KeyValuePair<string, object>[] data)
             where TException : Exception, new()
         {
-            return GenerateException(ArgumentExceptionFactory<TException>(argumentName, message), data);
+            return GenerateException(ArgumentExceptionFactory<TException>(argumentName, message), frame, data);
         }
 
         public static Exception GenerateException<TException>(string message = null,
-                                                         object[] args = null,
-                                                         params KeyValuePair<string, object>[] data)
+                                                              object[] args = null,
+                                                              StackFrame frame = default,
+                                                              params KeyValuePair<string, object>[] data)
             where TException : Exception, new()
         {
-            if (string.IsNullOrEmpty(message))
-                message = string.Empty;
+            if (string.IsNullOrEmpty(message)) message = string.Empty;
 
-            var tmp = new ConcurrentList<object> {message};
+            var tmp = new ConcurrentList<object>
+                      {
+                          message
+                      };
 
-            if (args != null)
-                tmp.AddRange(args);
+            if (args != null) tmp.AddRange(args);
 
-            return GenerateException(
-                                     () => (TException)Activator.CreateInstance(typeof(TException), tmp.ToArray()),
-                                     data);
+            return GenerateException(() => (TException) Activator.CreateInstance(typeof(TException), tmp.ToArray()), frame, data);
         }
 
         public static TException GenerateException<TException>(Func<TException> exceptionFactory,
+                                                               StackFrame frame = default,
                                                                params KeyValuePair<string, object>[] data)
             where TException : Exception, new()
         {
-            if (exceptionFactory == null)
-                throw new ArgumentNullException(nameof(exceptionFactory), "No exception factory was specified.");
+            if (exceptionFactory == null) throw new ArgumentNullException(nameof(exceptionFactory), "No exception factory was specified.");
 
             var exceptionToThrow = exceptionFactory();
             if (exceptionToThrow == null)
@@ -54,34 +56,31 @@ namespace Shin.Framework.Exceptions
             exceptionToThrow.Data.AddRange(data);
 
             // Add a time-stamp for when the exception was thrown.
-            exceptionToThrow.Data.AddRange(
-                                           new KeyValuePair<string, string>("Date", DateTime.Now.ToString(CultureInfo.InvariantCulture)));
+            exceptionToThrow.Data.AddRange(new KeyValuePair<string, string>("Date", 
+                                                                            DateTime.Now.ToString(CultureInfo.InvariantCulture)));
 
+            exceptionToThrow.Data.AddRange(new KeyValuePair<string, string>("ShinStackTrace", 
+                                                                            frame?.ToString()));
+            
             return exceptionToThrow;
         }
 
-        private static Func<TException> ArgumentExceptionFactory<TException>(string argumentName, string message = null)
+        private static Func<TException> ArgumentExceptionFactory<TException>(string argumentName,
+                                                                             string message = null)
             where TException : Exception, new()
         {
             var type = typeof(TException);
-            if (type == typeof(ArgumentException))
-            {
-                return () =>
-                           new ArgumentException(message, argumentName) as TException;
-            }
+            if (type == typeof(ArgumentException)) return () => new ArgumentException(message, argumentName) as TException;
 
             if (type.IsSubclassOf(typeof(ArgumentException)))
             {
-                if (TryGetFactoryWithTwoStringArguments(out var two))
-                    return () => two(argumentName, message);
+                if (TryGetFactoryWithTwoStringArguments(out var two)) return () => two(argumentName, message);
 
-                if (TryGetFactoryWithOneStringArgument(out var one))
-                    return () => one(argumentName);
+                if (TryGetFactoryWithOneStringArgument(out var one)) return () => one(argumentName);
             }
             else if (TryGetFactoryWithOneStringArgument(out var one)) return () => one(message);
 
-            if (TryGetFactoryWithNoArguments(out var none))
-                return () => none();
+            if (TryGetFactoryWithNoArguments(out var none)) return () => none();
             return () =>
                    {
                        var x = new ArgumentException(message, argumentName);
@@ -90,7 +89,11 @@ namespace Shin.Framework.Exceptions
 
             bool TryGetFactoryWithTwoStringArguments(out Func<string, string, TException> factory)
             {
-                var ctor = type.GetConstructor(new[] {typeof(string), typeof(string)});
+                var ctor = type.GetConstructor(new[]
+                                               {
+                                                   typeof(string),
+                                                   typeof(string)
+                                               });
                 if (ctor != null)
                 {
                     var args = new[]
@@ -99,9 +102,7 @@ namespace Shin.Framework.Exceptions
                                    Expression.Parameter(typeof(string), "arg2")
                                };
 
-                    factory = Expression.Lambda<Func<string, string, TException>>(
-                                                                                  Expression.New(ctor, args),
-                                                                                  args)
+                    factory = Expression.Lambda<Func<string, string, TException>>(Expression.New(ctor, args), args)
                                         .Compile();
 
                     return true;
@@ -113,13 +114,14 @@ namespace Shin.Framework.Exceptions
 
             bool TryGetFactoryWithOneStringArgument(out Func<string, TException> factory)
             {
-                var ctor = type.GetConstructor(new[] {typeof(string)});
+                var ctor = type.GetConstructor(new[]
+                                               {
+                                                   typeof(string)
+                                               });
                 if (ctor != null)
                 {
                     var arg = Expression.Parameter(typeof(string), "message");
-                    factory = Expression.Lambda<Func<string, TException>>(
-                                                                          Expression.New(ctor, arg),
-                                                                          arg)
+                    factory = Expression.Lambda<Func<string, TException>>(Expression.New(ctor, arg), arg)
                                         .Compile();
 
                     return true;
@@ -131,10 +133,12 @@ namespace Shin.Framework.Exceptions
 
             bool TryGetFactoryWithNoArguments(out Func<TException> factory)
             {
-                var ctor = type.GetConstructor(new Type[] { });
+                var ctor = type.GetConstructor(new Type[]
+                                               { });
                 if (ctor != null)
                 {
-                    factory = Expression.Lambda<Func<TException>>(Expression.New(ctor)).Compile();
+                    factory = Expression.Lambda<Func<TException>>(Expression.New(ctor))
+                                        .Compile();
                     return true;
                 }
 

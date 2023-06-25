@@ -16,6 +16,7 @@ namespace Shin.Framework
 
         #region Members
         protected bool m_isDisposed;
+        protected static readonly object m_lock = new object();
         #endregion
 
         #region Properties
@@ -52,21 +53,24 @@ namespace Shin.Framework
 
         protected virtual void OnDisposing(object sender, EventArgs e) { }
 
-        private void Dispose(bool disposing)
+        protected void Dispose(bool disposing)
         {
             if (m_isDisposed)
                 return;
 
-            Disposing.Raise(this, EventArgs.Empty);
-            if (disposing)
-                DisposeManagedResources();
+            lock(m_lock)
+            {
+                Disposing.Raise(this, EventArgs.Empty);
+                if (disposing)
+                    DisposeManagedResources();
 
-            DisposeUnmanagedResources();
-            Disposed.Raise(this, EventArgs.Empty);
+                DisposeUnmanagedResources();
+                Disposed.Raise(this, EventArgs.Empty);
 
-            Disposing.Dispose();
-            Disposed.Dispose();
-            m_isDisposed = true;
+                Disposing.Dispose();
+                Disposed.Dispose();
+                m_isDisposed = true;
+            }
         }
 
         private void WireUpDisposeEvents()

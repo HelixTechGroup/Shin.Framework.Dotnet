@@ -162,14 +162,14 @@ namespace Shin.Framework.Collections.Concurrent
         }
         #endregion
 
-        public ConcurrentCollection(IList<T> list)
-        {
+        //public ConcurrentCollection(IList<T> list)
+        //{
             //if (list == null)
             //{
             //    ThrowHelper.ThrowArgumentNullException(ExceptionArgument.list);
             //}
             //items = list;
-        }
+        //}
 
         #region Methods
         public virtual void Add(T item)
@@ -532,6 +532,14 @@ namespace Shin.Framework.Collections.Concurrent
             Throw.IfNull(items).ArgumentNullException(nameof(items));
 
             m_arr = items.ToArray();
+            m_count = m_arr.Length;
+        }
+
+        public ConcurrentCollection(params T[] items)
+        {
+            Throw.IfNull(items).ArgumentNullException(nameof(items));
+
+            m_arr = items;
             m_count = m_arr.Length;
         }
         #endregion

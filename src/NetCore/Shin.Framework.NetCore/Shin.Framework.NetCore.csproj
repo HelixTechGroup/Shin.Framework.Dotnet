@@ -1,4 +1,4 @@
-﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.2.2-preview">
+﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.2.2-beta-build04">
 
   <PropertyGroup>
     <SectionSymbol>@</SectionSymbol>
@@ -25,9 +25,9 @@
     <!--<TargetFrameworks>netstandard2.1;net5.0;net6.0;netcoreapp31;net48</TargetFrameworks>-->
     <!--<PrometheusPlatformEnabled>True</PrometheusPlatformEnabled>-->
     <!--<PrometheusTasksEnabled>False</PrometheusTasksEnabled>-->
-    <TargetFrameworks>net6.0;
-      net5.0;
-      net48
+    <TargetFrameworks>
+      net6.0;
+      netstandard2.0;
     </TargetFrameworks>
     <!--<TargetPlatforms>net6.0;net5.0;net48</TargetPlatforms>-->
     <!--<TargetPlatform>net6.0</TargetPlatform>-->
@@ -51,7 +51,7 @@
     <!--<PackageId>$(ProductName)</PackageId>-->
     <CompanyName>HelixTechGroup,llc</CompanyName>
     <AuthorName>Bryan M. Longacre</AuthorName>
-    <ProductVersion>0.1.5-beta-build037</ProductVersion>
+    <ProductVersion>0.1.6-beta-build10</ProductVersion>
     <Description>Shin.Framework</Description>
     <CopyrightStartYear>2017</CopyrightStartYear>
     <RepositoryHttpUrl>https://github.com/HelixTechGroup/Shin.Framework.Dotnet</RepositoryHttpUrl>

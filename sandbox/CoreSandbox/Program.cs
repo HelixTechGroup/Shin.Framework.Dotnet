@@ -4,12 +4,16 @@ using System;
 
 namespace CoreSandbox
 {
-    class Program
+    internal class Program
     {
         #region Methods
         private static void Main(string[] args)
         {
             //Throw.If(args.Length > 0).InvalidOperationException();
+
+            //var shinLockSlimTests = new ShinLockSlimTests();
+            //shinLockSlimTests.Start()
+            //                .Finish();
 
             //var lockSlimTests = new LockSlimTests();
             //for (var i = 0; i < 30; i++)
@@ -32,12 +36,15 @@ namespace CoreSandbox
                           .ParentRegisterTests()
                           .ParentLifetimeTests()
                           .ChildCreationTests()
-                          .ChildRegisterTests()
-                          .ChildLifetimeTests()
-                          .GrandchildCreationTests()
-                          .GrandchildRegisterTests()
-                          .GrandchildLifetimeTests()
+                           //.ChildRegisterTests()
+                           //.ChildLifetimeTests()
+                           //.GrandchildCreationTests()
+                           //.GrandchildRegisterTests()
+                           //.GrandchildLifetimeTests()
                            //.AsyncLifetimeTests()
+                          .InterfaceRegistrationTests()
+                          .InterfaceResolutionTests()
+                          .ConstructorInjectionTests()
                           .Finish();
 
             Console.WriteLine("Tests Finished");

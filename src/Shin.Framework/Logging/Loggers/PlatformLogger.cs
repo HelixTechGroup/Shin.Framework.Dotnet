@@ -15,10 +15,19 @@ namespace Shin.Framework.Logging.Loggers
         {
             get { return m_isBuffering; }
         }
+
+        /// <inheritdoc />
+        public void Flush(ILogEntry entry)
+        {
+            lock(m_lock)
+            {
+                PlatformFlush(entry);
+            }
+        }
         #endregion
 
         #region Methods
-        public abstract void Flush(ILogEntry entry);
+        protected abstract void PlatformFlush(ILogEntry entry);
 
         protected abstract bool ShouldBuffer();
         #endregion

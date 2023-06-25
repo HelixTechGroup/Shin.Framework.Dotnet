@@ -1,63 +1,93 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#region Usings
+using System;
+#endregion
 
 namespace Shin.Framework.Threading
 {
-    public abstract class Synchronizable : Disposable, ISynchronize
+    public abstract class Synchronizable : Disposable,
+                                                               ISynchronize
     {
+#region Methods
         /// <inheritdoc />
         public void Enter()
         {
-            if (!TryEnter())
-                throw new InvalidOperationException();
+            if (!TryEnterLock()) throw new InvalidOperationException();
         }
 
         /// <inheritdoc />
         public void Exit()
         {
-            if (!TryExit())
-                throw new InvalidOperationException();
+            if (!TryExit()) throw new InvalidOperationException();
         }
 
-        protected abstract bool TryEnter(SynchronizationAccess access = SynchronizationAccess.Read,
+        /// <inheritdoc />
+        public bool TryEnter()
+        {
+            return TryEnterLock();
+        }
+
+        /// <inheritdoc />
+        public bool TryExit()
+        {
+            return TryExitLock();
+        }
+
+        protected abstract bool TryEnterLock(
+            SynchronizationAccess access = SynchronizationAccess.Read,
                                          int maxRetries = 3,
                                          int retryDelay = 50,
                                          int lockTimeout = 50);
 
-        protected abstract bool TryExit(SynchronizationAccess access = SynchronizationAccess.Read,
+        protected abstract bool TryExitLock(
+            SynchronizationAccess access = SynchronizationAccess.Read,
                                         int maxRetries = 3,
                                         int retryDelay = 50,
                                         int lockTimeout = 50);
+#endregion
     }
 
-    public abstract class Synchronizable<TObject> : Disposable, ISynchronize<TObject>
-    {
-        protected readonly TObject m_rawObject;
+//    public abstract class Synchronizable<TContext> : Disposable,
+//                                                     ISynchronizeObject<TContext>
+//    {
+//#region Members
+//        protected readonly TContext m_rawObject;
+//#endregion
 
-        Synchronizable(TObject rawObject)
-        {
-            m_rawObject = rawObject;
-        }
+//        Synchronizable(TContext rawObject)
+//        {
+//            m_rawObject = rawObject;
+//        }
 
-        /// <inheritdoc />
-        public TObject Enter()
-        {
-            if (TryEnter())
-                return m_rawObject;
+//#region Methods
+//        /// <inheritdoc />
+//        public TContext Enter()
+//        {
+//            if (TryEnter()) return m_rawObject;
 
-            throw new InvalidOperationException();
-        }
+//            throw new InvalidOperationException();
+//        }
 
-        /// <inheritdoc />
-        public void Exit()
-        {
-            if (!TryExit())
-                throw new InvalidOperationException();
-        }
+//        /// <inheritdoc />
+//        public void Exit()
+//        {
+//            if (!TryExit()) throw new InvalidOperationException();
+//        }
 
-        protected abstract bool TryEnter(SynchronizationAccess access = SynchronizationAccess.Read, int maxRetries = 3, int retryDelay = 50, int lockTimeout = 50);
+//        /// <inheritdoc />
+//        void ISynchronize.Enter()
+//        {
+//            throw new NotImplementedException();
+//        }
 
-        protected abstract bool TryExit(SynchronizationAccess access = SynchronizationAccess.Read, int maxRetries = 3, int retryDelay = 50, int lockTimeout = 50);
-    }
+//        protected abstract bool TryEnter(SynchronizationAccess access = SynchronizationAccess.Read,
+//                                         int maxRetries = 3,
+//                                         int retryDelay = 50,
+//                                         int lockTimeout = 50);
+
+//        protected abstract bool TryExit(SynchronizationAccess access = SynchronizationAccess.Read,
+//                                        int maxRetries = 3,
+//                                        int retryDelay = 50,
+//                                        int lockTimeout = 50);
+//#endregion
+//    }
 }

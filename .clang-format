@@ -2,6 +2,8 @@
 Language: Cpp
 BasedOnStyle: Microsoft
 AccessModifierOffset: -4
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
 AlignOperands: false
 AlignTrailingComments: false
 AlwaysBreakTemplateDeclarations: Yes
@@ -17,14 +19,26 @@ BraceWrapping:
   AfterExternBlock: false
   BeforeCatch: true
   BeforeElse: true
+  BeforeLambdaBody: true
+  BeforeWhile: true
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
 BreakConstructorInitializers: AfterColon
-BreakConstructorInitializersBeforeComma: False
-ConstructorInitializerAllOnOneLineOrOnePerLine: False
+IncludeCategories: 
+  - Regex: '^<.*'
+    Priority: 1
+  - Regex: '^".*'
+    Priority: 2
+  - Regex: '.*'
+    Priority: 3
+IncludeIsMainRegex: '([-_](test|unittest))?$'
+IndentCaseBlocks: true
+MacroBlockBegin: ''
+MacroBlockEnd: ''
 MaxEmptyLinesToKeep: 2
 NamespaceIndentation: All
+SpacesInAngles: false
 ---
 Language: JavaScript
 BasedOnStyle: Microsoft

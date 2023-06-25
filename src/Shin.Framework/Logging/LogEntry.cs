@@ -12,7 +12,7 @@ namespace Shin.Framework.Logging
     {
         #region Members
         private readonly LogLevel m_level;
-        private readonly object m_entryLock;
+        //private readonly object m_entryLock;
         private readonly Guid m_id;
         private readonly LogPriority m_priority;
         private string m_logDate;
@@ -45,14 +45,14 @@ namespace Shin.Framework.Logging
         {
             get
             {
-                lock(m_entryLock)
+                lock(m_lock)
                 {
                     return m_message;
                 }
             }
             set
             {
-                lock(m_entryLock)
+                lock(m_lock)
                 {
                     m_message = value;
                     SetLogDate();
@@ -79,7 +79,6 @@ namespace Shin.Framework.Logging
         public LogEntry(string message, LogLevel level, LogPriority priority)
         {
             m_id = Guid.NewGuid();
-            m_entryLock = new object();
             m_message = message;
             m_level = level;
             m_priority = priority;
@@ -102,7 +101,7 @@ namespace Shin.Framework.Logging
             unchecked
             {
                 var hashCode = m_id.GetHashCode();
-                hashCode = (hashCode * 397) ^ m_entryLock.GetHashCode();
+                hashCode = (hashCode * 397) ^ m_lock.GetHashCode();
                 return hashCode;
             }
         }

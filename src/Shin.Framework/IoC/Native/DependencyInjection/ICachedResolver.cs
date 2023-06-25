@@ -8,5 +8,7 @@ namespace Shin.Framework.IoC.Native.DependencyInjection
         Guid Id { get; }
 
         Guid ContainerId { get; }
+        
+        IDIRootContainer RootContainer { get; }
     }
 }

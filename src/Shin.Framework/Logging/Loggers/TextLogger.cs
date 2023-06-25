@@ -24,7 +24,7 @@ namespace Shin.Framework.Logging.Loggers
         }
 
         #region Methods
-        public override void Flush(ILogEntry entry)
+        protected override void PlatformFlush(ILogEntry entry)
         {
             //m_isBuffering = ShouldBuffer();
             m_isBuffering = ShouldBuffer();

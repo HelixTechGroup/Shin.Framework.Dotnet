@@ -6,12 +6,13 @@ namespace Shin.Framework.Threading
 {
     public abstract class SynchronizableLock: Synchronizable, ISynchronizeLock
     {
-        private ISynchronizeContext m_context;
+        private bool m_isLocked;
 
         /// <inheritdoc />
-        public ISynchronizeContext Context
+        public virtual bool IsLocked
         {
-            get { return m_context; }
+            get { return m_isLocked; }
+            set { m_isLocked = value; }
         }
     }
 }

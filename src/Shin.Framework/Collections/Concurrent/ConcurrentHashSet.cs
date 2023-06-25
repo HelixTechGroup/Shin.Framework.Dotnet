@@ -5,6 +5,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
 using Shin.Framework.Extensions;
@@ -20,7 +21,7 @@ namespace Shin.Framework.Collections.Concurrent
     {
         #region Members
         private readonly HashSet<T> m_hashSet;
-        private readonly ReaderWriterLockSlim m_lock;
+        private static readonly ReaderWriterLockSlim m_lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         #endregion
 
         #region Properties
@@ -51,13 +52,26 @@ namespace Shin.Framework.Collections.Concurrent
         {
             var s = new SortedList();
             m_hashSet = new HashSet<T>();
-            m_lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            
         }
 
         public ConcurrentHashSet(IEqualityComparer<T> comparer)
         {
             m_hashSet = new HashSet<T>(comparer);
-            m_lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        }
+
+        public ConcurrentHashSet(IEnumerable<T> items)
+        {
+            Throw.IfNull(items).ArgumentNullException(nameof(items));
+
+            m_hashSet = new HashSet<T>(items);
+        }
+
+        public ConcurrentHashSet(params T[] items)
+        {
+            Throw.IfNull(items).ArgumentNullException(nameof(items));
+
+            m_hashSet = new HashSet<T>(items);
         }
 
         #region Methods

@@ -4,6 +4,7 @@
 #region Usings
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 #endregion
 
@@ -14,6 +15,7 @@ namespace Shin.Framework.Exceptions
         #region Methods
         public static ArgumentNullException ArgumentNullException(string paramName,
                                                                   string message = null,
+                                                                  StackFrame frame = default,
                                                                   params KeyValuePair<string, object>[] data)
         {
             if (string.IsNullOrWhiteSpace(message))
@@ -21,11 +23,12 @@ namespace Shin.Framework.Exceptions
 
             return GenerateException(
                                      () => (ArgumentNullException)Activator.CreateInstance(typeof(ArgumentNullException), paramName, message),
-                                     data);
+                                     frame, data);
         }
 
         public static ArgumentException ArgumentException(string paramName,
                                                           string message = null,
+                                                          StackFrame frame = default,
                                                           params KeyValuePair<string, object>[] data)
         {
             if (string.IsNullOrWhiteSpace(message))
@@ -33,12 +36,13 @@ namespace Shin.Framework.Exceptions
 
             return GenerateException(
                                      () => (ArgumentException)Activator.CreateInstance(typeof(ArgumentException), message, paramName),
-                                     data);
+                                     frame, data);
         }
 
         public static ArgumentOutOfRangeException ArgumentOutOfRangeException(string paramName,
                                                                               object actualValue = null,
                                                                               string message = null,
+                                                                              StackFrame frame = default,
                                                                               params KeyValuePair<string, object>[] data)
         {
             if (string.IsNullOrWhiteSpace(message))
@@ -49,10 +53,11 @@ namespace Shin.Framework.Exceptions
                                                                                                  message,
                                                                                                  paramName,
                                                                                                  actualValue),
-                                     data);
+                                     frame, data);
         }
 
         public static InvalidOperationException InvalidOperationException(string message = null,
+                                                                          StackFrame frame = default,
                                                                           params KeyValuePair<string, object>[] data)
         {
             if (string.IsNullOrWhiteSpace(message))
@@ -60,10 +65,11 @@ namespace Shin.Framework.Exceptions
 
             return GenerateException(
                                      () => (InvalidOperationException)Activator.CreateInstance(typeof(InvalidOperationException), message),
-                                     data);
+                                     frame, data);
         }
 
         public static UnauthorizedAccessException UnauthorizedAccessException(string message = null,
+                                                                              StackFrame frame = default,
                                                                               params KeyValuePair<string, object>[] data)
         {
             if (string.IsNullOrWhiteSpace(message))
@@ -71,10 +77,11 @@ namespace Shin.Framework.Exceptions
 
             return GenerateException(
                                      () => (UnauthorizedAccessException)Activator.CreateInstance(typeof(UnauthorizedAccessException), message),
-                                     data);
+                                     frame, data);
         }
 
         public static IOException IOException(string message = null,
+                                              StackFrame frame = default,
                                               params KeyValuePair<string, object>[] data)
         {
             if (string.IsNullOrWhiteSpace(message))
@@ -82,7 +89,7 @@ namespace Shin.Framework.Exceptions
 
             return GenerateException(
                                      () => (IOException)Activator.CreateInstance(typeof(IOException), message),
-                                     data);
+                                     frame, data);
         }
         #endregion
     }

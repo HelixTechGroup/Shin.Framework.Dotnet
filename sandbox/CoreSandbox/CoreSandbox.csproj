@@ -1,7 +1,8 @@
-﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.2.0-preview">
+﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.2.2-beta-build04">
 
   <PropertyGroup>
     <SectionSymbol>@</SectionSymbol>
+    <PrometheusPlatformEnabled>False</PrometheusPlatformEnabled>
     <!--<LocalNugetRepo>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>-->
     <!--<PrometheusDetectPlatform>False</PrometheusDetectPlatform>-->
     <IsLibraryProject>false</IsLibraryProject>

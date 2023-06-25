@@ -37,11 +37,14 @@ namespace Shin.Framework
             if (m_isInitialized)
                 return;
 
-            m_isDisposed = false;
-            Initializing.Raise(this, EventArgs.Empty);
-            InitializeResources();
-            m_isInitialized = true;
-            Initialized.Raise(this, EventArgs.Empty);
+            lock(m_lock)
+            {
+                m_isDisposed = false;
+                Initializing.Raise(this, EventArgs.Empty);
+                InitializeResources();
+                m_isInitialized = true;
+                Initialized.Raise(this, EventArgs.Empty);
+            }
         }
 
         protected virtual void InitializeResources() { }

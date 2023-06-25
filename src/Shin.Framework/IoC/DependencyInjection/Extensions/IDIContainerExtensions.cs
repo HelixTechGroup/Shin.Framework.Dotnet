@@ -16,6 +16,13 @@ namespace Shin.Framework.IoC.DependencyInjection
             return container.Resolve<T>(null, parameters: parameters);
         }
 
+        public static object Resolve(this IDIContainer container,
+                                     Type type, 
+                                   params object[] parameters)
+        {
+            return container.Resolve(type, parameters: parameters);
+        }
+        
         //public static bool IsTypeRegisteredParentOnly(this DIContainer container)
         //{
         //    container.RegisteredTypes

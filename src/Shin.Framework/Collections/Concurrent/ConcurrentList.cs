@@ -761,6 +761,14 @@ namespace Shin.Framework.Collections.Concurrent
             m_arr = items.ToArray();
             m_count = m_arr.Length;
         }
+
+        public ConcurrentList(params T[] items)
+        {
+            Throw.IfNull(items).ArgumentNullException(nameof(items));
+
+            m_arr = items;
+            m_count = m_arr.Length;
+        }
         #endregion
     }
 }
