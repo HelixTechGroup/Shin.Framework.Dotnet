@@ -1,8 +1,8 @@
 using System;
 using System.Runtime.ConstrainedExecution;
-using Shin.Framework.Extensions;
+using Shin.Extensions;
 
-namespace Shin.Framework
+namespace Shin
 {
     public abstract class CriticalDisposable : CriticalFinalizerObject, IDispose
     {

@@ -1,0 +1,20 @@
+﻿<Project>
+  
+  <PropertyGroup>
+    <SectionSymbol>@</SectionSymbol>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsPackable>false</IsPackable>
+    <IsLibraryProject>true</IsLibraryProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(AssemblyName).MSTest</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  
+  <PropertyGroup Condition="'$(RELEASE)' == 'debug'">
+    <MergeBinary>false</MergeBinary>
+  </PropertyGroup>
+  
+</Project>

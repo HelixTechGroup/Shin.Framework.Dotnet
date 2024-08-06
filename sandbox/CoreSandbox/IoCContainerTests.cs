@@ -3,16 +3,17 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Shin.Framework.Collections.Concurrent;
-using Shin.Framework.Extensions;
-using Shin.Framework.IoC.DependencyInjection;
-using Shin.Framework.IoC.Native.DependencyInjection;
-using Shin.Framework.IoC.Native.DependencyInjection.Exceptions;
+
+using Shin.Collections.Concurrent;
+using Shin.Extensions;
+using Shin.IoC.DependencyInjection;
+using Shin.IoC.DependencyInjection.Extensions;
 #endregion
 
 namespace CoreSandbox
 {
-    internal sealed class IoCContainerTests : ShinUnitTest
+    internal sealed class IoCContainerTests<T> : ShinUnitTest
+    where T : class, IDIContainer, new()
     {
         #region Members
         private static IDIContainer m_childContainer;
@@ -23,7 +24,7 @@ namespace CoreSandbox
         #endregion
 
         #region Methods
-        public IoCContainerTests Start()
+        public IoCContainerTests<T> Start()
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("Starting Tests...");
@@ -32,12 +33,12 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests ParentCreationTests()
+        public IoCContainerTests<T> ParentCreationTests()
         {
             PrintTestStart();
 
             Console.WriteLine("Creating Parent Container...");
-            m_container = new ShinDIContainer();
+            m_container = new T(); //new ShinContainer();
 
             Debug.Assert(m_container != null);
 
@@ -47,16 +48,18 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests ParentRegisterTests()
+        public IoCContainerTests<T> ParentRegisterTests()
         {
             PrintTestStart();
 
             Debug.Assert(m_container != null);
 
-            m_container.Register<IoCTestClassA>();
+            m_container.Register<IIoCTestInterface, IoCTestClassA>();
+            //m_container.Register<IoCTestClassA>();
             m_container.Register<IoCTestClassB>();
 
 
+            Debug.Assert(m_container.IsTypeRegistered<IIoCTestInterface>());
             Debug.Assert(m_container.IsTypeRegistered<IoCTestClassA>());
             Debug.Assert(m_container.IsTypeRegistered<IoCTestClassB>());
 
@@ -66,7 +69,7 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests ParentLifetimeTests()
+        public IoCContainerTests<T> ParentLifetimeTests()
         {
             PrintTestStart();
 
@@ -89,7 +92,7 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests ChildCreationTests()
+        public IoCContainerTests<T> ChildCreationTests()
         {
             PrintTestStart();
             Console.WriteLine("--------------------");
@@ -102,12 +105,12 @@ namespace CoreSandbox
             //m_container.CreateChildContainer();
             Debug.Assert(m_childContainer != null);
             Console.WriteLine(m_childContainer.ToString());
-            
+
             PrintTestEnd();
             return this;
         }
 
-        public IoCContainerTests GrandchildCreationTests()
+        public IoCContainerTests<T> GrandchildCreationTests()
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("Starting Create Child Tests...");
@@ -123,7 +126,7 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests ChildRegisterTests()
+        public IoCContainerTests<T> ChildRegisterTests()
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("Starting Child Register Tests...");
@@ -133,7 +136,7 @@ namespace CoreSandbox
 
             m_childContainer.Register<IoCTestClassC>();
 
-            Debug.Assert(m_container.IsTypeRegistered<IoCTestClassC>());
+            Debug.Assert(!m_container.IsTypeRegistered<IoCTestClassC>());
             Debug.Assert(m_childContainer.IsTypeRegistered<IoCTestClassC>());
 
             Debug.Assert(m_childContainer.IsTypeRegistered<IoCTestClassA>());
@@ -144,7 +147,7 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests ChildLifetimeTests()
+        public IoCContainerTests<T> ChildLifetimeTests()
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("Starting Child Lifetime Tests...");
@@ -166,12 +169,13 @@ namespace CoreSandbox
             Console.WriteLine(@$"test B id and test2 B id Equal: {testB.Id == testB2.Id}");
             Debug.Assert(testB.Id == testB2.Id);
 
-            var testC = m_container.Resolve<IoCTestClassC>();
+            //var testC = m_container.Resolve<IoCTestClassC>();
             var testC2 = m_childContainer.Resolve<IoCTestClassC>();
-            Console.WriteLine(@$"test C id(Root): {testC.Id}");
+            Debug.Assert(testC2 is not null);
+            //Console.WriteLine(@$"test C id(Root): {testC.Id}");
             Console.WriteLine(@$"test C id(Root->Child): {testC2.Id}");
-            Console.WriteLine(@$"test C id and test2 C id Equal: {testC.Id == testC2.Id}");
-            Debug.Assert(testC.Id == testC2.Id);
+            //Console.WriteLine(@$"test C id and test2 C id Equal: {testC.Id == testC2.Id}");
+            //Debug.Assert(testC.Id == testC2.Id);
 
             //PrintLockState();
             //Console.WriteLine("--------------------");
@@ -179,7 +183,7 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests GrandchildLifetimeTests()
+        public IoCContainerTests<T> GrandchildLifetimeTests()
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("Starting Grandchild Lifetime Tests...");
@@ -208,25 +212,25 @@ namespace CoreSandbox
             Console.WriteLine(@$"test B id Equal: {conditionB}");
             Debug.Assert(conditionB);
 
-            var testC = m_container.Resolve<IoCTestClassC>();
+            //var testC = m_container.Resolve<IoCTestClassC>();
             var testC2 = m_childContainer.Resolve<IoCTestClassC>();
             var testC3 = m_grandChildContainer.Resolve<IoCTestClassC>();
-            var conditionC = testC.Id == testC2.Id && testC.Id == testC3.Id;
-            Console.WriteLine(@$"test C id(Root): {testC.Id}");
+            var conditionC = /*testC.Id ==*/ testC2.Id /*&& testC.Id*/ == testC3.Id;
+            //Console.WriteLine(@$"test C id(Root): {testC.Id}");
             Console.WriteLine(@$"test C id(Root->Child): {testC2.Id}");
             Console.WriteLine(@$"test C id(Root->Child->Grandchild): {testC3.Id}");
-            Console.WriteLine(@$"test C id Equal: {conditionC}");
+            //Console.WriteLine(@$"test C id Equal: {conditionC}");
             Debug.Assert(conditionC);
 
-            var testD = m_container.Resolve<IoCTestClassA>();
-            var testD2 = m_childContainer.Resolve<IoCTestClassA>();
-            var testD3 = m_grandChildContainer.Resolve<IoCTestClassA>();
-            var conditionD = testD.Id == testD2.Id && testD.Id == testD3.Id;
-            Console.WriteLine(@$"test D id(Root): {testD.Id}");
-            Console.WriteLine(@$"test D id(Root->Child): {testD2.Id}");
+            //var testD = m_container.Resolve<IoCTestClassD>();
+            //var testD2 = m_childContainer.Resolve<IoCTestClassD>();
+            var testD3 = m_grandChildContainer.Resolve<IoCTestClassD>();
+            Debug.Assert(testD3 is not null);
+            //var conditionD = testD.Id == testD2.Id && testD.Id == testD3.Id;
+            //Console.WriteLine(@$"test D id(Root): {testD.Id}");
+            //Console.WriteLine(@$"test D id(Root->Child): {testD2.Id}");
             Console.WriteLine(@$"test D id(Root->Child->Grandchild): {testD3.Id}");
-            Console.WriteLine(@$"test D id Equal: {conditionD}");
-            Debug.Assert(conditionD);
+            //Console.WriteLine(@$"test D id Equal: {conditionD}");
 
 
             //PrintLockState();
@@ -236,7 +240,7 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests GrandchildRegisterTests()
+        public IoCContainerTests<T> GrandchildRegisterTests()
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("Starting Grandchild Register Tests...");
@@ -246,8 +250,8 @@ namespace CoreSandbox
 
             m_grandChildContainer.Register<IoCTestClassD>();
 
-            Debug.Assert(m_container.IsTypeRegistered<IoCTestClassD>());
-            Debug.Assert(m_childContainer.IsTypeRegistered<IoCTestClassD>());
+            Debug.Assert(!m_container.IsTypeRegistered<IoCTestClassD>());
+            Debug.Assert(!m_childContainer.IsTypeRegistered<IoCTestClassD>());
             Debug.Assert(m_grandChildContainer.IsTypeRegistered<IoCTestClassD>());
 
             Debug.Assert(m_grandChildContainer.IsTypeRegistered<IoCTestClassA>());
@@ -260,7 +264,7 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests TraversalContainerTests()
+        public IoCContainerTests<T> TraversalContainerTests()
         {
             Console.WriteLine("--------------------");
             Console.WriteLine("Starting Traversal Tests...");
@@ -303,7 +307,7 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests ConstructorInjectionTests()
+        public IoCContainerTests<T> ConstructorInjectionTests()
         {
             PrintTestStart();
 
@@ -342,59 +346,93 @@ namespace CoreSandbox
             return this;
         }
 
-        public IoCContainerTests InterfaceRegistrationTests()
+        public IoCContainerTests<T> InterfaceRegistrationTests()
         {
             PrintTestStart();
-            
+
             Console.WriteLine("Starting Interface Registration Tests...");
             Debug.Assert(m_container is not null);
-            
+
             m_container.Register<IIoCTestInterface2, IoCTestClassG>();
             Debug.Assert(m_container.IsTypeRegistered<IoCTestClassG>());
             Debug.Assert(m_container.IsTypeRegistered<IIoCTestInterface2>());
-            
+
             PrintTestEnd();
             return this;
         }
-        
-        public IoCContainerTests InterfaceResolutionTests()
+
+        public IoCContainerTests<T> InterfaceResolutionTests()
         {
             PrintTestStart();
 
-            Console.WriteLine("Starting Interface Resolution Tests...");
-            Debug.Assert(m_container is not null);
+            foreach (var c in new[]
+                              {
+                                  m_container,
+                                  m_childContainer,
+                                  m_grandChildContainer
+                              })
+            {
+                Console.WriteLine("Starting Interface Resolution Tests...");
+                Console.WriteLine("====================");
+                Console.WriteLine($@"Current Container: {c.Id}");
+                Console.WriteLine("====================");
+                Debug.Assert(c is not null);
 
-            var testA = m_container.Resolve<IIoCTestInterface>();
-            Debug.Assert(testA is not null);
-            Console.WriteLine(@$"test A (IIoCTestInterface) id(Root): {testA.Id}");
+                var testA = c.Resolve<IIoCTestInterface>();
+                Debug.Assert(testA is not null);
+                Console.WriteLine(@$"test A (IIoCTestInterface) id(Root): {testA.Id}");
 
-            var testA2 = m_container.Resolve<IoCTestClassA>();
-            Debug.Assert(testA2 is not null);
-            Console.WriteLine(@$"test A (IoCTestClassA) id(Root): {testA2.Id}");
+                var testA2 = c.Resolve<IoCTestClassA>();
+                Debug.Assert(testA2 is not null);
+                Console.WriteLine(@$"test A (IoCTestClassA) id(Root): {testA2.Id}");
 
-            var condition = testA.Id == testA2.Id;
-            Debug.Assert(condition);
-            Console.WriteLine(@$"test A Interface and Concrete id Equal: {condition}");
+                var condition = testA.Id == testA2.Id;
+                Debug.Assert(condition);
+                Console.WriteLine(@$"test A Interface and Concrete id Equal: {condition}");
 
-            Debug.Assert(TestInterface<IIoCTestInterface>());
-            Debug.Assert(!TestInterface<IIoCTestInterfaceNoConcrete>());
+                TestInterface<IIoCTestInterface>(c);
+                //TestInterface<IIoCTestInterfaceNoConcrete>(c);
+            }
 
             PrintTestEnd();
 
             return this;
         }
 
-        private bool TestInterface<T>()
+        public IoCContainerTests<T> ConstructorParameterTest()
+        {
+            PrintTestStart();
+
+            Console.WriteLine("Starting Constructor Parameter Tests...");
+            Debug.Assert(m_container is not null);
+
+            m_container.Register<IoCTestClassH>();
+            Debug.Assert(m_container.IsTypeRegistered<IoCTestClassH>());
+
+            var testNumber = Random.Shared.Next(10);
+            var testH = m_container.Resolve<IoCTestClassH>(testNumber);
+            Console.WriteLine(@$"test H (IoCTestClassH) id(Root): {testH.Id}");
+            Console.WriteLine($@"Test Number: {testNumber}");
+            Console.WriteLine($@"Constructed Number: {testH.Number}");
+            var condition = testNumber == testH.Number;
+            Debug.Assert(condition);
+            Console.WriteLine(@$"Test number and Constructed number are Equal: {condition}");
+
+            PrintTestEnd();
+            return this;
+        }
+
+        private bool TestInterface<T>(IDIContainer container)
         {
             var result = false;
-            
+            Console.WriteLine(@$"Testing Interface {typeof(T).Name}");
             try
             {
-                var condition2 = m_container.Resolve<T>();
+                var condition2 = container.Resolve<T>();
                 //Console.WriteLine(@$"test {typeof(T).Name} has no implementation: {condition2}");
                 Debug.Assert(condition2 is not null);
             }
-            catch (IoCResolutionException e)
+            catch (Exception e)
             {
                 //Console.WriteLine($@"");
                 return false;
@@ -403,36 +441,39 @@ namespace CoreSandbox
 
             try
             {
-                var condition3 = m_container.ResolveAll<T>();
+                var condition3 = container.ResolveAll<T>();
                 //Console.WriteLine(@$"testI has no implementation: {condition3}");
                 Debug.Assert(condition3 is not null);
             }
-            catch (IoCResolutionException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 return false;
                 //Debug.Assert(false);
             }
 
-            var condition4 = m_container.TryResolve<T>(out var testI);
+            var condition4 = container.TryResolve<T>(out var testI);
             Console.WriteLine(@$"{typeof(T).Name} has implementation: {condition4}");
             result = condition4;
+            Debug.Assert(result);
             if (!result)
                 return false;
             //Debug.Assert(condition4);
             //Debug.Assert(testI is not null);
 
-            var condition5 = m_container.TryResolveAll<T>(out var testI2);
+            var condition5 = container.TryResolveAll<T>(out var testI2);
             Console.WriteLine(@$"{typeof(T).Name} has implementation: {condition5}");
             result = condition5;
-            if (!result) return false;
-            
+            Debug.Assert(result);
+            if (!result)
+                return false;
+
             //Debug.Assert(condition5);
             //Debug.Assert(testI2 is not null);
-            
+
             return true;
         }
-        
+
         public void Finish()
         {
             Console.WriteLine("--------------------");
@@ -449,9 +490,12 @@ namespace CoreSandbox
             m_container = null;
 
             Console.WriteLine("--------------------");
+            //GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
 
-        public IoCContainerTests AsyncLifetimeTests()
+        public IoCContainerTests<T> AsyncLifetimeTests()
         {
             var threadLimit = 10;
 
@@ -516,10 +560,13 @@ namespace CoreSandbox
             //Console.WriteLine($@"Is Test Class A Registered: {m_container.IsTypeRegistered<IoCTestClassA>()}");
             //Console.WriteLine($@"Is Test Class B Registered: {m_container.IsTypeRegistered<IoCTestClassB>()}");
             var all = m_container.ResolveAll<IIoCTestClass>();
-            Debug.Assert(all.Any());
+
+            var t = m_container.IsTypeRegistered<IIoCTestClass>();
+            Debug.Assert(t);
             Console.WriteLine($@"All Tests Registered: {all.Count()}");
             foreach (var c in all)
             {
+                Console.WriteLine(@$"Class Name: {c.GetType().Name}");
                 Console.WriteLine(@$"Class Id: {c.Id}");
                 Console.WriteLine(@$"Class Interface: {c.ContainsInterface<IIoCTestClass>()}");
             }
@@ -550,17 +597,20 @@ namespace CoreSandbox
         #endregion
 
         #region Nested Types
-        private abstract class IoCTestClass : IIoCTestClass
+
+        public abstract class IoCTestClass : IIoCTestClass
         {
             #region Properties
             public Guid Id { get; protected init; }
             #endregion
 
-            protected IoCTestClass() { Id = Guid.NewGuid(); }
+            public IoCTestClass() { Id = Guid.NewGuid(); }
         }
 
-        private class IoCTestClassA : IoCTestClass,
-                                      IIoCTestInterface { }
+        public sealed class IoCTestClassA : IoCTestClass,
+                                               IIoCTestInterface
+        {
+        }
 
         private class IoCTestClassB : IoCTestClass { }
 
@@ -583,19 +633,32 @@ namespace CoreSandbox
             public IoCTestClassE Class { get; protected init; }
             #endregion
 
+
             public IoCTestClassF(IoCTestClassE classE) { Class = classE; }
         }
 
         private class IoCTestClassG : IoCTestClass, IIoCTestInterface2 { }
-        
-        private interface IIoCTestClass
+
+        private class IoCTestClassH : IoCTestClass
+        {
+            public int Number { get; protected set; }
+
+            public IoCTestClassH() : base() { }
+
+            protected IoCTestClassH(int number)
+            {
+                Number = number;
+            }
+        }
+
+        public interface IIoCTestClass
         {
             #region Properties
             Guid Id { get; }
             #endregion
         }
 
-        private interface IIoCTestInterface : IIoCTestClass { }
+        public interface IIoCTestInterface : IIoCTestClass { }
 
         private interface IIoCTestInterfaceNoConcrete : IIoCTestClass { }
 

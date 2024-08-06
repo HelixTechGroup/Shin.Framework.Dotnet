@@ -2,7 +2,7 @@
 using System;
 #endregion
 
-namespace Shin.Framework.Messaging
+namespace Shin.Messaging
 {
     public interface IActionMessage : IMessage, IPublish, ISubscribe<Action> { }
 

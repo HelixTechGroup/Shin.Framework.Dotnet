@@ -4,7 +4,7 @@
 #region Usings
 #endregion
 
-namespace Shin.Framework.Messaging.Collections
+namespace Shin.Messaging.Collections
 {
     public interface IMessageCollection
     {

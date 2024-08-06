@@ -3,7 +3,7 @@ using System;
 using System.Runtime.Serialization;
 #endregion
 
-namespace Shin.Framework.Exceptions
+namespace Shin.Exceptions
 {
     [Serializable]
     public class ExceptionNotRegisteredException : Exception

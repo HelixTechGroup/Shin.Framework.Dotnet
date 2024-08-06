@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 #endregion
 
-namespace Shin.Framework.Extensions
+namespace Shin.Extensions
 {
     public static class CollectionExtensions
     {

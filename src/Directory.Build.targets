@@ -1,0 +1,14 @@
+﻿<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <SectionSymbol>@</SectionSymbol>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!--<IsPackable>false</IsPackable>
+    <IsLibraryProject>true</IsLibraryProject>-->
+    <!--<RootNamespace Condition="'$(ProductName)' == 'Shin.Framework'">Shin</RootNamespace>
+    <RootNamespace Condition="'$(ProductName)' == 'ShinContainer'">Shin.IoC.DependencyInjection</RootNamespace>-->
+    <!--<RootNamespace Condition="'$(ProductName)' == 'NinjectContainer' OR
+                   '$(ProductName)' == 'ShinContainer'">Shin.IoC.DependencyInjection</RootNamespace>-->
+  </PropertyGroup>
+</Project>

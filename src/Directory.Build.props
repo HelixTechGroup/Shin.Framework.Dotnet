@@ -1,0 +1,39 @@
+﻿<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <SectionSymbol>@</SectionSymbol>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!--<IsPackable>false</IsPackable>-->
+    <!--<IsLibraryProject>true</IsLibraryProject>-->
+    <!--<RootNamespace Condition="'$(ProductName)' == 'Shin.Framework'">Shin</RootNamespace>-->
+    <!--<RootNamespace Condition="'$(ProductName)' == 'ShinContainer'">Shin.IoC.DependencyInjection</RootNamespace>
+    <RootNamespace Condition="'$(ProductName)' == 'NinjectContainer'">Shin.IoC.DependencyInjection</RootNamespace>-->
+    <!--<RootNamespace
+      Condition="'$(ProductName)' == 'NinjectContainer' OR
+                   '$(ProductName)' == 'ShinContainer'">
+      Shin.IoC.DependencyInjection
+    </RootNamespace>-->
+  </PropertyGroup>
+
+  <!--<PropertyGroup>
+    <UseGitHub>True</UseGitHub>
+    <ProductName>Shin.Framework</ProductName>
+    <CompanyName>HelixTechGroup,llc</CompanyName>
+    <AuthorName>Bryan M. Longacre</AuthorName>
+    <Description>Shin.Framework</Description>
+    <CopyrightStartYear>2017</CopyrightStartYear>
+    <RepositoryHttpUrl>https://github.com/HelixTechGroup/Shin.Framework.Dotnet</RepositoryHttpUrl>
+  </PropertyGroup>-->
+
+  <!--<ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(AssemblyName).MSTest</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(RELEASE)' == 'debug'">
+    <MergeBinary>false</MergeBinary>
+  </PropertyGroup>-->
+
+</Project>

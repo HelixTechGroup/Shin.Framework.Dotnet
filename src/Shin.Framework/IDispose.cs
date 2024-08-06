@@ -5,15 +5,15 @@
 using System;
 #endregion
 
-namespace Shin.Framework
+namespace Shin
 {
     /// <inheritdoc />
     /// <summary>Interface for dispose.</summary>
     public interface IDispose : IDisposable
     {
         #region Events
-        event EventHandler Disposed;
-        event EventHandler Disposing;
+        //event EventHandler Disposed;
+        //event EventHandler Disposing;
         #endregion
 
         #region Properties

@@ -1,4 +1,4 @@
-﻿namespace Shin.Framework.Messaging
+﻿namespace Shin.Messaging
 {
     public enum ThreadOption
     {

@@ -1,4 +1,4 @@
-﻿namespace Shin.Framework.IoC.DependencyInjection
+﻿namespace Shin.IoC.DependencyInjection
 {
     /// <summary>Interface for IoC(Inversion of Control) bindings.</summary>
     public interface IBindings

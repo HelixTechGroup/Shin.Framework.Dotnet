@@ -1,5 +1,7 @@
 ﻿#region Usings
 using System;
+
+using Shin.IoC.DependencyInjection;
 #endregion
 
 namespace CoreSandbox
@@ -30,21 +32,23 @@ namespace CoreSandbox
             //if (Console.ReadKey().Key == ConsoleKey.Q)
             //    return;
 
-            var containerTests = new IoCContainerTests();
+            var containerTests = new IoCContainerTests<NinjectContainer>();
             containerTests.Start()
                           .ParentCreationTests()
                           .ParentRegisterTests()
                           .ParentLifetimeTests()
                           .ChildCreationTests()
-                           //.ChildRegisterTests()
-                           //.ChildLifetimeTests()
-                           //.GrandchildCreationTests()
-                           //.GrandchildRegisterTests()
-                           //.GrandchildLifetimeTests()
-                           //.AsyncLifetimeTests()
+                          .ChildRegisterTests()
+                          .ChildLifetimeTests()
+                          .GrandchildCreationTests()
+                          .GrandchildRegisterTests()
+                          .GrandchildLifetimeTests()
+                          //.AsyncLifetimeTests()
                           .InterfaceRegistrationTests()
                           .InterfaceResolutionTests()
                           .ConstructorInjectionTests()
+                          .ConstructorParameterTest()
+                          .TraversalContainerTests()
                           .Finish();
 
             Console.WriteLine("Tests Finished");

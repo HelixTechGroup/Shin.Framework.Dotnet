@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Shin.Framework.IoC.DependencyInjection
+namespace Shin.IoC.DependencyInjection.Extensions
 {
     public static class IDIContainerExtensions
     {

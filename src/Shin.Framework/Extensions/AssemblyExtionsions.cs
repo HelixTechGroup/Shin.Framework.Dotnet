@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 #endregion
 
-namespace Shin.Framework.Extensions
+namespace Shin.Extensions
 {
     public static class AssemblyExtionsions
     {

@@ -17,11 +17,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Shin.Framework.Extensions;
-using Shin.Framework.Threading;
+using Shin.Extensions;
+using Shin.Threading;
 #endregion
 
-namespace Shin.Framework.Collections.Concurrent
+namespace Shin.Collections.Concurrent
 {
     public class ConcurrentList : IList
     {

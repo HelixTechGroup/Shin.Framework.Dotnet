@@ -7,7 +7,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 #endregion
 
-namespace Shin.Framework.Messaging.Collections
+namespace Shin.Messaging.Collections
 {
     public sealed class MessageCollection : IMessageCollection
     {

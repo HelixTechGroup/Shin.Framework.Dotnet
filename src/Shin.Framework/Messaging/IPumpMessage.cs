@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Shin.Framework.Messaging
+﻿namespace Shin.Messaging
 {
     public interface IPumpMessage : IMessage
     {

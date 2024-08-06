@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
-using Shin.Framework.Extensions;
-using Shin.Framework.Threading;
+using Shin.Extensions;
+using Shin.Threading;
 
-namespace Shin.Framework.Runtime
+namespace Shin.Runtime
 {
     public class SafeMemoryBuffer : ConcurrentSafeBuffer, IEquatable<SafeMemoryBuffer>
     {

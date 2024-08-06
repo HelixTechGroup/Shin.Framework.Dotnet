@@ -2,7 +2,7 @@
 using System;
 #endregion
 
-namespace Shin.Framework.Threading
+namespace Shin.Threading
 {
     public abstract class Synchronizable : Disposable,
                                                                ISynchronize

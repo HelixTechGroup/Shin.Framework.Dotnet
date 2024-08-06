@@ -5,7 +5,7 @@
 using System;
 #endregion
 
-namespace Shin.Framework.Messaging
+namespace Shin.Messaging
 {
     public sealed class SubscriptionToken : IEquatable<SubscriptionToken>, IDispose
     {

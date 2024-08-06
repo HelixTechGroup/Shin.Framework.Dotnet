@@ -6,7 +6,7 @@ using System;
 using System.Threading;
 #endregion
 
-namespace Shin.Framework.Messaging.Subscriptions
+namespace Shin.Messaging.Subscriptions
 {
     internal sealed class ContextDispatcherSubscription : Subscription
     {

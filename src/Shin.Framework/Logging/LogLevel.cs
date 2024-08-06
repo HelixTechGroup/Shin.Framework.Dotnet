@@ -1,4 +1,4 @@
-namespace Shin.Framework.Logging
+namespace Shin.Logging
 {
     /// <summary>
     /// Defines values for the categories used by <see cref="ILogProvider"/>.

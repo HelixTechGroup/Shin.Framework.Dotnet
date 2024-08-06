@@ -1,47 +1,46 @@
 #region Usings
 using System;
 using System.Threading;
-using Shin.Framework.Extensions;
+using Shin.Extensions;
 #endregion
 
-namespace Shin.Framework.Threading.Native
+namespace Shin.Threading.Native
 {
     public interface ISynchonizableReaderWriter : ISynchronizeLockReader,
                                                   ISynchronizeLockWriter,
                                                   ISynchronizeLockUpgrader { }
 
-    public sealed class ShinLockSlim :
-        SynchronizableLock,
-        ISynchonizableReaderWriter
+    public sealed class ShinLockSlim : SynchronizableLock,
+                                       ISynchonizableReaderWriter
     {
-#region Members
-        const uint MaxReaders = ReaderMask;
-        const int MaxSpins = 20;
+        #region Members
+        private const uint MaxReaders = ReaderMask;
+        private const int MaxSpins = 20;
 
-        const uint ReaderMask = 0x3FFFFFFF;
+        private const uint ReaderMask = 0x3FFFFFFF;
 
-        const uint Writer = 0x80000000;
+        private const uint Writer = 0x80000000;
 
-        const uint WriterWaiting = 0x40000000;
+        private const uint WriterWaiting = 0x40000000;
 
-        readonly FastSemaphore readWait = new FastSemaphore(),
-                               writeWait = new FastSemaphore();
+        private readonly FastSemaphore readWait = new(),
+                                       writeWait = new();
 
-        bool hasWaiter;
+        private bool hasWaiter;
         //private bool m_isReadLockHeld;
         //private bool m_isUpgradeableLockHeld;
         //private bool m_isWriteLockHeld;
 
-        uint readersWaiting,
-             writersWaiting;
+        private uint readersWaiting,
+                     writersWaiting;
 
-        int spinLock;
+        private int spinLock;
 
         // high bit is set if a writer owns the lock. the next bit is set if a writer is waiting. the low 30 bits are the number of readers
-        uint state;
-#endregion
+        private uint state;
+        #endregion
 
-#region Properties
+        #region Properties
         /// <inheritdoc />
         public bool IsReadLockHeld
         {
@@ -59,9 +58,9 @@ namespace Shin.Framework.Threading.Native
         {
             get { return (state & Writer) != 0; }
         }
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
         public void Downgrade()
         {
             if ((state & Writer) == 0) throw new SynchronizationLockException();
@@ -76,7 +75,7 @@ namespace Shin.Framework.Threading.Native
 
         public void EnterRead()
         {
-            int spinCount = 0;
+            var spinCount = 0;
             while (true)
             {
                 EnterLock(ref spinLock);
@@ -134,8 +133,8 @@ namespace Shin.Framework.Threading.Native
 
             Thread.BeginCriticalRegion();
 
-            int spinCount = 0;
-            bool reserved = false;
+            var spinCount = 0;
+            var reserved = false;
             while (true)
             {
                 EnterLock(ref spinLock);
@@ -203,7 +202,7 @@ namespace Shin.Framework.Threading.Native
                     EnterWrite();
                     break;
             }
-            
+
             return true;
         }
 
@@ -222,12 +221,13 @@ namespace Shin.Framework.Threading.Native
                     ExitWrite();
                     break;
             }
+
             return true;
         }
 
-        void EnterWriteCore(bool clearWaitBit)
+        private void EnterWriteCore(bool clearWaitBit)
         {
-            int spinCount = 0;
+            var spinCount = 0;
             EnterLock(ref spinLock);
             if (clearWaitBit && writersWaiting == 0) state &= ~WriterWaiting;
 
@@ -260,14 +260,14 @@ namespace Shin.Framework.Threading.Native
             }
         }
 
-        void ReleaseWaitingThreads()
+        private void ReleaseWaitingThreads()
         {
             if (writersWaiting != 0)
             {
                 if ((state & ReaderMask) == 0)
                 {
                     if (--writersWaiting == 0 &&
-                        readersWaiting == 0)
+                        readersWaiting   == 0)
                         hasWaiter = false;
 
                     spinLock = 0;
@@ -277,7 +277,7 @@ namespace Shin.Framework.Threading.Native
             }
             else if (readersWaiting != 0) // otherwise, if any readers were waiting, release all of them
             {
-                uint count = readersWaiting;
+                var count = readersWaiting;
                 hasWaiter      = false;
                 readersWaiting = 0;
                 spinLock       = 0;
@@ -288,7 +288,7 @@ namespace Shin.Framework.Threading.Native
             spinLock = 0;
         }
 
-        void ReleaseWaitingThreadsIfAny()
+        private void ReleaseWaitingThreadsIfAny()
         {
             if (hasWaiter)
                 ReleaseWaitingThreads();
@@ -296,14 +296,14 @@ namespace Shin.Framework.Threading.Native
                 spinLock = 0;
         }
 
-        static void EnterLock(ref int spinLock)
+        private static void EnterLock(ref int spinLock)
         {
             if (Interlocked.CompareExchange(ref spinLock, 1, 0) != 0) EnterLockSpin(ref spinLock);
         }
 
-        static void EnterLockSpin(ref int spinLock)
+        private static void EnterLockSpin(ref int spinLock)
         {
-            int spinCount = 0;
+            var spinCount = 0;
             do
             {
                 spinCount++;
@@ -317,9 +317,9 @@ namespace Shin.Framework.Threading.Native
             } while (Interlocked.CompareExchange(ref spinLock, 1, 0) != 0);
         }
 
-        static void SpinWait(int spinCount)
+        private static void SpinWait(int spinCount)
         {
-            if (spinCount < 5 &&
+            if (spinCount                  < 5 &&
                 Environment.ProcessorCount > 1)
                 Thread.SpinWait(20 * spinCount);
             else if (spinCount < MaxSpins - 3)
@@ -327,28 +327,28 @@ namespace Shin.Framework.Threading.Native
             else
                 Thread.Sleep(1);
         }
-#endregion
+        #endregion
     }
 
     public struct ShinLockSlimContext : ISynchronizeContext
     {
-#region Events
+        #region Events
         /// <inheritdoc />
         public event EventHandler Disposed;
 
         /// <inheritdoc />
         public event EventHandler Disposing;
-#endregion
+        #endregion
 
-#region Members
+        #region Members
         private readonly bool m_isSynchronized;
         private SynchronizationAccess m_accessLevel;
         private bool m_isDisposed;
 
-        ShinLockSlim m_owner;
-#endregion
+        private ShinLockSlim m_owner;
+        #endregion
 
-#region Properties
+        #region Properties
         /// <inheritdoc />
         public SynchronizationAccess AccessLevel
         {
@@ -371,7 +371,7 @@ namespace Shin.Framework.Threading.Native
         {
             get { return m_isSynchronized; }
         }
-#endregion
+        #endregion
 
         internal ShinLockSlimContext(ShinLockSlim owner,
                                      SynchronizationAccess access)
@@ -385,7 +385,7 @@ namespace Shin.Framework.Threading.Native
             Disposing = null;
         }
 
-#region Methods
+        #region Methods
         public void Dispose()
         {
             Dispose(true);
@@ -406,7 +406,7 @@ namespace Shin.Framework.Threading.Native
             AssertNotDisposed();
             if (m_accessLevel == SynchronizationAccess.Write) throw new SynchronizationLockException();
 
-            bool firstUpgrader = m_owner.Upgrade();
+            var firstUpgrader = m_owner.Upgrade();
             m_accessLevel = SynchronizationAccess.Write;
             return firstUpgrader;
         }
@@ -436,7 +436,7 @@ namespace Shin.Framework.Threading.Native
             m_isDisposed = true;
         }
 
-        void AssertNotDisposed()
+        private void AssertNotDisposed()
         {
             if (m_owner == null)
             {
@@ -444,16 +444,16 @@ namespace Shin.Framework.Threading.Native
                                                      .FullName);
             }
         }
-#endregion
+        #endregion
     }
 
-    sealed class FastSemaphore
+    internal sealed class FastSemaphore
     {
-#region Members
-        uint count;
-#endregion
+        #region Members
+        private uint count;
+        #endregion
 
-#region Methods
+        #region Methods
         public void Release()
         {
             lock(this)
@@ -495,18 +495,18 @@ namespace Shin.Framework.Threading.Native
                 count--;
             }
         }
-#endregion
+        #endregion
     }
 
     internal static class ThreadUtility
     {
-#region Members
+        #region Members
         public static bool MultiProcessor = Environment.ProcessorCount > 1;
 
         private static int dummy;
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
         public static void BriefWait()
         {
             if (MultiProcessor)
@@ -529,6 +529,6 @@ namespace Shin.Framework.Threading.Native
 
             dummy++;
         }
-#endregion
+        #endregion
     }
 }

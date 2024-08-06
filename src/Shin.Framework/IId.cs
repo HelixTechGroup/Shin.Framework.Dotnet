@@ -1,4 +1,4 @@
-﻿namespace Shin.Framework
+﻿namespace Shin
 {
     public interface IId<out T>
     {

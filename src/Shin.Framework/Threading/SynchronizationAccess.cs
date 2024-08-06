@@ -1,4 +1,4 @@
-﻿namespace Shin.Framework.Threading
+﻿namespace Shin.Threading
 {
     public enum SynchronizationAccess
     {

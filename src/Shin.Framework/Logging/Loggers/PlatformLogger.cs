@@ -1,7 +1,7 @@
 ﻿#region Usings
 #endregion
 
-namespace Shin.Framework.Logging.Loggers
+namespace Shin.Logging.Loggers
 {
     public abstract class PlatformLogger : Disposable, ILogProvider
     {

@@ -6,7 +6,7 @@ using System;
 using System.Globalization;
 #endregion
 
-namespace Shin.Framework.Logging
+namespace Shin.Logging
 {
     public sealed class LogEntry : Disposable, ILogEntry, IEquatable<LogEntry>
     {

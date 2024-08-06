@@ -1,0 +1,8 @@
+﻿<Project>
+  
+  <PropertyGroup>
+    <SectionSymbol>@</SectionSymbol>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+</Project>

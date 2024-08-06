@@ -5,17 +5,18 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Shin.Framework.Exceptions;
+using System.Diagnostics.CodeAnalysis;
+using Shin.Exceptions;
 #endregion
 
-namespace Shin.Framework
+namespace Shin
 {
     public static partial class Throw
     {
         #region Methods
-        public static ThrowExceptionSelector Exception()
+        public static ThrowExceptionBuilder Exception()
         {
-            return new ThrowExceptionSelector(true);
+            return new ThrowExceptionBuilder(true);
         }
 
         public static void Exception<TException>(string message = null,
@@ -49,14 +50,14 @@ namespace Shin.Framework
                 throw ExceptionProvider.GenerateException<TException>(message, args, frame,data);
         }
 
-        public static ThrowExceptionSelector If(Func<bool> predicate)
+        public static ThrowExceptionBuilder If(Func<bool> predicate)
         {
-            return new ThrowExceptionSelector(predicate());
+            return new ThrowExceptionBuilder(predicate());
         }
 
-        public static ThrowExceptionSelector If(bool predicate)
+        public static ThrowExceptionBuilder If(bool predicate)
         {
-            return new ThrowExceptionSelector(predicate);
+            return new ThrowExceptionBuilder(predicate);
         }
 
         public static void IfNot<TException>(Func<bool> predicate,
@@ -81,14 +82,14 @@ namespace Shin.Framework
                 throw ExceptionProvider.GenerateException<TException>(message, args, frame,data);
         }
 
-        public static ThrowExceptionSelector IfNot(Func<bool> predicate)
+        public static ThrowExceptionBuilder IfNot(Func<bool> predicate)
         {
-            return new ThrowExceptionSelector(!predicate());
+            return new ThrowExceptionBuilder(!predicate());
         }
 
-        public static ThrowExceptionSelector IfNot(bool predicate)
+        public static ThrowExceptionBuilder IfNot(bool predicate)
         {
-            return new ThrowExceptionSelector(!predicate);
+            return new ThrowExceptionBuilder(!predicate);
         }
         #endregion
     }

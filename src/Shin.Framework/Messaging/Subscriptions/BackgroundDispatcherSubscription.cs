@@ -5,7 +5,7 @@
 using System;
 #endregion
 
-namespace Shin.Framework.Messaging.Subscriptions
+namespace Shin.Messaging.Subscriptions
 {
     internal sealed class BackgroundDispatcherSubscription : Subscription
     {

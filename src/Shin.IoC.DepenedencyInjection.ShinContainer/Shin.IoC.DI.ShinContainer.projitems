@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>38721f0c-56e0-485b-9450-a1f29168cbcf</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shin.IoC.DependencyInjection</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\DIChildContainerDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Registration\Collections\TypeRegistrationDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Registration\ITypeRegistrationContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Registration\RegistrationScope.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\IDependencyGraph.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\Injectors\IConstructorInjector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\IInjector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\Injectors\IMethodInjector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\Injectors\IPropertyInjector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\Injectors\PropertyInjector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\ITypeInstance.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\ITypeResolverBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Caching\ITypeInterfaceCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Caching\ITypeKeyCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Caching\ITypeResolverCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Caching\TypeInterfaceCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\IoCRegistrationException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\IoCResolutionException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DIContainerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\ICachedResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Registration\ITypeRegistration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Resolution\IResolutionContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\ITypeResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExpressionCompiler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\Injectors\ConstructorInjector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\TypeResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Activation\Collections\TypeResolverDictionary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ShinContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ShinContainer.Register.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ShinContainer.Resolve.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Runtime\Activation\" />
+  </ItemGroup>
+</Project>

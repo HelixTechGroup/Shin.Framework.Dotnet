@@ -1,37 +1,18 @@
-﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.2.2-beta-build04">
-
-  <PropertyGroup>
-    <SectionSymbol>@</SectionSymbol>
-    <PrometheusPlatformEnabled>False</PrometheusPlatformEnabled>
-    <!--<LocalNugetRepo>D:\Users\Bryan\Documents\Projects\HelixTechGroup\local-nuget</LocalNugetRepo>-->
-    <!--<PrometheusDetectPlatform>False</PrometheusDetectPlatform>-->
-    <IsLibraryProject>false</IsLibraryProject>
-    <IsPackable>false</IsPackable>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <OutputType>exe</OutputType>
-  </PropertyGroup>
-
+﻿<Project Sdk="Prometheus.MSBuild.Sdk">
+  
   <PropertyGroup>
     <ProductName>Shin.Framework.Sandbox</ProductName>
-    <!--<PackageId>$(ProductName)</PackageId>-->
-    <CompanyName>HelixTechGroup,llc</CompanyName>
-    <AuthorName>Bryan M. Longacre</AuthorName>
-    <ProductVersion>0.1.1-preview</ProductVersion>
-    <Description>Shin.Framework</Description>
-    <CopyrightStartYear>2017</CopyrightStartYear>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!--<OutputType>Exe</OutputType>-->
-    <TargetFrameworks></TargetFrameworks>
-    <TargetPlatform>net6.0-windows</TargetPlatform>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <!--<TargetFrameworks></TargetFrameworks>-->
     <StartupObject>CoreSandbox.Program</StartupObject>
+    <TargetPlatform>net8.0</TargetPlatform>
+    <!--<TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>-->
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NetCore\Shin.Framework.Net6\Shin.Framework.Net6.csproj" />
+      <ProjectReference Include="..\..\packages\Shin.Framework.NetCore\Shin.Framework.NetCore.csproj"
+                        PrivateAssets="All" />
+      <ProjectReference Include="..\..\packages\Shin.Framework.IoC.DependencyInjection.Ninject.NetCore\Shin.Framework.IoC.DependencyInjection.Ninject.NetCore.csproj"
+                        PrivateAssets="All" />
+    <!--<ProjectReference Include="..\..\src\Platform\Shin.IoC.DependencyInjection.Ninject.Net8\Shin.IoC.DI.Ninject.Net8.csproj" />-->
   </ItemGroup>
 
 </Project>

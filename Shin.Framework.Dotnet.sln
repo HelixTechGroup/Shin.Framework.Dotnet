@@ -5,20 +5,6 @@ VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shin.Framework", "src\Shin.Framework\Shin.Framework.shproj", "{F7EF21B1-EE13-4B24-99B6-CB79BBCB71CE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetStandard", "NetStandard", "{FCDC1DAE-0B6D-4FB3-83A3-8543A5368870}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.NetStandard", "src\Netstandard\Shin.Framework.NetStandard\Shin.Framework.NetStandard.csproj", "{CE636A6D-423B-4011-8A67-C2FA02CF1A8C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuSpec", "NuSpec", "{FC3C0675-9A2A-4341-8DD9-70A4144F8DCE}"
-	ProjectSection(SolutionItems) = preProject
-		nuspecs\generate-nuget.ps1 = nuspecs\generate-nuget.ps1
-		nuspecs\projects.json = nuspecs\projects.json
-		nuspecs\Shield.Framework.IoC.Ninject.nuspec = nuspecs\Shield.Framework.IoC.Ninject.nuspec
-		nuspecs\Shield.Framework.Platform.MonoGame.Windows.nuspec = nuspecs\Shield.Framework.Platform.MonoGame.Windows.nuspec
-		nuspecs\Shield.Framework.Platform.Windows.nuspec = nuspecs\Shield.Framework.Platform.Windows.nuspec
-		nuspecs\Shin.Framework.nuspec = nuspecs\Shin.Framework.nuspec
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A0B56BE1-0C2D-466B-AD59-6B7D34C41E51}"
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG.md = CHANGELOG.md
@@ -26,23 +12,62 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		CONTRIBUTING.md = CONTRIBUTING.md
 		Directory.Build.props = Directory.Build.props
+		src\Directory.Build.props = src\Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		src\Directory.Build.targets = src\Directory.Build.targets
+		global.json = global.json
 		src\GlobalSuppressions.cs = src\GlobalSuppressions.cs
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 		src\SharedAssemblyInfo.cs = src\SharedAssemblyInfo.cs
+		Solution.Build.props = Solution.Build.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F997FA0E-EDDB-4E55-B46A-4D6025AECB42}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+		tests\Directory.Build.targets = tests\Directory.Build.targets
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sandbox", "Sandbox", "{CAA13F07-C88B-49C8-A626-5E3B1C55B628}"
+	ProjectSection(SolutionItems) = preProject
+		sandbox\Directory.Build.props = sandbox\Directory.Build.props
+		src\Platform\Directory.Build.targets = src\Platform\Directory.Build.targets
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreSandbox", "sandbox\CoreSandbox\CoreSandbox.csproj", "{0E27F09C-2C4C-4487-83B9-044A82DAADBA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetCore", "NetCore", "{B12062BF-DD4C-4855-B725-BF9308870285}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform", "Platform", "{9F68A0EA-D325-4A37-B740-84C08A11979A}"
+	ProjectSection(SolutionItems) = preProject
+		src\Platform\Directory.Build.props = src\Platform\Directory.Build.props
+		src\Platform\Directory.Build.targets = src\Platform\Directory.Build.targets
+	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.NetCore", "src\NetCore\Shin.Framework.NetCore\Shin.Framework.NetCore.csproj", "{07B929E6-9B57-4348-9380-05BFD5701220}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.Net6", "src\Platform\Shin.Framework.Net6\Shin.Framework.Net6.csproj", "{E5909202-DF56-4DF4-908F-9744D8222824}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.Net6", "src\NetCore\Shin.Framework.Net6\Shin.Framework.Net6.csproj", "{5F31181A-3A45-4737-9A9F-C27C245AE40E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.Net8", "src\Platform\Shin.Framework.Net8\Shin.Framework.Net8.csproj", "{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.MSTest", "tests\Shin.Framework.MSTest\Shin.Framework.MSTest.csproj", "{3889314C-F15D-4EF8-94A2-2EDE8D4B8846}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{6DCCB653-98AE-41F7-91EA-AC002F907AFD}"
+	ProjectSection(SolutionItems) = preProject
+		packages\Directory.Build.props = packages\Directory.Build.props
+		packages\Directory.Build.targets = packages\Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.NetCore", "packages\Shin.Framework.NetCore\Shin.Framework.NetCore.csproj", "{F3A80181-2D50-474C-BB65-6A94C3E42264}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shin.IoC.DI.ShinContainer", "src\Shin.IoC.DepenedencyInjection.ShinContainer\Shin.IoC.DI.ShinContainer.shproj", "{38721F0C-56E0-485B-9450-A1F29168CBCF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.IoC.DI.ShinContainer.Net8", "src\Platform\Shin.Framework.IoC.DependencyInjection.ShinContainer.Net8\Shin.IoC.DI.ShinContainer.Net8.csproj", "{805441B7-1988-4A8A-AA10-B1A55206D821}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.Net8.Tests", "tests\Shin.Framework.Net8.Tests\Shin.Framework.Net8.Tests.csproj", "{0A2905AE-800E-4547-9683-52E9306A8BAB}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shin.IoC.DI.Ninject", "src\Shin.Ioc.DependencyInjection.Ninject\Shin.IoC.DI.Ninject.shproj", "{DC750AE6-1783-40D6-9C33-B8EC240CF1F9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.IoC.DI.Ninject.Net8", "src\Platform\Shin.IoC.DependencyInjection.Ninject.Net8\Shin.IoC.DI.Ninject.Net8.csproj", "{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.IoC.DependencyInjection.Ninject.NetCore", "packages\Shin.Framework.IoC.DependencyInjection.Ninject.NetCore\Shin.Framework.IoC.DependencyInjection.Ninject.NetCore.csproj", "{697A553F-005A-4A96-9E9D-1F8ACD277B34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,39 +75,68 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0E27F09C-2C4C-4487-83B9-044A82DAADBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07B929E6-9B57-4348-9380-05BFD5701220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07B929E6-9B57-4348-9380-05BFD5701220}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07B929E6-9B57-4348-9380-05BFD5701220}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07B929E6-9B57-4348-9380-05BFD5701220}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5F31181A-3A45-4737-9A9F-C27C245AE40E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5F31181A-3A45-4737-9A9F-C27C245AE40E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5F31181A-3A45-4737-9A9F-C27C245AE40E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5F31181A-3A45-4737-9A9F-C27C245AE40E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5909202-DF56-4DF4-908F-9744D8222824}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5909202-DF56-4DF4-908F-9744D8222824}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5909202-DF56-4DF4-908F-9744D8222824}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5909202-DF56-4DF4-908F-9744D8222824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3889314C-F15D-4EF8-94A2-2EDE8D4B8846}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3889314C-F15D-4EF8-94A2-2EDE8D4B8846}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3889314C-F15D-4EF8-94A2-2EDE8D4B8846}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3889314C-F15D-4EF8-94A2-2EDE8D4B8846}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3A80181-2D50-474C-BB65-6A94C3E42264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3A80181-2D50-474C-BB65-6A94C3E42264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3A80181-2D50-474C-BB65-6A94C3E42264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3A80181-2D50-474C-BB65-6A94C3E42264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{805441B7-1988-4A8A-AA10-B1A55206D821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{805441B7-1988-4A8A-AA10-B1A55206D821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{805441B7-1988-4A8A-AA10-B1A55206D821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{805441B7-1988-4A8A-AA10-B1A55206D821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A2905AE-800E-4547-9683-52E9306A8BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A2905AE-800E-4547-9683-52E9306A8BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A2905AE-800E-4547-9683-52E9306A8BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A2905AE-800E-4547-9683-52E9306A8BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{697A553F-005A-4A96-9E9D-1F8ACD277B34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{697A553F-005A-4A96-9E9D-1F8ACD277B34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{697A553F-005A-4A96-9E9D-1F8ACD277B34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{697A553F-005A-4A96-9E9D-1F8ACD277B34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{CE636A6D-423B-4011-8A67-C2FA02CF1A8C} = {FCDC1DAE-0B6D-4FB3-83A3-8543A5368870}
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA} = {CAA13F07-C88B-49C8-A626-5E3B1C55B628}
-		{07B929E6-9B57-4348-9380-05BFD5701220} = {B12062BF-DD4C-4855-B725-BF9308870285}
-		{5F31181A-3A45-4737-9A9F-C27C245AE40E} = {B12062BF-DD4C-4855-B725-BF9308870285}
+		{E5909202-DF56-4DF4-908F-9744D8222824} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
+		{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
+		{3889314C-F15D-4EF8-94A2-2EDE8D4B8846} = {F997FA0E-EDDB-4E55-B46A-4D6025AECB42}
+		{F3A80181-2D50-474C-BB65-6A94C3E42264} = {6DCCB653-98AE-41F7-91EA-AC002F907AFD}
+		{805441B7-1988-4A8A-AA10-B1A55206D821} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
+		{0A2905AE-800E-4547-9683-52E9306A8BAB} = {F997FA0E-EDDB-4E55-B46A-4D6025AECB42}
+		{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
+		{697A553F-005A-4A96-9E9D-1F8ACD277B34} = {6DCCB653-98AE-41F7-91EA-AC002F907AFD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E19F08BB-A8A3-402E-ABF8-1D5E72FD43E8}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\Shin.Framework\Shin.Framework.projitems*{07b929e6-9b57-4348-9380-05bfd5701220}*SharedItemsImports = 5
-		src\Shin.Framework\Shin.Framework.projitems*{5f31181a-3a45-4737-9a9f-c27c245ae40e}*SharedItemsImports = 5
-		src\Shin.Framework\Shin.Framework.projitems*{ce636a6d-423b-4011-8a67-c2fa02cf1a8c}*SharedItemsImports = 5
+		src\Shin.Framework\Shin.Framework.projitems*{02d92b8d-8b79-4048-bebf-18fe0e1e6bf7}*SharedItemsImports = 5
+		src\Shin.IoC.DepenedencyInjection.ShinContainer\Shin.IoC.DI.ShinContainer.projitems*{38721f0c-56e0-485b-9450-a1f29168cbcf}*SharedItemsImports = 13
+		src\Shin.Ioc.DependencyInjection.Ninject\Shin.Ioc.DependencyInjection.Ninject.projitems*{697a553f-005a-4a96-9e9d-1f8acd277b34}*SharedItemsImports = 5
+		src\Shin.IoC.DepenedencyInjection.ShinContainer\Shin.IoC.DI.ShinContainer.projitems*{805441b7-1988-4a8a-aa10-b1a55206d821}*SharedItemsImports = 5
+		src\Shin.Ioc.DependencyInjection.Ninject\Shin.Ioc.DependencyInjection.Ninject.projitems*{dc750ae6-1783-40d6-9c33-b8ec240cf1f9}*SharedItemsImports = 13
+		src\Shin.Framework\Shin.Framework.projitems*{e5909202-df56-4df4-908f-9744d8222824}*SharedItemsImports = 5
+		src\Shin.Ioc.DependencyInjection.Ninject\Shin.Ioc.DependencyInjection.Ninject.projitems*{e8898fd2-fbb2-46bd-be8c-5b813dd431e9}*SharedItemsImports = 5
+		src\Shin.Framework\Shin.Framework.projitems*{f3a80181-2d50-474c-bb65-6a94c3e42264}*SharedItemsImports = 5
 		src\Shin.Framework\Shin.Framework.projitems*{f7ef21b1-ee13-4b24-99b6-cb79bbcb71ce}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

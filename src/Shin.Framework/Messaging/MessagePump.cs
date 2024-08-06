@@ -1,14 +1,13 @@
 ﻿#region Usings
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
-using Shin.Framework.Collections.Concurrent;
-using Shin.Framework.Extensions;
+using Shin.Collections.Concurrent;
+using Shin.Extensions;
 #endregion
 
-namespace Shin.Framework.Messaging
+namespace Shin.Messaging
 {
     public abstract class MessagePump : Initializable, IMessagePump
     {
@@ -84,10 +83,14 @@ namespace Shin.Framework.Messaging
             var startTime = DateTimeOffset.Now;
             do
             {
+                if (m_tokenSource.IsCancellationRequested)
+                    break;
+                
                 Pump(ctx);
                 if (timeout == 0)
                     return Pop(out message);
 
+                
                 switch (Pop(out message))
                 {
                     case false:
@@ -99,7 +102,7 @@ namespace Shin.Framework.Messaging
                     default:
                         return true;
                 }
-            } while (!m_tokenSource.IsCancellationRequested);
+            } while (m_queue.Count > 0);
 
             message = default;
             return false;
@@ -136,13 +139,15 @@ namespace Shin.Framework.Messaging
         {
             try
             {
-                if (m_queue.TryDequeue(out message))
-                {
-                    m_deferred.TryDequeue(out var res);
+                if (!m_queue.TryDequeue(out message))
+                    m_deferred.TryDequeue(out message);
 
-                    MessagePopped.Raise(this, message);
-                    return true;
-                }
+                if (message is null)
+                    return false;
+                
+                MessagePopped.Raise(this, message);
+                return true;
+                
             }
             catch (Exception ex)
             {
@@ -173,7 +178,7 @@ namespace Shin.Framework.Messaging
 
         protected void AddCancellationToken(CancellationToken ctx)
         {
-            if (ctx == CancellationToken.None || m_token.IsCancellationRequested)
+            if (ctx == CancellationToken.None || ctx.IsCancellationRequested)
                 return;
 
             if (m_tokens.Contains(ctx.GetHashCode()))

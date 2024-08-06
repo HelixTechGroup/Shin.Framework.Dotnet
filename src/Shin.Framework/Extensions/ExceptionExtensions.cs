@@ -5,7 +5,7 @@
 using System;
 #endregion
 
-namespace Shin.Framework.Extensions
+namespace Shin.Extensions
 {
     public static class ExceptionExtensions
     {

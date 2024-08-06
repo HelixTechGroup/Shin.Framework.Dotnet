@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Shin.Framework.Collections.Concurrent;
+using Shin.Collections.Concurrent;
 #endregion
 
-namespace Shin.Framework.Messaging.Messages
+namespace Shin.Messaging.Messages
 {
     public abstract class Message : IMessage, IEquatable<Message>
     {

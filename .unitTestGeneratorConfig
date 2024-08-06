@@ -1,0 +1,3 @@
+﻿[GenerationOptions]
+EmitXmlDocumentation=True
+UseFieldForAutoFixture=True

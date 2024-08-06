@@ -1,17 +1,13 @@
 ﻿#region Usings
-#endregion
-
-#region Usings
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Shin.Framework.Collections.Concurrent;
+using Shin.Collections.Concurrent;
 #endregion
 
-namespace Shin.Framework.Logging.Native
+namespace Shin.Logging.Native
 {
     public sealed class Logger : Initializable, ILogger
     {

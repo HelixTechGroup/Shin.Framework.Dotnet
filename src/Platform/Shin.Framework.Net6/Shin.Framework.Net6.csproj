@@ -1,0 +1,8 @@
+﻿<Project Sdk="Prometheus.MSBuild.Sdk">
+  <PropertyGroup>
+    <SectionSymbol>@</SectionSymbol>
+    <TargetPlatforms>net6.0;net8.0</TargetPlatforms>
+  </PropertyGroup>
+  
+  <Import Project="..\..\Shin.Framework\Shin.Framework.projitems" Label="Shared" />
+</Project>

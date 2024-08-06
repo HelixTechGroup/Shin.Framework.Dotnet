@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Shin.Framework.Extensions
+namespace Shin.Extensions
 {
     public static class IntExtensions
     {

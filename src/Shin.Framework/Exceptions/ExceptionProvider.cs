@@ -5,11 +5,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-using Shin.Framework.Collections.Concurrent;
-using Shin.Framework.Extensions;
+using Shin.Collections.Concurrent;
+using Shin.Extensions;
 #endregion
 
-namespace Shin.Framework.Exceptions
+namespace Shin.Exceptions
 {
     public static partial class ExceptionProvider
     {

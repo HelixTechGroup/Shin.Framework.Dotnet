@@ -2,15 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using Shin.Framework.Collections.Concurrent;
-using Shin.Framework.Exceptions;
+using Shin.Collections.Concurrent;
+using Shin.Exceptions;
 #endregion
 
-namespace Shin.Framework.Extensions
+namespace Shin.Extensions
 {
     public static class EnumExtensions
     {

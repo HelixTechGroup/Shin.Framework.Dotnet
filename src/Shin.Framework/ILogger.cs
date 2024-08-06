@@ -1,12 +1,9 @@
 ﻿#region Usings
-#endregion
-
-#region Usings
 using System;
-using Shin.Framework.Logging;
+using Shin.Logging;
 #endregion
 
-namespace Shin.Framework
+namespace Shin
 {
     public interface ILogger : IInitialize, IDisposable
     {

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Shin.Framework.Messaging
+namespace Shin.Messaging
 {
     public interface IMessage : IEquatable<IMessage>
     {

@@ -2,9 +2,9 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
-using Shin.Framework.Extensions;
-using Shin.Framework.Threading;
-using Shin.Framework.Threading.Native;
+using Shin.Extensions;
+using Shin.Threading;
+using Shin.Threading.Native;
 #endregion
 
 namespace CoreSandbox

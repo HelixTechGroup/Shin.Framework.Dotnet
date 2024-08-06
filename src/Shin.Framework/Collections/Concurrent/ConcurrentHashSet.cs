@@ -1,18 +1,15 @@
 ﻿#region Usings
-#endregion
-
-#region Usings
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Threading;
-using Shin.Framework.Extensions;
-using Shin.Framework.Threading;
+using Shin.Extensions;
+using Shin.Threading;
 #endregion
 
-namespace Shin.Framework.Collections.Concurrent
+namespace Shin.Collections.Concurrent
 {
     public class ConcurrentHashSet<T> : ISet<T>,
                                         IReadOnlyCollection<T>,

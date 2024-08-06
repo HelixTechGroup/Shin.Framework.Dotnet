@@ -1,0 +1,22 @@
+﻿#region Usings
+#endregion
+
+using System;
+using System.Runtime.Serialization;
+
+namespace Shin.IoC.DependencyInjection.Exceptions
+{
+    [Serializable]
+    public class IoCResolutionException : Exception
+    {
+        public IoCResolutionException() { }
+
+        public IoCResolutionException(string message) : base(message) { }
+
+        public IoCResolutionException(string message, Exception innerException)
+            : base(message, innerException) { }
+
+        protected IoCResolutionException(SerializationInfo info, StreamingContext context)
+            : base(info, context) { }
+    }
+}

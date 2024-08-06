@@ -1,0 +1,14 @@
+﻿<Project Sdk="Prometheus.MSBuild.Sdk">
+  <PropertyGroup>
+    <SectionSymbol>@</SectionSymbol>
+    <ProductName>ShinContainer</ProductName>
+    <RootNamespace>Shin.Ioc.DependencyInjection</RootNamespace>
+    <TargetPlatform>net6.0;net8.0</TargetPlatform>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\packages\Shin.Framework.NetCore\Shin.Framework.NetCore.csproj" PrivateAssets="All" />
+  </ItemGroup>
+
+  <Import Project="..\..\Shin.IoC.DepenedencyInjection.ShinContainer\Shin.IoC.DI.ShinContainer.projitems" Label="Shared" />
+</Project>

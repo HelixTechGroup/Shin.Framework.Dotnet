@@ -1,9 +1,9 @@
 ﻿#region Usings
 using System;
-using Shin.Framework.Messaging.Exceptions;
+using Shin.Messaging.Exceptions;
 #endregion
 
-namespace Shin.Framework.Messaging
+namespace Shin.Messaging
 {
     public interface IMessageProxy : IInitialize, IDispose
     {

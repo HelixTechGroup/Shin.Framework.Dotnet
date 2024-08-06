@@ -2,7 +2,7 @@
 using System;
 #endregion
 
-namespace Shin.Framework.Messaging
+namespace Shin.Messaging
 {
     internal interface ISubscription
     {

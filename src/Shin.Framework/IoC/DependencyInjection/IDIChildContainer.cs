@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shin.Framework.IoC.DependencyInjection
+namespace Shin.IoC.DependencyInjection
 {
     public interface IDIChildContainer : IDIContainer
     {

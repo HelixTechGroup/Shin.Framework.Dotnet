@@ -1,4 +1,4 @@
-﻿namespace Shin.Framework.ComponentModel
+﻿namespace Shin.ComponentModel
 {
     public class PropertyChangedEventArgs<T> : PropertyChangingEventArgs<T>
     {

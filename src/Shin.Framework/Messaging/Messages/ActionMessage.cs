@@ -1,10 +1,10 @@
 ﻿#region Usings
 using System;
 using System.Linq;
-using Shin.Framework.Messaging.Subscriptions;
+using Shin.Messaging.Subscriptions;
 #endregion
 
-namespace Shin.Framework.Messaging.Messages
+namespace Shin.Messaging.Messages
 {
     public class ActionMessage : Message, IActionMessage
     {

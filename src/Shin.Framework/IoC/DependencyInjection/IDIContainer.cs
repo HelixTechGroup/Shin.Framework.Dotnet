@@ -1,11 +1,9 @@
 ﻿#region Usings
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using sysComponent = System.ComponentModel;
 #endregion
 
-namespace Shin.Framework.IoC.DependencyInjection
+namespace Shin.IoC.DependencyInjection
 {
     public partial interface IDIContainer : IDispose
     {
@@ -14,6 +12,8 @@ namespace Shin.Framework.IoC.DependencyInjection
 
         IEnumerable<Type> RegisteredTypes { get; }
 
+        IEnumerable<Type> RegisteredInterfaces { get; }
+        
         IDIRootContainer Root { get; }
         #endregion
 

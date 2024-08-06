@@ -1,22 +1,21 @@
 ﻿#region Usings
 using System;
-using sysComponent = System.ComponentModel;
 #endregion
 
-namespace Shin.Framework.IoC.DependencyInjection
+namespace Shin.IoC.DependencyInjection
 {
     public partial interface IDIContainer
     {
         #region Methods
-        void Register<T>(Func<T> createInstanceFunc,
-                         bool asSingleton = true,
-                         string key = null,
-                         bool overrideExisting = false);
+        //void Register<T>(Func<T> createInstanceFunc,
+        //                 bool asSingleton = true,
+        //                 string key = null,
+        //                 bool overrideExisting = false);
 
-        void Register<T>(Func<object[], T> createInstanceFunc,
-                         bool asSingleton = true,
-                         string key = null,
-                         bool overrideExisting = false);
+        //void Register<T>(Func<object[], T> createInstanceFunc,
+        //                 bool asSingleton = true,
+        //                 string key = null,
+        //                 bool overrideExisting = false);
 
         void Register<T>(T value,
                          bool asSingleton = true,
@@ -43,17 +42,17 @@ namespace Shin.Framework.IoC.DependencyInjection
                       string key = null,
                       bool overrideExisting = false);
 
-        void Register(Type T,
-                      Func<object> createInstanceFunc,
-                      bool asSingleton = true,
-                      string key = null,
-                      bool overrideExisting = false);
+        //void Register(Type T,
+        //              Func<object> createInstanceFunc,
+        //              bool asSingleton = true,
+        //              string key = null,
+        //              bool overrideExisting = false);
 
-        void Register(Type T,
-                      Func<object[], object> createInstanceFunc,
-                      bool asSingleton = true,
-                      string key = null,
-                      bool overrideExisting = false);
+        //void Register(Type T,
+        //              Func<object[], object> createInstanceFunc,
+        //              bool asSingleton = true,
+        //              string key = null,
+        //              bool overrideExisting = false);
 
         void Register<T>(Type C,
                          bool asSingleton = true,
@@ -71,30 +70,30 @@ namespace Shin.Framework.IoC.DependencyInjection
                             bool overrideExisting = false)
             where C : class, T;
 
-        void Register<T>(Type C,
-                         Func<T> createInstanceFunc,
-                         bool asSingleton = true,
-                         string key = null,
-                         bool overrideExisting = false);
+        //void Register<T>(Type C,
+        //                 Func<T> createInstanceFunc,
+        //                 bool asSingleton = true,
+        //                 string key = null,
+        //                 bool overrideExisting = false);
 
-        void Register<T>(Type C,
-                         Func<object[], T> createInstanceFunc,
-                         bool asSingleton = true,
-                         string key = null,
-                         bool overrideExisting = false);
+        //void Register<T>(Type C,
+        //                 Func<object[], T> createInstanceFunc,
+        //                 bool asSingleton = true,
+        //                 string key = null,
+        //                 bool overrideExisting = false);
 
-        void Register<T, C>(Func<C> createInstanceFunc,
-                            bool asSingleton = true,
-                            string key = null,
-                            bool overrideExisting = false)
-            where C : class, T;
+        //void Register<T, C>(Func<C> createInstanceFunc,
+        //                    bool asSingleton = true,
+        //                    string key = null,
+        //                    bool overrideExisting = false)
+        //    where C : class, T;
 
 
-        void Register<T, C>(Func<object[], C> createInstanceFunc,
-                            bool asSingleton = true,
-                            string key = null,
-                            bool overrideExisting = false)
-            where C : class, T;
+        //void Register<T, C>(Func<object[], C> createInstanceFunc,
+        //                    bool asSingleton = true,
+        //                    string key = null,
+        //                    bool overrideExisting = false)
+        //    where C : class, T;
 
         void Register(Type T,
                       Type C,
@@ -102,19 +101,19 @@ namespace Shin.Framework.IoC.DependencyInjection
                       string key = null,
                       bool overrideExisting = false);
 
-        void Register(Type T,
-                      Type C,
-                      Func<object> createInstanceFunc,
-                      bool asSingleton = true,
-                      string key = null,
-                      bool overrideExisting = false);
+        //void Register(Type T,
+        //              Type C,
+        //              Func<object> createInstanceFunc,
+        //              bool asSingleton = true,
+        //              string key = null,
+        //              bool overrideExisting = false);
 
-        void Register(Type T,
-                      Type C,
-                      Func<object[], object> createInstanceFunc,
-                      bool asSingleton = true,
-                      string key = null,
-                      bool overrideExisting = false);
+        //void Register(Type T,
+        //              Type C,
+        //              Func<object[], object> createInstanceFunc,
+        //              bool asSingleton = true,
+        //              string key = null,
+        //              bool overrideExisting = false);
 
         void Unregister<T>(string key = null);
 

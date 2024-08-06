@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Shin.Framework.Exceptions;
+using System.Diagnostics.CodeAnalysis;
+using Shin.Exceptions;
 #endregion
 
-namespace Shin.Framework
+namespace Shin
 {
     public static partial class Throw
     {
@@ -29,7 +30,7 @@ namespace Shin.Framework
             if (obj == null) throw ExceptionProvider.GenerateException<TException>(message, args, frame,data);
         }
 
-        public static ThrowExceptionSelector IfNull<T>(T obj) { return new ThrowExceptionSelector(obj == null); }
+        public static ThrowExceptionBuilder IfNull<T>(T obj) { return new ThrowExceptionBuilder(obj == null); }
 
         public static void IfNullOrEmpty<TException>(string obj,
                                                      string message = null,
@@ -41,7 +42,7 @@ namespace Shin.Framework
             if (string.IsNullOrWhiteSpace(obj)) throw ExceptionProvider.GenerateException<TException>(message, args, frame,data);
         }
 
-        public static ThrowExceptionSelector IfNullOrEmpty(string obj) { return new ThrowExceptionSelector(string.IsNullOrWhiteSpace(obj)); }
+        public static ThrowExceptionBuilder IfNullOrEmpty(string obj) { return new ThrowExceptionBuilder(string.IsNullOrWhiteSpace(obj)); }
 #endregion
     }
 }

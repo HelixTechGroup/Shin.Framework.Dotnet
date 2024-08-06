@@ -1,7 +1,7 @@
 ﻿#region Usings
 #endregion
 
-namespace Shin.Framework.Extensions
+namespace Shin.Extensions
 {
     public static class ActionExtensions
     {

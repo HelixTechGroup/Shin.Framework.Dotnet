@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 #endregion
 
-namespace Shin.Framework.Messaging
+namespace Shin.Messaging
 {
     public interface IMessagePump : IInitialize, IDispose
     {

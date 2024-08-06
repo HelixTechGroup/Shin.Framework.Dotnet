@@ -3,10 +3,10 @@
 
 #region Usings
 using System;
-using Shin.Framework.Extensions;
+using Shin.Extensions;
 #endregion
 
-namespace Shin.Framework
+namespace Shin
 {
     public abstract class Initializable : Disposable, IInitialize
     {

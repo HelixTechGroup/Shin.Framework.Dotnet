@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Threading;
 #endregion
 
-namespace Shin.Framework.Extensions
+namespace Shin.Extensions
 {
     public static class EventHandlerExtensions
     {
@@ -45,10 +45,13 @@ namespace Shin.Framework.Extensions
 
         public static void Dispose(this EventHandler handler)
         {
-            if (handler != null)
+            if (handler == null) 
+                return;
+            
+            lock(handler)
             {
-                foreach (var d in handler.GetInvocationList())
-                    handler -= d as EventHandler;
+                foreach (var d in handler.GetInvocationList()) 
+                    handler -= d as EventHandler;   
             }
         }
         #endregion

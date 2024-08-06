@@ -1,7 +1,7 @@
 ﻿using System.Threading;
-using Shin.Framework.Threading;
+using Shin.Threading;
 
-namespace Shin.Framework.Extensions
+namespace Shin.Extensions
 {
     public static class LockExtensions
     {

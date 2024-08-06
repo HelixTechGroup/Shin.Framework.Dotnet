@@ -2,14 +2,11 @@
 #endregion
 
 #region Usings
-using System;
 using System.Collections.Concurrent;
-using System.Globalization;
 using System.IO;
-using Shin.Framework.Messaging.Messages;
 #endregion
 
-namespace Shin.Framework.Logging.Loggers
+namespace Shin.Logging.Loggers
 {
     public abstract class TextLogger : PlatformLogger
     {

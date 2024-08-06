@@ -1,19 +1,17 @@
 #region Usings
 using System;
-using System.Runtime.ConstrainedExecution;
-using Shin.Framework.Extensions;
 #endregion
 
-namespace Shin.Framework
+namespace Shin
 {
     public abstract class Disposable : IDispose
     {
         #region Events
         /// <inheritdoc />
-        public event EventHandler Disposed;
+        //public event EventHandler Disposed;
 
         /// <inheritdoc />
-        public event EventHandler Disposing;
+        //public event EventHandler Disposing;
         #endregion
 
         #region Members
@@ -62,23 +60,23 @@ namespace Shin.Framework
 
             lock(m_lock)
             {
-                Disposing.Raise(this, EventArgs.Empty);
+                //Disposing.Raise(this, EventArgs.Empty);
                 if (disposing)
                     DisposeManagedResources();
 
                 DisposeUnmanagedResources();
-                Disposed.Raise(this, EventArgs.Empty);
+                //Disposed.Raise(this, EventArgs.Empty);
 
-                Disposing.Dispose();
-                Disposed.Dispose();
+                //Disposing.Dispose();
+                //Disposed.Dispose();
                 m_isDisposed = true;
             }
         }
 
         private void WireUpDisposeEvents()
         {
-            Disposing += OnDisposing;
-            Disposed += OnDisposed;
+            //Disposing += OnDisposing;
+            //Disposed += OnDisposed;
         }
         #endregion
     }

@@ -3,10 +3,10 @@
 
 #region Usings
 using System;
-using Shin.Framework.Exceptions;
+using Shin.Exceptions;
 #endregion
 
-namespace Shin.Framework.Extensions
+namespace Shin.Extensions
 {
     internal static class ObjectExtensions
     {

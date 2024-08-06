@@ -1,7 +1,7 @@
 ﻿#region Usings
 #endregion
 
-namespace Shin.Framework.Logging
+namespace Shin.Logging
 {
     public interface ILogProvider : IDispose
     {

@@ -6,12 +6,13 @@
     <SharedGUID>f7ef21b1-ee13-4b24-99b6-cb79bbcb71ce</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Shin.Framework</Import_RootNamespace>
+    <Import_RootNamespace>Shin</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Concurrent\ConcurrentCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Concurrent\ConcurrentHashSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Concurrent\ConcurrentList.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\Concurrent\DisposableConcurrentDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\ListDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CriticalDispose.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Disposable.cs" />
@@ -22,12 +23,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ActionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\AssemblyExtionsions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\CollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\GuidExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IChild.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IFluentInterface.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDIChildContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDIContainer.Resolve.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDIContainer.Register.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDIParentContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDIRegistrationBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\IDIRootContainer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Extensions\DIContainerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EnumExtensions.cs" />
@@ -53,17 +57,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\InjectConstructorAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\InjectPropertyAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\Extensions\IDIContainerExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Resolver.ConstructorInvokeInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Exceptions\IoCRegistrationException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Exceptions\IoCResolutionException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ShinDIContainer.Resolve.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ShinDIContainer.Register.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ShinDIContainer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ICachedResolver.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\IResolver.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ReflectionCompiler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\ResolverDictionary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Resolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IParent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogLevel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Collections\IMessageCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessageProxy.cs" />
@@ -77,9 +71,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Loggers\TextLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogPriority.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Native\Logger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Messaging\DelegateReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DelegateReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IActionMessage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Messaging\IDelegateReference.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IDelegateReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IMessageThrottle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\IPublish.cs" />
@@ -115,13 +109,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizeLock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Throw.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Throw.DefaultConditions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ThrowExceptionSelector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ThrowExceptionBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Collections\Concurrent\" />
     <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\" />
-    <Folder Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\Extensions\" />
-    <Folder Include="$(MSBuildThisFileDirectory)IoC\Native\DependencyInjection\Extensions\" />
+    <Folder Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\Activation\" />
+    <Folder Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\Registration\" />
+    <Folder Include="$(MSBuildThisFileDirectory)IoC\DependencyInjection\Resolution\" />
+    <Folder Include="$(MSBuildThisFileDirectory)IoC\Factory\" />
+    <Folder Include="$(MSBuildThisFileDirectory)IoC\ServiceLocator\" />
     <Folder Include="$(MSBuildThisFileDirectory)Messaging\Exceptions\" />
     <Folder Include="$(MSBuildThisFileDirectory)Messaging\Collections\" />
     <Folder Include="$(MSBuildThisFileDirectory)Threading\Native\" />

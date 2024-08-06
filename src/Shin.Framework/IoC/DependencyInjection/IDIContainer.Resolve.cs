@@ -2,10 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using sysComponent = System.ComponentModel;
 #endregion
 
-namespace Shin.Framework.IoC.DependencyInjection
+namespace Shin.IoC.DependencyInjection
 {
     public partial interface IDIContainer
     {
@@ -37,11 +36,11 @@ namespace Shin.Framework.IoC.DependencyInjection
                               DIResolutionStrategy strategy = DIResolutionStrategy.Default,
                               params object[] parameters);
 
-        Type ResolveType(string key);
+        //Type ResolveType(string key);
 
-        string ResolveKey(Type type);
+        //string ResolveTypeId(Type type);
 
-        string ResolveKey<T>();
+        //string ResolveKey<T>();
         #endregion
     }
 }

@@ -1,0 +1,17 @@
+﻿<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('$(MSBuildThisFile)', '$(MSBuildThisFileDirectory)../'))" />
+  <!--<Import Project="..\Shin.Framework\Shin.Framework.projitems" Label="Shared" />-->
+  <PropertyGroup>
+    <!--<RootNamespace>Shin.Framework</RootNamespace>-->
+    <MergeBinary>false</MergeBinary>
+  </PropertyGroup>
+  <!--<ItemGroup>
+    <PackageReference Include="Fody" Version="6.8.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ILMerge.Fody" Version="1.24.0" />
+    <PackageReference Include="JetBrainsAnnotations.Fody" Version="2.17.0" />
+    <PackageReference Include="NullGuard.Fody" Version="3.1.1" />
+  </ItemGroup>-->
+</Project>

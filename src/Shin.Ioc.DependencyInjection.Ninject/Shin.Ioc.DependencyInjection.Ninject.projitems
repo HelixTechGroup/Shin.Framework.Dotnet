@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>dc750ae6-1783-40d6-9c33-b8ec240cf1f9</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Shin.IoC.DependencyInjection</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)IDINinjectContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NinjectContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Activation\Caching\RootedActivationCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Activation\IRootedProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Activation\IRootedRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Activation\Providers\RootedProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Activation\RootedRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Activation\RootedResolutionStrategy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Extensions\RequestExtenstions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Extensions\RootedResolutionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\IKernelWithId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Planning\Bindings\RootedBindingResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Planning\Bindings\RootedMissingBindingResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\RootedKernel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\IRootedKernel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\IRootKernel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Selection\Heuristics\RootedConstructorScorer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\IChildKernel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\IParentKernel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\RootKernel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Selection\IRootedTypeMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ninject\Syntax\IRootedResolutionRoot.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Ninject\Selection\Heuristics\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Ninject\Selection\Routing\" />
+  </ItemGroup>
+</Project>

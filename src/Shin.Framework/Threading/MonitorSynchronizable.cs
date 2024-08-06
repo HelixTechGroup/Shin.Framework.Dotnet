@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Shin.Framework.Threading
+namespace Shin.Threading
 {
     public class MonitorSynchronizable : SynchronizableLock
     {

@@ -1,5 +1,5 @@
 ﻿#region Header
-// solution:Shin.Framework.Dotnet
+// solution:Shin.Dotnet
 // project:	Shin.Framework
 // file:	Shin.Framework\IInitialize.cs
 // summary:	Declares the IInitialize interface
@@ -10,7 +10,7 @@
 using System;
 #endregion
 
-namespace Shin.Framework
+namespace Shin
 {
     /// <summary>Interface for initialize.</summary>
     public interface IInitialize : IDispose

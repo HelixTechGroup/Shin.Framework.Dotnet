@@ -3,7 +3,7 @@ using System;
 using System.Globalization;
 #endregion
 
-namespace Shin.Framework.Messaging.Subscriptions
+namespace Shin.Messaging.Subscriptions
 {
     internal class Subscription : ISubscription
     {

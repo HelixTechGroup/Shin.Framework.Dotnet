@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 #endregion
 
-namespace Shin.Framework.Collections
+namespace Shin.Collections
 {
     public sealed class ListDictionary<TKey, TValue> : IDictionary<TKey, IList<TValue>>
     {

@@ -2,7 +2,7 @@
 using System;
 #endregion
 
-namespace Shin.Framework.ComponentModel
+namespace Shin.ComponentModel
 {
     public class PropertyChangingEventArgs<T> : EventArgs
     {

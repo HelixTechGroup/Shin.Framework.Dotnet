@@ -2,7 +2,7 @@
 using System;
 #endregion
 
-namespace Shin.Framework.IoC.DependencyInjection
+namespace Shin.IoC.DependencyInjection
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class InjectPropertyAttribute : Attribute { }

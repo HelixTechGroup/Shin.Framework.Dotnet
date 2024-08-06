@@ -2,8 +2,8 @@
 using System;
 #endregion
 
-namespace Shin.Framework.IoC.DependencyInjection
+namespace Shin.IoC.DependencyInjection
 {
-    [AttributeUsage(AttributeTargets.Constructor)]
-    public class InjectConstructorAttribute : Attribute { }
+    [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = true)]
+    public sealed class InjectAttribute : Attribute { }
 }

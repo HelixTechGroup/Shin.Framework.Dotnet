@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 #endregion
 
-namespace Shin.Framework.Logging.Loggers
+namespace Shin.Logging.Loggers
 {
     public class ConsoleLogger : TextLogger
     {

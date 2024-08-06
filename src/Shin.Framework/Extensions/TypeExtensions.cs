@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 #endregion
 
-namespace Shin.Framework.Extensions
+namespace Shin.Extensions
 {
     public static class TypeExtensions
     {
@@ -99,12 +99,12 @@ namespace Shin.Framework.Extensions
 
         public static IEnumerable<Type> GetTopLevelInterfaces(this Type t)
         {
-            var allInterfaces = t.GetInterfaces().Where(a => a.BaseType != null);
+            var allInterfaces = t.GetInterfaces();
 
             if (t.BaseType == null)
                 return allInterfaces;
 
-            var interfaces = allInterfaces.ToArray();
+            var interfaces = allInterfaces;
             var selection = interfaces
                            .Where(x => !interfaces.Any(y => y.GetInterfaces().Contains(x)))
                            .Except(t.BaseType.GetInterfaces());

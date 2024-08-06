@@ -1,4 +1,4 @@
-﻿namespace Shin.Framework.IoC.DependencyInjection
+﻿namespace Shin.IoC.DependencyInjection
 {
     public interface IDIRootContainer : IDIContainer { }
 }

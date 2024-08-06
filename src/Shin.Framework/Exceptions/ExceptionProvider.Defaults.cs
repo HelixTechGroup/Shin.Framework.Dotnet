@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.IO;
 #endregion
 
-namespace Shin.Framework.Exceptions
+namespace Shin.Exceptions
 {
     public static partial class ExceptionProvider
     {

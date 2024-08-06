@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using Microsoft.Win32.SafeHandles;
-using Shin.Framework.Extensions;
-using Shin.Framework.Threading;
+using Shin.Extensions;
+using Shin.Threading;
 
-namespace Shin.Framework.Runtime
+namespace Shin.Runtime
 {
     public class ConcurrentSafeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using Shin.Framework;
+using Shin;
 
 namespace CoreSandbox
 {

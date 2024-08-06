@@ -1,4 +1,4 @@
-﻿namespace Shin.Framework.Messaging.Exceptions
+﻿namespace Shin.Messaging.Exceptions
 {
     public class MessageErrorEventArgs { }
 }
