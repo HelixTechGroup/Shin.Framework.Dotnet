@@ -3,7 +3,7 @@
     <SectionSymbol>@</SectionSymbol>
     <ProductName>ShinContainer</ProductName>
     <RootNamespace>Shin.Ioc.DependencyInjection</RootNamespace>
-    <TargetPlatform>net6.0;net8.0</TargetPlatform>
+    <!--<TargetPlatform>;net8.0</TargetPlatform>-->
   </PropertyGroup>
 
   <ItemGroup>

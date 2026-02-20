@@ -2,13 +2,15 @@
 using System;
 using System.Collections.Generic;
 
-using Ninject.Activation;
-using Ninject.Parameters;
-using Ninject.Planning.Bindings;
-using Ninject.Planning.Targets;
+using Shin.IoC.DependencyInjection.Ninject;
+
+using Shinject.Activation;
+using Shinject.Parameters;
+using Shinject.Planning.Bindings;
+using Shinject.Planning.Targets;
 #endregion
 
-namespace Shin.IoC.DependencyInjection.Ninject.Activation
+namespace Shin.IoC.DependencyInjection.Shinject.Activation
 {
     public class RootedRequest : Request,
                                  IRootedRequest

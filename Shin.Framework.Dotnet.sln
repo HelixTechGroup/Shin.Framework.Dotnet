@@ -43,9 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platform", "Platform", "{9F
 		src\Platform\Directory.Build.targets = src\Platform\Directory.Build.targets
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.Net6", "src\Platform\Shin.Framework.Net6\Shin.Framework.Net6.csproj", "{E5909202-DF56-4DF4-908F-9744D8222824}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.Net8", "src\Platform\Shin.Framework.Net8\Shin.Framework.Net8.csproj", "{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.NetLts", "src\Platform\Shin.Framework.Net8\Shin.Framework.NetLts.csproj", "{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.MSTest", "tests\Shin.Framework.MSTest\Shin.Framework.MSTest.csproj", "{3889314C-F15D-4EF8-94A2-2EDE8D4B8846}"
 EndProject
@@ -63,11 +61,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.IoC.DI.ShinContainer.N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.Net8.Tests", "tests\Shin.Framework.Net8.Tests\Shin.Framework.Net8.Tests.csproj", "{0A2905AE-800E-4547-9683-52E9306A8BAB}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shin.IoC.DI.Ninject", "src\Shin.Ioc.DependencyInjection.Ninject\Shin.IoC.DI.Ninject.shproj", "{DC750AE6-1783-40D6-9C33-B8EC240CF1F9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.IoC.DI.Ninject.Net8", "src\Platform\Shin.IoC.DependencyInjection.Ninject.Net8\Shin.IoC.DI.Ninject.Net8.csproj", "{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shin.IoC.DI.Shinject", "src\Shin.Ioc.DependencyInjection.Ninject\Shin.IoC.DI.Shinject.shproj", "{DC750AE6-1783-40D6-9C33-B8EC240CF1F9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.IoC.DependencyInjection.Ninject.NetCore", "packages\Shin.Framework.IoC.DependencyInjection.Ninject.NetCore\Shin.Framework.IoC.DependencyInjection.Ninject.NetCore.csproj", "{697A553F-005A-4A96-9E9D-1F8ACD277B34}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.Framework.Net48", "src\Platform\Shin.Framework.Net48\Shin.Framework.Net48.csproj", "{41C01134-9AA5-412D-BC5C-714540873182}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shin.IoC.DI.Ninject.Net48", "src\Platform\Shin.IoC.DI.Ninject.Net48\Shin.IoC.DI.Ninject.Net48.csproj", "{6DE74149-682F-41E9-8F71-1CA2C48B4477}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shin.IoC.DI.Ninject.Net8", "src\Platform\Shin.IoC.DI.Ninject.Net8\Shin.IoC.DI.Ninject.Net8.csproj", "{E7812D52-F1E8-8072-90B3-4D0BD3FFA137}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,10 +80,6 @@ Global
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5909202-DF56-4DF4-908F-9744D8222824}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5909202-DF56-4DF4-908F-9744D8222824}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5909202-DF56-4DF4-908F-9744D8222824}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5909202-DF56-4DF4-908F-9744D8222824}.Release|Any CPU.Build.0 = Release|Any CPU
 		{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -102,28 +100,37 @@ Global
 		{0A2905AE-800E-4547-9683-52E9306A8BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A2905AE-800E-4547-9683-52E9306A8BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A2905AE-800E-4547-9683-52E9306A8BAB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{697A553F-005A-4A96-9E9D-1F8ACD277B34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{697A553F-005A-4A96-9E9D-1F8ACD277B34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{697A553F-005A-4A96-9E9D-1F8ACD277B34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{697A553F-005A-4A96-9E9D-1F8ACD277B34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41C01134-9AA5-412D-BC5C-714540873182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41C01134-9AA5-412D-BC5C-714540873182}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41C01134-9AA5-412D-BC5C-714540873182}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41C01134-9AA5-412D-BC5C-714540873182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DE74149-682F-41E9-8F71-1CA2C48B4477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DE74149-682F-41E9-8F71-1CA2C48B4477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DE74149-682F-41E9-8F71-1CA2C48B4477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DE74149-682F-41E9-8F71-1CA2C48B4477}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7812D52-F1E8-8072-90B3-4D0BD3FFA137}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7812D52-F1E8-8072-90B3-4D0BD3FFA137}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7812D52-F1E8-8072-90B3-4D0BD3FFA137}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7812D52-F1E8-8072-90B3-4D0BD3FFA137}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0E27F09C-2C4C-4487-83B9-044A82DAADBA} = {CAA13F07-C88B-49C8-A626-5E3B1C55B628}
-		{E5909202-DF56-4DF4-908F-9744D8222824} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
 		{02D92B8D-8B79-4048-BEBF-18FE0E1E6BF7} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
 		{3889314C-F15D-4EF8-94A2-2EDE8D4B8846} = {F997FA0E-EDDB-4E55-B46A-4D6025AECB42}
 		{F3A80181-2D50-474C-BB65-6A94C3E42264} = {6DCCB653-98AE-41F7-91EA-AC002F907AFD}
 		{805441B7-1988-4A8A-AA10-B1A55206D821} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
 		{0A2905AE-800E-4547-9683-52E9306A8BAB} = {F997FA0E-EDDB-4E55-B46A-4D6025AECB42}
-		{E8898FD2-FBB2-46BD-BE8C-5B813DD431E9} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
 		{697A553F-005A-4A96-9E9D-1F8ACD277B34} = {6DCCB653-98AE-41F7-91EA-AC002F907AFD}
+		{41C01134-9AA5-412D-BC5C-714540873182} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
+		{6DE74149-682F-41E9-8F71-1CA2C48B4477} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
+		{E7812D52-F1E8-8072-90B3-4D0BD3FFA137} = {9F68A0EA-D325-4A37-B740-84C08A11979A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E19F08BB-A8A3-402E-ABF8-1D5E72FD43E8}
@@ -131,11 +138,12 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\Shin.Framework\Shin.Framework.projitems*{02d92b8d-8b79-4048-bebf-18fe0e1e6bf7}*SharedItemsImports = 5
 		src\Shin.IoC.DepenedencyInjection.ShinContainer\Shin.IoC.DI.ShinContainer.projitems*{38721f0c-56e0-485b-9450-a1f29168cbcf}*SharedItemsImports = 13
+		src\Shin.Framework\Shin.Framework.projitems*{41c01134-9aa5-412d-bc5c-714540873182}*SharedItemsImports = 5
 		src\Shin.Ioc.DependencyInjection.Ninject\Shin.Ioc.DependencyInjection.Ninject.projitems*{697a553f-005a-4a96-9e9d-1f8acd277b34}*SharedItemsImports = 5
+		src\Shin.Ioc.DependencyInjection.Ninject\Shin.Ioc.DependencyInjection.Ninject.projitems*{6de74149-682f-41e9-8f71-1ca2c48b4477}*SharedItemsImports = 5
 		src\Shin.IoC.DepenedencyInjection.ShinContainer\Shin.IoC.DI.ShinContainer.projitems*{805441b7-1988-4a8a-aa10-b1a55206d821}*SharedItemsImports = 5
 		src\Shin.Ioc.DependencyInjection.Ninject\Shin.Ioc.DependencyInjection.Ninject.projitems*{dc750ae6-1783-40d6-9c33-b8ec240cf1f9}*SharedItemsImports = 13
-		src\Shin.Framework\Shin.Framework.projitems*{e5909202-df56-4df4-908f-9744d8222824}*SharedItemsImports = 5
-		src\Shin.Ioc.DependencyInjection.Ninject\Shin.Ioc.DependencyInjection.Ninject.projitems*{e8898fd2-fbb2-46bd-be8c-5b813dd431e9}*SharedItemsImports = 5
+		src\Shin.Ioc.DependencyInjection.Ninject\Shin.Ioc.DependencyInjection.Ninject.projitems*{e7812d52-f1e8-8072-90b3-4d0bd3ffa137}*SharedItemsImports = 5
 		src\Shin.Framework\Shin.Framework.projitems*{f3a80181-2d50-474c-bb65-6a94c3e42264}*SharedItemsImports = 5
 		src\Shin.Framework\Shin.Framework.projitems*{f7ef21b1-ee13-4b24-99b6-cb79bbcb71ce}*SharedItemsImports = 13
 	EndGlobalSection

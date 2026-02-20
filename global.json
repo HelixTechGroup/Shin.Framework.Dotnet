@@ -1,5 +1,5 @@
 {
     "msbuild-sdks": {
-        "Prometheus.MSBuild.Sdk": "0.2.2-beta.31"
+        "Prometheus.MSBuild.Sdk": "0.3.1-beta.1"
     }
 }

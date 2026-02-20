@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-using Ninject;
-using Ninject.Activation;
-using Ninject.Modules;
-using Ninject.Parameters;
-using Ninject.Planning.Bindings;
-using Ninject.Syntax;
+using Shinject;
+using Shinject.Activation;
+using Shinject.Modules;
+using Shinject.Parameters;
+using Shinject.Planning.Bindings;
+using Shinject.Syntax;
 
 using Shin.Collections.Concurrent;
 
@@ -17,13 +17,13 @@ namespace Shin.IoC.DependencyInjection.Ninject
 {
     public class RootKernel : StandardKernel, IRootKernel
     {
-        [NotNull]
+
         protected readonly ConcurrentDictionary<Guid, IChildKernel> m_childContainers = new();
 
-        [NotNull]
+
         protected readonly ConcurrentDictionary<Type, ConcurrentHashSet<Guid>> m_childTypeCache = new();
 
-        //[NotNull]
+        //
         protected readonly Guid m_id = Guid.NewGuid();
         //private IKernel m_kernelInstance;
 

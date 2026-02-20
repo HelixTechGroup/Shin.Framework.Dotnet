@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Ninject;
-using Ninject.Syntax;
+using Shinject;
+using Shinject.Syntax;
 
-using Shin.IoC.DependencyInjection.Ninject;
+using Shin.IoC.DependencyInjection.Shinject;
 
 namespace Shin.IoC.DependencyInjection.Ninject
 {

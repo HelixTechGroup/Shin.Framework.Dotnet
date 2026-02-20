@@ -19,11 +19,13 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------
 
-using Ninject;
-using Ninject.Activation.Caching;
-using Ninject.Components;
+using Shin.IoC.DependencyInjection.Ninject;
 
-namespace Shin.IoC.DependencyInjection.Ninject.Activation.Caching
+using Shinject;
+using Shinject.Activation.Caching;
+using Shinject.Components;
+
+namespace Shin.IoC.DependencyInjection.Shinject.Activation.Caching
 {
     /// <summary>
     /// The activation cache of child kernels.

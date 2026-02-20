@@ -1,8 +1,9 @@
-﻿<Project Sdk="Prometheus.MSBuild.Sdk">
+﻿<Project Sdk="Prometheus.MSBuild.Sdk/0.3.1-beta.1">
   <PropertyGroup>
     <SectionSymbol>@</SectionSymbol>
-    <TargetPlatforms>net6.0;net8.0</TargetPlatforms>
-    <EnableShinFramework>false</EnableShinFramework>
+    <!--<TargetPlatform>net10.0</TargetPlatform>-->
+    <!--<TargetPlatforms>net6.0;net8.0</TargetPlatforms>
+    <EnableShinFramework>false</EnableShinFramework>-->
   </PropertyGroup>
   
   <!--<ItemGroup>
@@ -12,7 +13,6 @@
   </ItemGroup>-->
   
   <Import Project="..\..\Shin.Framework\Shin.Framework.projitems" Label="Shared" />
-  
   <!--<ItemGroup>
     <PackageReference Include="Fody" Version="6.8.1">
       <PrivateAssets>all</PrivateAssets>

@@ -21,8 +21,8 @@
 
 using System;
 
-using Ninject;
-using Ninject.Syntax;
+using Shinject;
+using Shinject.Syntax;
 
 namespace Shin.IoC.DependencyInjection.Ninject
 {

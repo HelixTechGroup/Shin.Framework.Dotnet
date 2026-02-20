@@ -1,12 +1,12 @@
 ﻿using System;
 
-using Ninject;
+using Shinject;
 
 using Shin.IoC.DependencyInjection;
 
 namespace Shin.IoC.DependencyInjection
 {
-    public interface IDINinjectContainer : IDIContainer,
+    public interface IDIShinjectContainer : IDIContainer,
                                              IDIChildContainer,
                                              IDIParentContainer,
                                              IDIRootContainer

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shin.IoC.DependencyInjection.Ninject.Activation
+namespace Shin.IoC.DependencyInjection.Shinject.Activation
 {
     [Flags]
     public enum RootedResolutionStrategy : long

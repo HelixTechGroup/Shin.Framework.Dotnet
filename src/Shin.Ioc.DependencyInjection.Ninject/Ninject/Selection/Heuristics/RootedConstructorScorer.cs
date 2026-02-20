@@ -19,17 +19,18 @@
 // </copyright>
 // -------------------------------------------------------------------------------------------------
 
-using Ninject;
-using Ninject.Activation;
-using Ninject.Components;
-using Ninject.Planning;
-using Ninject.Planning.Targets;
-using Ninject.Selection.Heuristics;
+using Shin.IoC.DependencyInjection.Ninject;
+using Shinject;
+using Shinject.Activation;
+using Shinject.Components;
+using Shinject.Planning;
+using Shinject.Planning.Targets;
+using Shinject.Selection.Heuristics;
 
-using Shin.IoC.DependencyInjection.Ninject.Activation;
-using Shin.IoC.DependencyInjection.Ninject.Extensions;
+using Shin.IoC.DependencyInjection.Shinject.Activation;
+using Shin.IoC.DependencyInjection.Shinject.Extensions;
 
-namespace Shin.IoC.DependencyInjection.Ninject.Selection.Heuristics
+namespace Shin.IoC.DependencyInjection.Shinject.Selection.Heuristics
 {
     /// <summary>
     /// Scores constructors by either looking for the existence of an injection marker

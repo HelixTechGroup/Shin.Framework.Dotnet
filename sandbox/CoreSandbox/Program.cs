@@ -2,6 +2,8 @@
 using System;
 
 using Shin.IoC.DependencyInjection;
+
+using Shinject;
 #endregion
 
 namespace CoreSandbox
@@ -32,7 +34,7 @@ namespace CoreSandbox
             //if (Console.ReadKey().Key == ConsoleKey.Q)
             //    return;
 
-            var containerTests = new IoCContainerTests<NinjectContainer>();
+            var containerTests = new IoCContainerTests<ShinjectContainer>();
             containerTests.Start()
                           .ParentCreationTests()
                           .ParentRegisterTests()

@@ -3,47 +3,34 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using Ninject;
-using Ninject.Activation;
-using Ninject.Activation.Caching;
-using Ninject.Components;
-using Ninject.Infrastructure;
-using Ninject.Modules;
-using Ninject.Parameters;
-using Ninject.Planning;
-using Ninject.Planning.Bindings;
+using Shinject;
+using Shinject.Activation;
+using Shinject.Activation.Caching;
+using Shinject.Components;
+using Shinject.Infrastructure;
+using Shinject.Parameters;
+using Shinject.Planning;
+using Shinject.Planning.Bindings;
 
 using Shin.Collections.Concurrent;
-using Shin.Extensions;
-using Shin.IoC.DependencyInjection.Ninject;
-using Shin.IoC.DependencyInjection;
-using Shin.IoC.DependencyInjection.Ninject.Activation;
-using Shin.IoC.DependencyInjection.Ninject.Extensions;
+using Shinject.Extensions;
+using Shinject.Syntax;
 #endregion
 
 namespace Shin.IoC.DependencyInjection
 {
-    public sealed class NinjectContainer : Disposable,
-                                           IDINinjectContainer
+    public sealed class ShinjectContainer : Disposable,
+                                           IDIShinjectContainer
     {
         #region Members
-
-
-        [NotNull]
         private readonly ConcurrentDictionary<Guid, HashSet<string[]>> m_constructorArgumentCache;
 
-        [NotNull]
+
         private readonly IRootKernel m_kernel;
-
-        //private readonly IDIParentContainer m_parent;
-
-        //[NotNull]
-        //private readonly IDIRootContainer m_root;
         #endregion
 
         #region Properties
@@ -78,7 +65,7 @@ namespace Shin.IoC.DependencyInjection
         /// <inheritdoc />
         public IDIRootContainer Root
         {
-            get { return m_kernel is IRootedKernel rootedKernel ? new NinjectContainer((IRootKernel) rootedKernel.Root) : this; }
+            get { return m_kernel is IRootedKernel rootedKernel ? new ShinjectContainer(rootedKernel.Root) : this; }
         }
 
         /// <inheritdoc />
@@ -86,15 +73,14 @@ namespace Shin.IoC.DependencyInjection
         {
             get
             {
-                return m_kernel.Children
-                                 .Select(c =>
-                                             new NinjectContainer(((IRootedKernel) c)))
-                                 .ToArray() ?? Array.Empty<IDIChildContainer>();
+                return m_kernel.Children.Select(c => new ShinjectContainer((IRootedKernel) c))
+                               .ToArray() ??
+                       Array.Empty<IDIChildContainer>();
             }
         }
 
         /// <inheritdoc />
-        IKernel IDINinjectContainer.Kernel
+        IKernel IDIShinjectContainer.Kernel
         {
             get { return m_kernel; }
         }
@@ -102,20 +88,15 @@ namespace Shin.IoC.DependencyInjection
         /// <inheritdoc />
         IDIParentContainer IDIChildContainer.ParentContainer
         {
-            get
-            {
-                return m_kernel is IRootedKernel rootedKernel
-                             ? new NinjectContainer((IRootKernel) rootedKernel.Parent) :
-                             this;
-            }
+            get { return m_kernel is IRootedKernel rootedKernel ? new ShinjectContainer((IRootKernel) rootedKernel.Parent) : this; }
         }
         #endregion
 
-        public NinjectContainer()
+        public ShinjectContainer()
         {
             //m_id = Guid.NewGuid();
-            //m_kernel ??= new StandardKernel();
-            var tmp = new StandardKernel();
+            m_kernel ??= new RootKernel();
+            //var tmp = new StandardKernel();
 
             //m_root ??= m_parent is null ? this : m_parent.Root;
             //m_childContainers = new ConcurrentDictionary<Guid, IDIChildContainer>();
@@ -153,7 +134,7 @@ namespace Shin.IoC.DependencyInjection
                     .ToMethod(m => CreateChildContainer());
         }
 
-        public NinjectContainer(IDINinjectContainer parent) : this()
+        public ShinjectContainer(IDIShinjectContainer parent) : this()
         {
             //m_parent = parent;
             m_kernel = parent.Kernel.Get<IRootedKernel>(); //new RootedKernel(parent.Kernel as IParentKernel);
@@ -161,10 +142,7 @@ namespace Shin.IoC.DependencyInjection
             //Register(m_parent, overrideExisting: true);
         }
 
-        protected NinjectContainer(IRootKernel kernel)
-        {
-            m_kernel = kernel;
-        }
+        protected ShinjectContainer(IRootKernel kernel) { m_kernel = kernel; }
 
         #region Methods
         /// <inheritdoc />
@@ -331,10 +309,7 @@ namespace Shin.IoC.DependencyInjection
                               params object[] parameters)
         {
             CheckParameters(T, out var p, parameters);
-            var result = RootedResolutionExtensions.Get(m_kernel,
-                T,
-                                      (RootedResolutionStrategy) strategy,
-                                      p);
+            var result = m_kernel.Get(T, (RootedResolutionStrategy) strategy, p);
             //TraverseContainers(T, out var result, p);
             return result;
         }
@@ -353,9 +328,7 @@ namespace Shin.IoC.DependencyInjection
                                               params object[] parameters)
         {
             CheckParameters(T, out var ninjectParams, parameters);
-            var result = m_kernel.GetAll(T,
-                                         (RootedResolutionStrategy) strategy,
-                                         ninjectParams);
+            var result = m_kernel.GetAll(T, (RootedResolutionStrategy) strategy, ninjectParams);
             //TraverseContainersAll(T, out var result);
             return result;
         }
@@ -454,7 +427,7 @@ namespace Shin.IoC.DependencyInjection
         public IDIChildContainer CreateChildContainer()
         {
             var c = m_kernel.Get<IRootedKernel>();
-            var container = new NinjectContainer(c);
+            var container = new ShinjectContainer(c);
             //m_childContainers[container.Id] = container;
             return container;
         }
@@ -664,8 +637,10 @@ namespace Shin.IoC.DependencyInjection
                                                                 exFormatter));
 
                 if (result.ContainsKey(T))
+                {
                     result[T]
                        .Add(provider?.Type);
+                }
                 else
                     result.TryAdd(T, new ConcurrentHashSet<Type>(provider?.Type));
 
@@ -728,7 +703,7 @@ namespace Shin.IoC.DependencyInjection
                 if (CheckBindings(T)) return true;
 
                 var ib = m_kernel.Bind(ti.ToArray())
-                        .To(T);
+                                 .To(T);
                 if (asSingleton) ib.InSingletonScope();
                 if (!string.IsNullOrWhiteSpace(key)) ib.Named(key);
 
@@ -922,5 +897,10 @@ namespace Shin.IoC.DependencyInjection
             return bindingsMap;
         }
         #endregion
+
+        //private readonly IDIParentContainer m_parent;
+
+        //
+        //private readonly IDIRootContainer m_root;
     }
 }

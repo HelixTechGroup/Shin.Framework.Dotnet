@@ -90,7 +90,7 @@ namespace Shin.IoC.DependencyInjection.Runtime.Activation
         //}
 
         public TypeResolver(IDIContainer container,
-                        Type type,
+                        Type type
                         /*bool singleton*/)
         {
             //Throw.If(type.IsInterface || type.IsAbstract)

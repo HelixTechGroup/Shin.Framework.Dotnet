@@ -4,25 +4,25 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-using Ninject.Activation;
-using Ninject.Components;
-using Ninject.Planning.Bindings;
-using Ninject.Planning.Bindings.Resolvers;
+using Shinject.Activation;
+using Shinject.Components;
+using Shinject.Planning.Bindings;
+using Shinject.Planning.Bindings.Resolvers;
 
 using Shin.Collections.Concurrent;
-using Shin.IoC.DependencyInjection.Ninject.Activation;
-using Shin.IoC.DependencyInjection.Ninject.Activation.Providers;
+using Shin.IoC.DependencyInjection.Shinject.Activation;
+using Shin.IoC.DependencyInjection.Shinject.Activation.Providers;
 #endregion
 
-namespace Shin.IoC.DependencyInjection.Ninject.Planning.Bindings
+namespace Shin.IoC.DependencyInjection.Shinject.Planning.Bindings
 {
     public class RootedMissingBindingResolver : NinjectComponent,
                                                 IMissingBindingResolver
     {
         #region Methods
         /// <inheritdoc />
-        public ICollection<IBinding> Resolve([NotNull] IDictionary<Type, ICollection<IBinding>> bindings,
-                                             [NotNull] IRequest request)
+        public ICollection<IBinding> Resolve(IDictionary<Type, ICollection<IBinding>> bindings,
+                                              IRequest request)
         {
             var service = request.Service;
             if (request is not IRootedRequest rootedRequest ||

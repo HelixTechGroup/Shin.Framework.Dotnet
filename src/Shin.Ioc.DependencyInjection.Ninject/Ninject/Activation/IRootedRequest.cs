@@ -1,8 +1,8 @@
 ﻿using System;
 
-using Ninject.Activation;
+using Shinject.Activation;
 
-namespace Shin.IoC.DependencyInjection.Ninject.Activation
+namespace Shin.IoC.DependencyInjection.Shinject.Activation
 {
     public interface IRootedRequest : IRequest
     {

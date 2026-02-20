@@ -3,6 +3,7 @@
   <PropertyGroup>
     <SectionSymbol>@</SectionSymbol>
     <IsPackable>false</IsPackable>
+    <EnableShinFramework>false</EnableShinFramework>
   </PropertyGroup>
 
 </Project>

@@ -1,9 +1,10 @@
-﻿using Ninject;
-using Ninject.Activation;
+﻿using Shin.IoC.DependencyInjection.Ninject;
+using Shinject;
+using Shinject.Activation;
 
-using Shin.IoC.DependencyInjection.Ninject.Activation;
+using Shin.IoC.DependencyInjection.Shinject.Activation;
 
-namespace Shin.IoC.DependencyInjection.Ninject.Extensions
+namespace Shin.IoC.DependencyInjection.Shinject.Extensions
 {
     public static class RequestExtenstions
     {

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
+using Shin.IoC.DependencyInjection.Ninject;
+using Shinject.Activation;
+using Shinject.Activation.Providers;
+using Shinject.Planning;
+using Shinject.Selection.Heuristics;
 
-using Ninject.Activation;
-using Ninject.Activation.Providers;
-using Ninject.Planning;
-using Ninject.Selection.Heuristics;
+using Shin.IoC.DependencyInjection.Shinject.Extensions;
 
-using Shin.IoC.DependencyInjection.Ninject.Extensions;
-
-namespace Shin.IoC.DependencyInjection.Ninject.Activation.Providers
+namespace Shin.IoC.DependencyInjection.Shinject.Activation.Providers
 {
     public class RootedProvider : IRootedProvider
     {

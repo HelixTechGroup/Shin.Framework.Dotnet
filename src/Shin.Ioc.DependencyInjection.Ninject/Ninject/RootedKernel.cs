@@ -4,23 +4,23 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-using Ninject;
-using Ninject.Activation;
-using Ninject.Activation.Caching;
-using Ninject.Modules;
-using Ninject.Parameters;
-using Ninject.Planning.Bindings;
-using Ninject.Planning.Bindings.Resolvers;
-using Ninject.Selection.Heuristics;
-using Ninject.Syntax;
+using Shinject;
+using Shinject.Activation;
+using Shinject.Activation.Caching;
+using Shinject.Modules;
+using Shinject.Parameters;
+using Shinject.Planning.Bindings;
+using Shinject.Planning.Bindings.Resolvers;
+using Shinject.Selection.Heuristics;
+using Shinject.Syntax;
 
 using Shin.Collections.Concurrent;
-using Shin.IoC.DependencyInjection.Ninject.Activation;
-using Shin.IoC.DependencyInjection.Ninject.Activation.Caching;
-using Shin.IoC.DependencyInjection.Ninject.Activation.Providers;
-using Shin.IoC.DependencyInjection.Ninject.Extensions;
-using Shin.IoC.DependencyInjection.Ninject.Planning.Bindings;
-using Shin.IoC.DependencyInjection.Ninject.Selection.Heuristics;
+using Shin.IoC.DependencyInjection.Shinject.Activation;
+using Shin.IoC.DependencyInjection.Shinject.Activation.Caching;
+using Shin.IoC.DependencyInjection.Shinject.Activation.Providers;
+using Shin.IoC.DependencyInjection.Shinject.Extensions;
+using Shin.IoC.DependencyInjection.Shinject.Planning.Bindings;
+using Shin.IoC.DependencyInjection.Shinject.Selection.Heuristics;
 #endregion
 
 namespace Shin.IoC.DependencyInjection.Ninject

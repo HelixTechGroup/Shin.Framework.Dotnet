@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Ninject.Planning.Targets;
+using Shinject.Planning.Targets;
 
-namespace Shin.IoC.DependencyInjection.Ninject.Selection
+namespace Shin.IoC.DependencyInjection.Shinject.Selection
 {
     public interface IRootedTypeMap
     {

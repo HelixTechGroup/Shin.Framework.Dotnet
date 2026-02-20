@@ -1,4 +1,4 @@
-﻿using Shin.IoC.DependencyInjection.Ninject;
+﻿using Shin.IoC.DependencyInjection.Shinject;
 
 namespace Shin.IoC.DependencyInjection.Ninject
 {

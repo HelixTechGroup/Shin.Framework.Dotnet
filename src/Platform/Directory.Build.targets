@@ -4,6 +4,7 @@
   <PropertyGroup>
     <!--<RootNamespace>Shin.Framework</RootNamespace>-->
     <MergeBinary>false</MergeBinary>
+    <EnableShinFramework>false</EnableShinFramework>
   </PropertyGroup>
   <!--<ItemGroup>
     <PackageReference Include="Fody" Version="6.8.1">

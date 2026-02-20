@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Ninject;
+using Shinject;
 
 namespace Shin.IoC.DependencyInjection.Ninject
 {

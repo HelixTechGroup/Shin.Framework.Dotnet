@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Ninject.Activation;
-using Ninject.Components;
-using Ninject.Planning.Bindings;
-using Ninject.Planning.Bindings.Resolvers;
+using Shinject.Activation;
+using Shinject.Components;
+using Shinject.Planning.Bindings;
+using Shinject.Planning.Bindings.Resolvers;
 
-using Shin.IoC.DependencyInjection.Ninject.Activation;
+using Shin.IoC.DependencyInjection.Shinject.Activation;
 
-namespace Shin.IoC.DependencyInjection.Ninject.Planning.Bindings
+namespace Shin.IoC.DependencyInjection.Shinject.Planning.Bindings
 {
     public class RootedBindingResolver : NinjectComponent, IBindingResolver
     {

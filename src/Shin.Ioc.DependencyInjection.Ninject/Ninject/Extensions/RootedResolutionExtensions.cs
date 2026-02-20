@@ -3,16 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Ninject;
-using Ninject.Activation;
-using Ninject.Parameters;
-using Ninject.Planning.Bindings;
-using Ninject.Syntax;
-using Ninject.Extensions;
-using Shin.IoC.DependencyInjection.Ninject.Activation;
+using Shin.IoC.DependencyInjection.Ninject;
+using Shinject;
+using Shinject.Activation;
+using Shinject.Parameters;
+using Shinject.Planning.Bindings;
+using Shinject.Syntax;
+using Shin.IoC.DependencyInjection.Shinject.Activation;
 #endregion
 
-namespace Shin.IoC.DependencyInjection.Ninject.Extensions
+namespace Shin.IoC.DependencyInjection.Shinject.Extensions
 {
     public static class RootedResolutionExtensions
     {
@@ -20,8 +20,8 @@ namespace Shin.IoC.DependencyInjection.Ninject.Extensions
         public static IRequest CreateRootedRequest(this IResolutionRoot root,
                                                    Type service,
                                                    RootedResolutionStrategy strategy,
-                                                   [AllowNull] Func<IBindingMetadata, bool> constraint,
-                                                   [AllowNull] IReadOnlyList<IParameter> parameters,
+                                                    Func<IBindingMetadata, bool> constraint,
+                                                    IReadOnlyList<IParameter> parameters,
                                                    bool isOptional,
                                                    bool isUnique)
         {
@@ -100,8 +100,8 @@ namespace Shin.IoC.DependencyInjection.Ninject.Extensions
         public static object Get(this IResolutionRoot root,
                                  Type service,
                                  RootedResolutionStrategy strategy,
-                                 [AllowNull] Func<IBindingMetadata, bool> constraint,
-                                 [AllowNull] params IParameter[] parameters)
+                                  Func<IBindingMetadata, bool> constraint,
+                                  params IParameter[] parameters)
         {
             return ResolveSingle(root,
                                  service,
@@ -225,8 +225,8 @@ namespace Shin.IoC.DependencyInjection.Ninject.Extensions
         private static object ResolveSingle(IResolutionRoot root,
                                             Type service,
                                             RootedResolutionStrategy strategy,
-                                            [AllowNull] Func<IBindingMetadata, bool> constraint,
-                                            [AllowNull] IReadOnlyList<IParameter> parameters,
+                                             Func<IBindingMetadata, bool> constraint,
+                                             IReadOnlyList<IParameter> parameters,
                                             bool isOptional,
                                             bool isUnique)
         {

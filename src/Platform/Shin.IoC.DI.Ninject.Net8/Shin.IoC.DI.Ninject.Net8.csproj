@@ -1,0 +1,33 @@
+﻿<Project Sdk="Prometheus.MSBuild.Sdk">
+  <PropertyGroup>
+    <SectionSymbol>@</SectionSymbol>
+    <ProductName>NinjectContainer</ProductName>
+    <RootNamespace>Shin.IoC.DependencyInjection</RootNamespace>
+    <!--<TargetPlatform>net8.0</TargetPlatform>-->
+    <EnableShinFramework>true</EnableShinFramework>
+  </PropertyGroup>
+  <!--<ItemGroup>
+    <PackageReference Include="Fody" Version="6.8.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ILMerge.Fody" Version="1.24.0" />
+    <PackageReference Include="JetBrainsAnnotations.Fody" Version="2.17.0" />
+    <PackageReference Include="Ninject" Version="4.0.0-beta.1" />
+    <PackageReference Include="ninject.extensions.conventions" Version="3.3.0" />
+    <PackageReference Include="NullGuard.Fody" Version="3.1.1" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    
+    <PackageReference Include="Shinject" Version="5.0.0-beta.1" />
+    <!--<PackageReference Include="Ninject" Version="4.0.0-beta.1" />
+    <PackageReference Include="ninject.extensions.conventions" Version="3.3.0" />-->
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <ProjectReference Include="..\Shin.Framework.Net8\Shin.Framework.Net8.csproj" />
+  </ItemGroup>-->
+
+  <Import Project="..\..\Shin.IoC.DependencyInjection.Ninject\Shin.IoC.DependencyInjection.Ninject.projitems" Label="Shared" />
+</Project>
